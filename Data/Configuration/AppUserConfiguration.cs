@@ -10,7 +10,6 @@ namespace Data.Configuration
         {
             builder.ToTable("AppUsers");
             builder.Property(x => x.IsSave).IsRequired().HasDefaultValue(false);
-            builder.Property(x => x.Address).IsRequired();
             builder.Property(x => x.DateCreated).IsRequired();
         }
 

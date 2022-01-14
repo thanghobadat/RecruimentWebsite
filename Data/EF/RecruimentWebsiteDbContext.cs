@@ -19,6 +19,12 @@ namespace Data.EF
             modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyInformationConfiguration());
             modelBuilder.ApplyConfiguration(new UserInformationConfiguration());
+            modelBuilder.ApplyConfiguration(new UserAvatarconfiguration());
+            modelBuilder.ApplyConfiguration(new CompanyAvatarConfiguration());
+            modelBuilder.ApplyConfiguration(new CompanyCoverImageConfiguration());
+            modelBuilder.ApplyConfiguration(new CompanyImageConfiguration());
+            modelBuilder.ApplyConfiguration(new CompanyBranchConfiguration());
+
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogins").HasKey(x => x.UserId);

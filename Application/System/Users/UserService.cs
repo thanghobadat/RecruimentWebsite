@@ -123,7 +123,6 @@ namespace Application.System.Users
                     AcademicLevel = userInf.AcademicLevel,
                     Age = userInf.Age,
                     DateCreated = user.DateCreated,
-                    Address = user.Address,
                     Role = role
                 };
                 var accVm = new AccountViewModel()
@@ -150,7 +149,6 @@ namespace Application.System.Users
                     WorkerNumber = companyInf.WorkerNumber,
                     Description = companyInf.Description,
                     DateCreated = user.DateCreated,
-                    Address = user.Address,
                     Role = role
                 };
                 var accVm = new AccountViewModel()
@@ -189,7 +187,6 @@ namespace Application.System.Users
                     PhoneNumber = x.PhoneNumber,
                     UserName = x.UserName,
                     Id = x.Id,
-                    Address = x.Address,
                     DateCreated = x.DateCreated,
                     Name = x.CompanyInformation.Name,
                     Description = x.CompanyInformation.Description,
@@ -234,7 +231,6 @@ namespace Application.System.Users
                     PhoneNumber = x.PhoneNumber,
                     UserName = x.UserName,
                     Id = x.Id,
-                    Address = x.Address,
                     FirstName = x.UserInformation.FirstName,
                     LastName = x.UserInformation.LastName,
                     Sex = x.UserInformation.Sex,
@@ -309,7 +305,6 @@ namespace Application.System.Users
                 Email = request.Email,
                 UserName = request.UserName,
                 PhoneNumber = request.PhoneNumber,
-                Address = request.Address,
                 IsSave = false
             };
             var resultUser = await _userManager.CreateAsync(user, request.Password);
@@ -365,7 +360,6 @@ namespace Application.System.Users
                 Email = request.Email,
                 UserName = request.UserName,
                 PhoneNumber = request.PhoneNumber,
-                Address = request.Address,
                 IsSave = false
             };
             var resultUser = await _userManager.CreateAsync(user, request.Password);
@@ -401,7 +395,6 @@ namespace Application.System.Users
             var user = await _userManager.FindByIdAsync(id.ToString());
             user.Email = request.Email;
             user.PhoneNumber = request.PhoneNumber;
-            user.Address = request.Address;
 
 
             var userInf = await _context.CompanyInformations.FindAsync(id);
@@ -424,7 +417,6 @@ namespace Application.System.Users
             var user = await _userManager.FindByIdAsync(id.ToString());
             user.Email = request.Email;
             user.PhoneNumber = request.PhoneNumber;
-            user.Address = request.Address;
 
 
             var userInf = await _context.UserInformations.FindAsync(id);

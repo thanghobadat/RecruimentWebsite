@@ -10,7 +10,9 @@ namespace Data.Entities
         public string LastName { get; set; }
         public int Age { get; set; }
         public Sex Sex { get; set; }
+        public string Address { get; set; }
         public string AcademicLevel { get; set; }
         public AppUser AppUser { get; set; }
+        public UserAvatar UserAvatar { get; set; }
     }
 }

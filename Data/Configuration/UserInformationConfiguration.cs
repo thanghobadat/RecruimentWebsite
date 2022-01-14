@@ -16,12 +16,10 @@ namespace Data.Configuration
             builder.Property(x => x.LastName).IsRequired();
             builder.Property(x => x.Age).IsRequired();
             builder.Property(x => x.Sex).IsRequired();
+            builder.Property(x => x.Address).IsRequired();
             builder.Property(x => x.AcademicLevel).IsRequired();
             builder.HasOne(t => t.AppUser).WithOne(pc => pc.UserInformation)
                 .HasForeignKey<UserInformation>(pc => pc.UserId);
-
-
-
         }
     }
 }

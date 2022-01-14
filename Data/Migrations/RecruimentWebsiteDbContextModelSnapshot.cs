@@ -47,18 +47,26 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "2b86f20d-73e2-4b5e-b905-7d44f0260c7a",
-                            Description = "Administrator role",
-                            Name = "admin",
-                            NormalizedName = "admin"
+                            ConcurrencyStamp = "ca63357a-1bb4-4ad1-be69-d60095f9e2a2",
+                            Description = "Company role",
+                            Name = "company",
+                            NormalizedName = "company"
                         },
                         new
                         {
-                            Id = new Guid("4699ffbf-e135-48c8-b3a1-e9792ab55688"),
-                            ConcurrencyStamp = "df0d310e-4ea7-40c7-a3ce-aacdc50f09d0",
+                            Id = new Guid("fa17bc58-9669-4f6a-95ef-e2d7f2bd8e7d"),
+                            ConcurrencyStamp = "72c18eda-d50e-4d9f-8582-e7c7eb6c4a87",
                             Description = "User role",
                             Name = "user",
                             NormalizedName = "user"
+                        },
+                        new
+                        {
+                            Id = new Guid("45b7e88d-8052-4a50-a299-c479fbc52ee9"),
+                            ConcurrencyStamp = "5106cd81-5147-4471-85cc-fb464e23977d",
+                            Description = "Admin role",
+                            Name = "admin",
+                            NormalizedName = "admin"
                         });
                 });
 
@@ -70,10 +78,6 @@ namespace Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
@@ -131,16 +135,15 @@ namespace Data.Migrations
                         {
                             Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
                             AccessFailedCount = 0,
-                            Address = "k144/11 To Huu, Da Nang",
-                            ConcurrencyStamp = "38c25331-0eea-4fab-8b7f-547ae2133c7a",
-                            DateCreated = new DateTime(2022, 1, 5, 9, 28, 57, 98, DateTimeKind.Local).AddTicks(4986),
+                            ConcurrencyStamp = "f3b0640a-ae21-432c-9ddd-d5f4d79055d5",
+                            DateCreated = new DateTime(2022, 1, 14, 9, 36, 53, 689, DateTimeKind.Local).AddTicks(8466),
                             Email = "hoangthanh01022000@gmail.com",
                             EmailConfirmed = true,
                             IsSave = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "hoangthanh01022000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGMNlP9KIfTUGxBWnSGFu6YzRY4AhgIphm/NJ0MOkRIM/ScSkiwboss7T+WRsBQaMw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGC7GvZL/tzdc9LNoCG8Q98P9keR39TEXtBhoCBEwqssF2wMSU+Z2fgz7+Uy8WJaEg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -148,23 +151,164 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("de3ddc80-b0a2-4358-acba-69f6fd3a4db9"),
+                            Id = new Guid("802f5a7f-c487-46e3-a4a9-84a1f1b9b94c"),
                             AccessFailedCount = 0,
-                            Address = "k144/11 To Huu, Da Nang",
-                            ConcurrencyStamp = "c18af836-5614-4fd3-8b0e-2519c57d8210",
-                            DateCreated = new DateTime(2022, 1, 5, 9, 28, 57, 106, DateTimeKind.Local).AddTicks(2903),
+                            ConcurrencyStamp = "c6be4913-a625-412c-9158-eaba5daddadc",
+                            DateCreated = new DateTime(2022, 1, 14, 9, 36, 53, 697, DateTimeKind.Local).AddTicks(6269),
                             Email = "hoangthanh01022000@gmail.com",
                             EmailConfirmed = true,
                             IsSave = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "hoangthanh01022000@gmail.com",
                             NormalizedUserName = "user",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHM+g2sO2vmx/KHu4o73bbgccDPZvLq7ckOcS6lSQeNzqfQjCwY7KQmxPeJ/ccVJCg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEUOLY0tnf2rPKADcxJ7j52U7zg9g5HGJ/sYyJZD3ytTKSKz7NLBsNCK2321WyDC/Q==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
                             UserName = "user"
+                        },
+                        new
+                        {
+                            Id = new Guid("9902a6c2-59dd-4064-b570-5ce1e4682567"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "3ceb112f-dd9b-49a3-bb00-9068018a122a",
+                            DateCreated = new DateTime(2022, 1, 14, 9, 36, 53, 704, DateTimeKind.Local).AddTicks(5259),
+                            Email = "hoangthanh01022000@gmail.com",
+                            EmailConfirmed = true,
+                            IsSave = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "hoangthanh01022000@gmail.com",
+                            NormalizedUserName = "admin",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAbYRXVI/POYrx1nq2DjsEt+tvF+sOuG16ZsPmupQD3XJnWTaumrmdEsGdoqYrdb6g==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
                         });
+                });
+
+            modelBuilder.Entity("Data.Entities.CompanyAvatar", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Caption")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("FizeSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId")
+                        .IsUnique();
+
+                    b.ToTable("CompanyAvatars");
+                });
+
+            modelBuilder.Entity("Data.Entities.CompanyBranch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("CompanyBranches");
+                });
+
+            modelBuilder.Entity("Data.Entities.CompanyCoverImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Caption")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("FizeSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId")
+                        .IsUnique();
+
+                    b.ToTable("CompanyCoverImages");
+                });
+
+            modelBuilder.Entity("Data.Entities.CompanyImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Caption")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("FizeSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("CompanyImages");
                 });
 
             modelBuilder.Entity("Data.Entities.CompanyInformation", b =>
@@ -194,12 +338,50 @@ namespace Data.Migrations
                     b.ToTable("CompanyInformations");
                 });
 
+            modelBuilder.Entity("Data.Entities.UserAvatar", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Caption")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("FizeSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserAvatars");
+                });
+
             modelBuilder.Entity("Data.Entities.UserInformation", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AcademicLevel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -304,8 +486,13 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("de3ddc80-b0a2-4358-acba-69f6fd3a4db9"),
-                            RoleId = new Guid("4699ffbf-e135-48c8-b3a1-e9792ab55688")
+                            UserId = new Guid("802f5a7f-c487-46e3-a4a9-84a1f1b9b94c"),
+                            RoleId = new Guid("fa17bc58-9669-4f6a-95ef-e2d7f2bd8e7d")
+                        },
+                        new
+                        {
+                            UserId = new Guid("9902a6c2-59dd-4064-b570-5ce1e4682567"),
+                            RoleId = new Guid("45b7e88d-8052-4a50-a299-c479fbc52ee9")
                         });
                 });
 
@@ -329,6 +516,50 @@ namespace Data.Migrations
                     b.ToTable("AppUserTokens");
                 });
 
+            modelBuilder.Entity("Data.Entities.CompanyAvatar", b =>
+                {
+                    b.HasOne("Data.Entities.CompanyInformation", "CompanyInformation")
+                        .WithOne("CompanyAvatar")
+                        .HasForeignKey("Data.Entities.CompanyAvatar", "CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyInformation");
+                });
+
+            modelBuilder.Entity("Data.Entities.CompanyBranch", b =>
+                {
+                    b.HasOne("Data.Entities.CompanyInformation", "CompanyInformation")
+                        .WithMany("CompanyBranches")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyInformation");
+                });
+
+            modelBuilder.Entity("Data.Entities.CompanyCoverImage", b =>
+                {
+                    b.HasOne("Data.Entities.CompanyInformation", "CompanyInformation")
+                        .WithOne("CompanyCoverImage")
+                        .HasForeignKey("Data.Entities.CompanyCoverImage", "CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyInformation");
+                });
+
+            modelBuilder.Entity("Data.Entities.CompanyImage", b =>
+                {
+                    b.HasOne("Data.Entities.CompanyInformation", "CompanyInformation")
+                        .WithMany("CompanyImages")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyInformation");
+                });
+
             modelBuilder.Entity("Data.Entities.CompanyInformation", b =>
                 {
                     b.HasOne("Data.Entities.AppUser", "AppUser")
@@ -338,6 +569,17 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("Data.Entities.UserAvatar", b =>
+                {
+                    b.HasOne("Data.Entities.UserInformation", "UserInformation")
+                        .WithOne("UserAvatar")
+                        .HasForeignKey("Data.Entities.UserAvatar", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserInformation");
                 });
 
             modelBuilder.Entity("Data.Entities.UserInformation", b =>
@@ -356,6 +598,22 @@ namespace Data.Migrations
                     b.Navigation("CompanyInformation");
 
                     b.Navigation("UserInformation");
+                });
+
+            modelBuilder.Entity("Data.Entities.CompanyInformation", b =>
+                {
+                    b.Navigation("CompanyAvatar");
+
+                    b.Navigation("CompanyBranches");
+
+                    b.Navigation("CompanyCoverImage");
+
+                    b.Navigation("CompanyImages");
+                });
+
+            modelBuilder.Entity("Data.Entities.UserInformation", b =>
+                {
+                    b.Navigation("UserAvatar");
                 });
 #pragma warning restore 612, 618
         }
