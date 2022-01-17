@@ -11,6 +11,5 @@ namespace Data.Entities
         public long FizeSize { get; set; }
         public Guid CompanyId { get; set; }
         public CompanyInformation CompanyInformation { get; set; }
-
     }
 }

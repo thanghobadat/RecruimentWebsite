@@ -35,6 +35,11 @@ namespace Data.EF
 
         public DbSet<UserInformation> UserInformations { get; set; }
         public DbSet<CompanyInformation> CompanyInformations { get; set; }
+        public DbSet<CompanyAvatar> CompanyAvatars { get; set; }
+        public DbSet<CompanyBranch> CompanyBranches { get; set; }
+        public DbSet<CompanyImage> CompanyImages { get; set; }
+        public DbSet<UserAvatar> UserAvatars { get; set; }
+        public DbSet<CompanyCoverImage> CompanyCoverImages { get; set; }
 
     }
 }

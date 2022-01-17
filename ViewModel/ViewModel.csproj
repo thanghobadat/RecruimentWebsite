@@ -12,4 +12,9 @@
     <ProjectReference Include="..\Data\Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Catalog\Company\" />
+    <Folder Include="Catalog\User\" />
+  </ItemGroup>
+
 </Project>

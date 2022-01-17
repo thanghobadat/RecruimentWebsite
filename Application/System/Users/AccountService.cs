@@ -1,6 +1,7 @@
 ﻿using Data.EF;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -14,14 +15,14 @@ using ViewModel.System.Users;
 
 namespace Application.System.Users
 {
-    public class UserService : IUserService
+    public class AccountService : IAccountService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _config;
         private readonly RecruimentWebsiteDbContext _context;
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
+        public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
             RoleManager<AppRole> roleManager, IConfiguration config, RecruimentWebsiteDbContext context)
         {
             _userManager = userManager;
@@ -91,86 +92,96 @@ namespace Application.System.Users
             return new ApiErrorResult<bool>("Delete failed");
         }
 
-        public async Task<ApiResult<AccountViewModel>> GetById(Guid id)
+        public async Task<ApiResult<UserViewModel>> GetUserById(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
-                return new ApiErrorResult<AccountViewModel>("User does not exist ");
+                return new ApiErrorResult<UserViewModel>("User does not exist ");
             }
-
-
-            var roleIList = await _userManager.GetRolesAsync(user);
-            var roleList = roleIList.ToList();
-            var role = string.Join("", roleList);
-
-            if (role == "user")
+            var userInf = await _context.UserInformations.FindAsync(id);
+            if (userInf == null)
             {
-                var userInf = await _context.UserInformations.FindAsync(id);
-                if (userInf == null)
-                {
-                    return new ApiErrorResult<AccountViewModel>("User does not have information exist.");
-                }
-                var userVm = new UserViewModel()
-                {
-                    Email = user.Email,
-                    PhoneNumber = user.PhoneNumber,
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    FirstName = userInf.FirstName,
-                    LastName = userInf.LastName,
-                    Sex = userInf.Sex,
-                    AcademicLevel = userInf.AcademicLevel,
-                    Age = userInf.Age,
-                    DateCreated = user.DateCreated,
-                    Role = role
-                };
-                var accVm = new AccountViewModel()
-                {
-                    UserViewModel = userVm
-                };
-                return new ApiSuccessResult<AccountViewModel>(accVm);
+                return new ApiErrorResult<UserViewModel>("User does not have information exist.");
             }
-            else if (role == "company")
-            {
-                var companyInf = await _context.CompanyInformations.FindAsync(id);
-                if (companyInf == null)
-                {
-                    return new ApiErrorResult<AccountViewModel>("Company does not have information exist.");
-                }
-                var companyVm = new CompanyViewModel()
-                {
-                    Email = user.Email,
-                    PhoneNumber = user.PhoneNumber,
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    Name = companyInf.Name,
-                    ContactName = companyInf.ContactName,
-                    WorkerNumber = companyInf.WorkerNumber,
-                    Description = companyInf.Description,
-                    DateCreated = user.DateCreated,
-                    Role = role
-                };
-                var accVm = new AccountViewModel()
-                {
-                    CompanyViewModel = companyVm
-                };
-                return new ApiSuccessResult<AccountViewModel>(accVm);
-            }
-            return new ApiErrorResult<AccountViewModel>("Your account can have more than 1 Roles. Please contact admin for support");
 
+            var userAva = await _context.UserAvatars.FirstOrDefaultAsync(x => x.UserId == id);
+            if (userAva == null)
+            {
+                return new ApiErrorResult<UserViewModel>("User does not have avatar exist.");
+            }
+            var userVm = new UserViewModel()
+            {
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Id = user.Id,
+                UserName = user.UserName,
+                DateCreated = user.DateCreated,
+                FirstName = userInf.FirstName,
+                LastName = userInf.LastName,
+                Age = userInf.Age,
+                Sex = userInf.Sex,
+                Address = userInf.Address,
+                AcademicLevel = userInf.AcademicLevel,
+                Caption = userAva.Caption,
+                FizeSize = userAva.FizeSize,
+                ImagePath = userAva.ImagePath,
+                DateCreatedAvatar = userAva.DateCreated,
+            };
+
+            return new ApiSuccessResult<UserViewModel>(userVm);
+        }
+
+        public async Task<ApiResult<CompanyViewModel>> GetCompanyById(Guid id)
+        {
+            var company = await _userManager.FindByIdAsync(id.ToString());
+            if (company == null)
+            {
+                return new ApiErrorResult<CompanyViewModel>("User does not exist ");
+            }
+            var companyInf = await _context.CompanyInformations.FindAsync(id);
+            if (companyInf == null)
+            {
+                return new ApiErrorResult<CompanyViewModel>("User does not have information exist.");
+            }
+
+            var companyAva = await _context.CompanyAvatars.FirstOrDefaultAsync(x => x.CompanyId == id);
+            if (companyAva == null)
+            {
+                return new ApiErrorResult<CompanyViewModel>("User does not have avatar exist.");
+            }
+            var companyVM = new CompanyViewModel()
+            {
+                Id = company.Id,
+                Email = company.Email,
+                PhoneNumber = company.PhoneNumber,
+                UserName = company.UserName,
+                DateCreated = company.DateCreated,
+                Name = companyInf.Name,
+                Description = companyInf.Description,
+                ContactName = companyInf.ContactName,
+                WorkerNumber = companyInf.WorkerNumber,
+                Caption = companyAva.Caption,
+                FizeSize = companyAva.FizeSize,
+                ImagePath = companyAva.ImagePath,
+                DateCreatedAvatar = companyAva.DateCreated,
+            };
+
+            return new ApiSuccessResult<CompanyViewModel>(companyVM);
         }
 
         public async Task<ApiResult<PageResult<CompanyViewModel>>> GetCompanyAccountPaging(GetUserPagingRequest request)
         {
 
-            var users = await _userManager.GetUsersInRoleAsync("company");
-            foreach (AppUser user in users)
+            var companies = await _userManager.GetUsersInRoleAsync("company");
+            foreach (AppUser company in companies)
             {
-                var userInf = await _context.CompanyInformations.FindAsync(user.Id);
-                user.CompanyInformation = userInf;
+                var companyInf = await _context.CompanyInformations.FindAsync(company.Id);
+                var companyAva = await _context.CompanyAvatars.FirstOrDefaultAsync(x => x.CompanyId == company.Id);
+                company.CompanyInformation.CompanyAvatar = companyAva;
+                company.CompanyInformation = companyInf;
             }
-            var query = users.AsQueryable();
+            var query = companies.AsQueryable();
 
             if (!string.IsNullOrEmpty(request.Keyword))
             {
@@ -191,7 +202,12 @@ namespace Application.System.Users
                     Name = x.CompanyInformation.Name,
                     Description = x.CompanyInformation.Description,
                     ContactName = x.CompanyInformation.ContactName,
-                    WorkerNumber = x.CompanyInformation.WorkerNumber
+                    WorkerNumber = x.CompanyInformation.WorkerNumber,
+                    Caption = x.CompanyInformation.CompanyAvatar.Caption,
+                    FizeSize = x.CompanyInformation.CompanyAvatar.FizeSize,
+                    ImagePath = x.CompanyInformation.CompanyAvatar.ImagePath,
+                    DateCreatedAvatar = x.CompanyInformation.CompanyAvatar.DateCreated
+
                 }).ToList();
 
             var pagedResult = new PageResult<CompanyViewModel>()
@@ -205,12 +221,13 @@ namespace Application.System.Users
         }
         public async Task<ApiResult<PageResult<UserViewModel>>> GetUserAccountPaging(GetUserPagingRequest request)
         {
-
             var users = await _userManager.GetUsersInRoleAsync("user");
 
             foreach (AppUser user in users)
             {
                 var userInf = await _context.UserInformations.FindAsync(user.Id);
+                var userAva = await _context.UserAvatars.FirstOrDefaultAsync(x => x.UserId == user.Id);
+                userInf.UserAvatar = userAva;
                 user.UserInformation = userInf;
             }
 
@@ -231,13 +248,17 @@ namespace Application.System.Users
                     PhoneNumber = x.PhoneNumber,
                     UserName = x.UserName,
                     Id = x.Id,
+                    DateCreated = x.DateCreated,
                     FirstName = x.UserInformation.FirstName,
                     LastName = x.UserInformation.LastName,
-                    Sex = x.UserInformation.Sex,
                     Age = x.UserInformation.Age,
-                    DateCreated = x.DateCreated,
+                    Sex = x.UserInformation.Sex,
+                    Address = x.UserInformation.Address,
                     AcademicLevel = x.UserInformation.AcademicLevel,
-
+                    Caption = x.UserInformation.UserAvatar.Caption,
+                    FizeSize = x.UserInformation.UserAvatar.FizeSize,
+                    ImagePath = x.UserInformation.UserAvatar.ImagePath,
+                    DateCreatedAvatar = x.UserInformation.UserAvatar.DateCreated,
 
                 }).ToList();
 
@@ -324,14 +345,18 @@ namespace Application.System.Users
                 ContactName = request.ContactName,
 
             };
-
             await _context.CompanyInformations.AddAsync(companyInf);
+            var companyAvatar = new CompanyAvatar()
+            {
+                CompanyId = user.Id,
+                FizeSize = 1,
+                DateCreated = DateTime.Now,
+                ImagePath = "default-avatar",
+                Caption = "default-avatar"
+            };
+            await _context.CompanyAvatars.AddAsync(companyAvatar);
 
             var resultUserInf = await _context.SaveChangesAsync();
-
-
-
-
 
             if (resultUserInf == 0)
             {
@@ -377,11 +402,19 @@ namespace Application.System.Users
                 AcademicLevel = request.AcademicLevel,
                 Age = request.Age,
                 Sex = request.Sex,
+                Address = request.Address
 
             };
-
             await _context.UserInformations.AddAsync(userInf);
-
+            var userAvatar = new UserAvatar()
+            {
+                UserId = user.Id,
+                FizeSize = 1,
+                DateCreated = DateTime.Now,
+                ImagePath = "default-avatar",
+                Caption = "default-avatar"
+            };
+            await _context.UserAvatars.AddAsync(userAvatar);
             var resultUserInf = await _context.SaveChangesAsync();
             if (resultUserInf == 0)
             {
@@ -425,6 +458,7 @@ namespace Application.System.Users
             userInf.AcademicLevel = request.AcademicLevel;
             userInf.LastName = request.LastName;
             userInf.Sex = request.Sex;
+            userInf.Address = request.Address;
             var resultUserInf = await _context.SaveChangesAsync();
 
 
@@ -435,5 +469,7 @@ namespace Application.System.Users
             }
             return new ApiSuccessResult<bool>(true);
         }
+
+
     }
 }

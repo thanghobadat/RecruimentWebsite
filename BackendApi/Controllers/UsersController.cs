@@ -12,8 +12,8 @@ namespace BackendApi.Controllers
     //[Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        private readonly IAccountService _userService;
+        public UsersController(IAccountService userService)
         {
             _userService = userService;
         }
@@ -80,6 +80,18 @@ namespace BackendApi.Controllers
             var products = await _userService.GetUserAccountPaging(request);
             return Ok(products);
         }
+        [HttpGet("GetUserById")]
+        public async Task<IActionResult> GetUserById(Guid id)
+        {
+            var user = await _userService.GetUserById(id);
+            return Ok(user);
+        }
+        [HttpGet("GetCompanyById")]
+        public async Task<IActionResult> GetCompanyById(Guid id)
+        {
+            var user = await _userService.GetCompanyById(id);
+            return Ok(user);
+        }
 
         [HttpPut("ChangePassword")]
         public async Task<IActionResult> ChangePassword(Guid id, string newPassword)
@@ -122,12 +134,7 @@ namespace BackendApi.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("GetById")]
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            var user = await _userService.GetById(id);
-            return Ok(user);
-        }
+
 
         [HttpDelete("DeleteUser")]
         public async Task<IActionResult> Delete(Guid id)

@@ -119,8 +119,7 @@ namespace WebApp.Controllers
                 {
 
                     Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
+
                     PhoneNumber = user.PhoneNumber,
                 };
                 return View(updateRequest);

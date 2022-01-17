@@ -1,3 +1,5 @@
+using Application.Catalog;
+using Application.Common;
 using Application.System.Users;
 using Data.EF;
 using Data.Entities;
@@ -96,7 +98,10 @@ namespace BackendApi
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 
+            services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ICompanyService, CompanyService>();
+            services.AddTransient<IStorageService, FileStorageService>();
             // services.AddTransient<IRoleService, RoleService>();
         }
 
@@ -110,6 +115,7 @@ namespace BackendApi
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.UseStaticFiles();
 
             app.UseRouting();
 
