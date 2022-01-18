@@ -11,7 +11,7 @@ namespace Application.Common
 
         public FileStorageService(IWebHostEnvironment webHostEnvironment)
         {
-            _userContentFolder = Path.GetFullPath($"../WebApp/wwwroot/{USER_CONTENT_FOLDER_NAME}");
+            _userContentFolder = Path.GetFullPath($"wwwroot/{USER_CONTENT_FOLDER_NAME}");
         }
 
         public string GetFileUrl(string fileName)
