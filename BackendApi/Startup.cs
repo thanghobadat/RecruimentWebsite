@@ -34,6 +34,7 @@ namespace BackendApi
             services.AddDbContext<RecruimentWebsiteDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("RecruimentWebsite")));
             services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<RecruimentWebsiteDbContext>().AddDefaultTokenProviders();
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+            //services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger Login", Version = "v1" });

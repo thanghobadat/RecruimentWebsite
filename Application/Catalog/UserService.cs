@@ -35,12 +35,12 @@ namespace Application.Catalog
 
             if (userAva.ImagePath != "default-avatar")
             {
-                await _storageService.DeleteFileAsync(userAva.ImagePath);
+                await _storageService.DeleteAvatarAsync(userAva.ImagePath);
             }
 
             userAva.FizeSize = thumnailImage.Length;
             userAva.Caption = thumnailImage.FileName;
-            userAva.ImagePath = await this.SaveFile(thumnailImage);
+            userAva.ImagePath = await this.SaveAvatar(thumnailImage);
             userAva.DateCreated = DateTime.Now;
             var result = await _context.SaveChangesAsync();
 
@@ -55,11 +55,11 @@ namespace Application.Catalog
         }
 
         //Save File
-        private async Task<string> SaveFile(IFormFile file)
+        private async Task<string> SaveAvatar(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
-            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
+            await _storageService.SaveAvatarAsync(file.OpenReadStream(), fileName);
             return fileName;
         }
 

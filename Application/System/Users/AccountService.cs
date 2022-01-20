@@ -170,16 +170,21 @@ namespace Application.System.Users
             return new ApiSuccessResult<CompanyViewModel>(companyVM);
         }
 
+
         public async Task<ApiResult<PageResult<CompanyViewModel>>> GetCompanyAccountPaging(GetUserPagingRequest request)
         {
+
 
             var companies = await _userManager.GetUsersInRoleAsync("company");
             foreach (AppUser company in companies)
             {
                 var companyInf = await _context.CompanyInformations.FindAsync(company.Id);
                 var companyAva = await _context.CompanyAvatars.FirstOrDefaultAsync(x => x.CompanyId == company.Id);
+                //var branch = await _context.CompanyBranches.Where(x => x.CompanyId == x.CompanyId).ToListAsync();
+
                 company.CompanyInformation.CompanyAvatar = companyAva;
                 company.CompanyInformation = companyInf;
+                //company.CompanyInformation.CompanyBranches = branch;
             }
             var query = companies.AsQueryable();
 
@@ -206,8 +211,7 @@ namespace Application.System.Users
                     Caption = x.CompanyInformation.CompanyAvatar.Caption,
                     FizeSize = x.CompanyInformation.CompanyAvatar.FizeSize,
                     ImagePath = x.CompanyInformation.CompanyAvatar.ImagePath,
-                    DateCreatedAvatar = x.CompanyInformation.CompanyAvatar.DateCreated
-
+                    DateCreatedAvatar = x.CompanyInformation.CompanyAvatar.DateCreated,
                 }).ToList();
 
             var pagedResult = new PageResult<CompanyViewModel>()

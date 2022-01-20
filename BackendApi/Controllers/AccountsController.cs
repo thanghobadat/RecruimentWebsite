@@ -71,8 +71,8 @@ namespace BackendApi.Controllers
         [HttpGet("GetCompanyAccount")]
         public async Task<IActionResult> GetCompanyAccountPaging([FromQuery] GetUserPagingRequest request)
         {
-            var products = await _accountService.GetCompanyAccountPaging(request);
-            return Ok(products);
+            var result = await _accountService.GetCompanyAccountPaging(request);
+            return Ok(result);
         }
         [HttpGet("GetUserAccount")]
         public async Task<IActionResult> GetUserAccountPaging([FromQuery] GetUserPagingRequest request)
@@ -89,8 +89,8 @@ namespace BackendApi.Controllers
         [HttpGet("GetCompanyById")]
         public async Task<IActionResult> GetCompanyById(Guid id)
         {
-            var user = await _accountService.GetCompanyById(id);
-            return Ok(user);
+            var company = await _accountService.GetCompanyById(id);
+            return Ok(company);
         }
 
         [HttpPut("ChangePassword")]

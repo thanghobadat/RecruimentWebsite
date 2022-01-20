@@ -6,33 +6,53 @@ namespace Application.Common
 {
     public class FileStorageService : IStorageService
     {
-        private readonly string _userContentFolder;
-        private const string USER_CONTENT_FOLDER_NAME = "images";
+        private readonly string _userContentFolderAvatar;
+        private readonly string _userContentFolderImages;
+        private const string USER_CONTENT_FOLDER_NAME_Avatar = "avatar";
+        private const string USER_CONTENT_FOLDER_NAME_Images = "images";
 
         public FileStorageService(IWebHostEnvironment webHostEnvironment)
         {
-            _userContentFolder = Path.GetFullPath($"wwwroot/{USER_CONTENT_FOLDER_NAME}");
+            _userContentFolderAvatar = Path.GetFullPath($"wwwroot/{USER_CONTENT_FOLDER_NAME_Avatar}");
+            _userContentFolderImages = Path.GetFullPath($"wwwroot/{USER_CONTENT_FOLDER_NAME_Images}");
         }
 
-        public string GetFileUrl(string fileName)
+        public string GetFileUrlAvatar(string fileName)
         {
-            return $"/{USER_CONTENT_FOLDER_NAME}/{fileName}";
+            return $"/{USER_CONTENT_FOLDER_NAME_Avatar}/{fileName}";
         }
-
-        public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName)
+        public string GetFileUrlImages(string fileName)
         {
-            var filePath = Path.Combine(_userContentFolder, fileName);
+            return $"/{USER_CONTENT_FOLDER_NAME_Images}/{fileName}";
+        }
+        public async Task SaveAvatarAsync(Stream mediaBinaryStream, string fileName)
+        {
+            var filePath = Path.Combine(_userContentFolderAvatar, fileName);
             using var output = new FileStream(filePath, FileMode.Create);
             await mediaBinaryStream.CopyToAsync(output);
         }
-
-        public async Task DeleteFileAsync(string fileName)
+        public async Task SaveImagesAsync(Stream mediaBinaryStream, string fileName)
         {
-            var filePath = Path.Combine(_userContentFolder, fileName);
+            var filePath = Path.Combine(USER_CONTENT_FOLDER_NAME_Images, fileName);
+            using var output = new FileStream(filePath, FileMode.Create);
+            await mediaBinaryStream.CopyToAsync(output);
+        }
+        public async Task DeleteAvatarAsync(string fileName)
+        {
+            var filePath = Path.Combine(_userContentFolderAvatar, fileName);
             if (File.Exists(filePath))
             {
                 await Task.Run(() => File.Delete(filePath));
             }
         }
+        public async Task DeleteImagesAsync(string fileName)
+        {
+            var filePath = Path.Combine(USER_CONTENT_FOLDER_NAME_Images, fileName);
+            if (File.Exists(filePath))
+            {
+                await Task.Run(() => File.Delete(filePath));
+            }
+        }
+
     }
 }

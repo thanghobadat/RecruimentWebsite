@@ -17,5 +17,6 @@ namespace ViewModel.System.Users
         public string ImagePath { get; set; }
         public string Caption { get; set; }
         public long FizeSize { get; set; }
+        //public List<CompanyBranch> Address { get; set; }
     }
 }

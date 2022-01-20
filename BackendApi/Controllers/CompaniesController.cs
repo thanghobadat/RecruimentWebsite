@@ -17,6 +17,20 @@ namespace BackendApi.Controllers
             _companyService = companyService;
         }
 
+        [HttpGet("GetCompanyBranches")]
+        public async Task<IActionResult> GetCompanyBranches([FromQuery] GetCompanyBranchRequest request)
+        {
+            var result = await _companyService.GetAllBranchPaging(request);
+            return Ok(result);
+        }
+        [HttpGet("GetCompanyImages")]
+        public async Task<IActionResult> GetCompanyImages([FromQuery] GetCompanyImagesRequest request)
+        {
+            var result = await _companyService.GetAllImagesPaging(request);
+            return Ok(result);
+        }
+
+
         [HttpPost("CreateNewBranch")]
         public async Task<IActionResult> CreateNewBranch([FromBody] CreateBranchRequest request)
         {
@@ -25,6 +39,21 @@ namespace BackendApi.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _companyService.CreateBranch(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("CreateCompanyImages")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> CreateCompanyImages([FromForm] CreateCompanyImageRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _companyService.CreateCompanyImages(request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
@@ -47,6 +76,26 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
 
+        [HttpPut("UpdateBranch")]
+        public async Task<IActionResult> UpdateBranch([FromBody] UpdateBranchRequest request)
+        {
+            var result = await _companyService.UpdateBranch(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
 
+        [HttpDelete("DeleteBranch")]
+        public async Task<IActionResult> DeleteBranch(int id)
+        {
+            var result = await _companyService.DeleteBranch(id);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
     }
 }
