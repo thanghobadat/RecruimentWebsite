@@ -1,8 +1,6 @@
 ﻿using Application.Common;
 using Data.EF;
-using Data.Entities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
@@ -14,13 +12,10 @@ namespace Application.Catalog
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<AppUser> _userManager;
         private readonly RecruimentWebsiteDbContext _context;
         private readonly IStorageService _storageService;
-        public UserService(UserManager<AppUser> userManager,
-            RecruimentWebsiteDbContext context, IStorageService storageService)
+        public UserService(RecruimentWebsiteDbContext context, IStorageService storageService)
         {
-            _userManager = userManager;
             _context = context;
             _storageService = storageService;
         }
@@ -37,21 +32,26 @@ namespace Application.Catalog
             {
                 await _storageService.DeleteAvatarAsync(userAva.ImagePath);
             }
-
-            userAva.FizeSize = thumnailImage.Length;
-            userAva.Caption = thumnailImage.FileName;
-            userAva.ImagePath = await this.SaveAvatar(thumnailImage);
-            userAva.DateCreated = DateTime.Now;
-            var result = await _context.SaveChangesAsync();
-
-
-
-            if (result == 0)
+            var imageIndex = thumnailImage.FileName.LastIndexOf(".");
+            var imageType = thumnailImage.FileName.Substring(imageIndex + 1);
+            if (imageType == "jpg" || imageType == "png")
             {
-                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
-            }
-            return new ApiSuccessResult<bool>(true);
+                userAva.FizeSize = thumnailImage.Length;
+                userAva.Caption = thumnailImage.FileName;
+                userAva.ImagePath = await this.SaveAvatar(thumnailImage);
+                userAva.DateCreated = DateTime.Now;
+                var result = await _context.SaveChangesAsync();
 
+
+
+                if (result == 0)
+                {
+                    return new ApiErrorResult<bool>("An error occured, register unsuccessful");
+                }
+                return new ApiSuccessResult<bool>(true);
+            }
+
+            return new ApiErrorResult<bool>("Please choose jpg or png image file");
         }
 
         //Save File

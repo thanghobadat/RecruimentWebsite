@@ -8,8 +8,8 @@ namespace Application.Common
     {
         private readonly string _userContentFolderAvatar;
         private readonly string _userContentFolderImages;
-        private const string USER_CONTENT_FOLDER_NAME_Avatar = "avatar";
-        private const string USER_CONTENT_FOLDER_NAME_Images = "images";
+        private const string USER_CONTENT_FOLDER_NAME_Avatar = "Avatar";
+        private const string USER_CONTENT_FOLDER_NAME_Images = "Images";
 
         public FileStorageService(IWebHostEnvironment webHostEnvironment)
         {
@@ -33,7 +33,7 @@ namespace Application.Common
         }
         public async Task SaveImagesAsync(Stream mediaBinaryStream, string fileName)
         {
-            var filePath = Path.Combine(USER_CONTENT_FOLDER_NAME_Images, fileName);
+            var filePath = Path.Combine(_userContentFolderImages, fileName);
             using var output = new FileStream(filePath, FileMode.Create);
             await mediaBinaryStream.CopyToAsync(output);
         }
@@ -47,7 +47,7 @@ namespace Application.Common
         }
         public async Task DeleteImagesAsync(string fileName)
         {
-            var filePath = Path.Combine(USER_CONTENT_FOLDER_NAME_Images, fileName);
+            var filePath = Path.Combine(_userContentFolderImages, fileName);
             if (File.Exists(filePath))
             {
                 await Task.Run(() => File.Delete(filePath));

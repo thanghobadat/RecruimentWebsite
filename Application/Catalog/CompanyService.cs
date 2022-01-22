@@ -57,16 +57,26 @@ namespace Application.Catalog
 
             foreach (var image in request.Images)
             {
-                var companyImage = new CompanyImage()
+                var imageIndex = image.FileName.LastIndexOf(".");
+                var imageType = image.FileName.Substring(imageIndex + 1);
+                if (imageType == "jpg" || imageType == "png")
                 {
-                    FizeSize = image.Length,
-                    Caption = image.FileName,
-                    DateCreated = DateTime.Now,
-                    CompanyId = request.CompanyId,
-                    ImagePath = await this.SaveImages(image)
-                };
+                    var companyImage = new CompanyImage()
+                    {
+                        FizeSize = image.Length,
+                        Caption = image.FileName,
+                        DateCreated = DateTime.Now,
+                        CompanyId = request.CompanyId,
+                        ImagePath = await this.SaveImages(image)
+                    };
 
-                await _context.CompanyImages.AddAsync(companyImage);
+                    await _context.CompanyImages.AddAsync(companyImage);
+                }
+                else
+                {
+                    return new ApiErrorResult<bool>("Please choose jpg or png image file");
+                }
+
             }
 
             var result = await _context.SaveChangesAsync();
@@ -169,20 +179,24 @@ namespace Application.Catalog
             {
                 await _storageService.DeleteAvatarAsync(companyAva.ImagePath);
             }
-
-            companyAva.FizeSize = thumnailImage.Length;
-            companyAva.Caption = thumnailImage.FileName;
-            companyAva.ImagePath = await this.SaveAvatar(thumnailImage);
-            companyAva.DateCreated = DateTime.Now;
-            var result = await _context.SaveChangesAsync();
-
-
-
-            if (result == 0)
+            var imageIndex = thumnailImage.FileName.LastIndexOf(".");
+            var imageType = thumnailImage.FileName.Substring(imageIndex + 1);
+            if (imageType == "jpg" || imageType == "png")
             {
-                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
+                companyAva.FizeSize = thumnailImage.Length;
+                companyAva.Caption = thumnailImage.FileName;
+                companyAva.ImagePath = await this.SaveAvatar(thumnailImage);
+                companyAva.DateCreated = DateTime.Now;
+                var result = await _context.SaveChangesAsync();
+
+                if (result == 0)
+                {
+                    return new ApiErrorResult<bool>("An error occured, register unsuccessful");
+                }
+                return new ApiSuccessResult<bool>(true);
             }
-            return new ApiSuccessResult<bool>(true);
+            return new ApiErrorResult<bool>("Please choose jpg or png image file");
+
         }
 
         public async Task<ApiResult<bool>> UpdateBranch(UpdateBranchRequest request)
