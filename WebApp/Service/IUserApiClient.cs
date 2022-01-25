@@ -9,9 +9,9 @@ namespace WebApp.Service
     {
         Task<string> Authenticate(LoginRequest request);
         Task<bool> RegisterUser(RegisterUserAccountRequest registerRequest);
-        Task<ApiResult<PageResult<UserViewModel>>> GetUserPagings(GetUserPagingRequest request);
+        Task<ApiResult<PageResult<UserAccountViewModel>>> GetUserPagings(GetUserPagingRequest request);
         Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request);
-        Task<ApiResult<UserViewModel>> GetById(Guid id);
+        Task<ApiResult<UserAccountViewModel>> GetById(Guid id);
         Task<ApiResult<bool>> Delete(Guid id);
     }
 }

@@ -8,13 +8,16 @@ namespace Application.Common
     {
         private readonly string _userContentFolderAvatar;
         private readonly string _userContentFolderImages;
-        private const string USER_CONTENT_FOLDER_NAME_Avatar = "Avatar";
+        private readonly string _userContentFolderCoverImages;
+        private const string USER_CONTENT_FOLDER_NAME_Avatar = "Avatars";
         private const string USER_CONTENT_FOLDER_NAME_Images = "Images";
+        private const string USER_CONTENT_FOLDER_NAME_Cover_Images = "CoverImages";
 
         public FileStorageService(IWebHostEnvironment webHostEnvironment)
         {
             _userContentFolderAvatar = Path.GetFullPath($"wwwroot/{USER_CONTENT_FOLDER_NAME_Avatar}");
             _userContentFolderImages = Path.GetFullPath($"wwwroot/{USER_CONTENT_FOLDER_NAME_Images}");
+            _userContentFolderCoverImages = Path.GetFullPath($"wwwroot/{USER_CONTENT_FOLDER_NAME_Cover_Images}");
         }
 
         public string GetFileUrlAvatar(string fileName)
@@ -54,5 +57,20 @@ namespace Application.Common
             }
         }
 
+        public async Task SaveCoverImageAsync(Stream mediaBinaryStream, string fileName)
+        {
+            var filePath = Path.Combine(_userContentFolderCoverImages, fileName);
+            using var output = new FileStream(filePath, FileMode.Create);
+            await mediaBinaryStream.CopyToAsync(output);
+        }
+
+        public async Task DeleteCoverImageAsync(string fileName)
+        {
+            var filePath = Path.Combine(_userContentFolderCoverImages, fileName);
+            if (File.Exists(filePath))
+            {
+                await Task.Run(() => File.Delete(filePath));
+            }
+        }
     }
 }

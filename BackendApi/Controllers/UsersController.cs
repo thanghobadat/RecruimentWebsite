@@ -18,14 +18,28 @@ namespace BackendApi.Controllers
             _userService = userService;
         }
 
-        [HttpPut("UpdateAvatar")]
+        [HttpGet("GetUserInformation")]
+        public async Task<IActionResult> GetUserInformation(Guid userId)
+        {
+            var result = await _userService.GetUserInformation(userId);
+            return Ok(result);
+        }
+
+        [HttpGet("GetUserAvatar")]
+        public async Task<IActionResult> GetUserAvatar(Guid userId)
+        {
+            var result = await _userService.GetUserAvatar(userId);
+            return Ok(result);
+        }
+
+        [HttpPut("UpdateUserAvatar")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UpdateAvatar([FromForm] Guid id, IFormFile thumnailImage)
+        public async Task<IActionResult> UpdateUserAvatar([FromForm] int id, IFormFile thumnailImage)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _userService.UpdateAvatar(id, thumnailImage);
+            var result = await _userService.UpdateUserAvatar(id, thumnailImage);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);

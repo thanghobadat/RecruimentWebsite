@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using ViewModel.Catalog.User;
 using ViewModel.Common;
 
 namespace Application.Catalog
@@ -20,22 +21,69 @@ namespace Application.Catalog
             _storageService = storageService;
         }
 
-        public async Task<ApiResult<bool>> UpdateAvatar(Guid id, IFormFile thumnailImage)
+        public async Task<ApiResult<UserInformationViewModel>> GetUserInformation(Guid userId)
         {
-            var userAva = await _context.UserAvatars.FirstOrDefaultAsync(x => x.UserId == id);
+            var userInfor = await _context.UserInformations.FindAsync(userId);
+            if (userInfor == null)
+            {
+                return new ApiErrorResult<UserInformationViewModel>("User information could not be found, please check again");
+            }
+
+            var userInforVM = new UserInformationViewModel()
+            {
+                FirstName = userInfor.FirstName,
+                LastName = userInfor.LastName,
+                AcademicLevel = userInfor.AcademicLevel,
+                Address = userInfor.Address,
+                Sex = userInfor.Sex,
+                Age = userInfor.Age,
+                UserId = userInfor.UserId,
+
+            };
+
+            var userAvatar = await this.GetUserAvatar(userId);
+            userInforVM.UserAvatar = userAvatar.ResultObj;
+            return new ApiSuccessResult<UserInformationViewModel>(userInforVM);
+        }
+
+        public async Task<ApiResult<UserAvatarViewModel>> GetUserAvatar(Guid userId)
+        {
+            var avatar = await _context.UserAvatars.FirstOrDefaultAsync(x => x.UserId == userId);
+            if (avatar == null)
+            {
+                return new ApiErrorResult<UserAvatarViewModel>("Something wrong, Please check user id");
+            }
+
+            var avatarVM = new UserAvatarViewModel()
+            {
+                UserId = userId,
+                Caption = avatar.Caption,
+                FileSize = avatar.FizeSize,
+                ImagePath = avatar.ImagePath,
+                DateCreated = avatar.DateCreated,
+                Id = avatar.Id
+            };
+
+            return new ApiSuccessResult<UserAvatarViewModel>(avatarVM);
+        }
+
+        public async Task<ApiResult<bool>> UpdateUserAvatar(int id, IFormFile thumnailImage)
+        {
+            var userAva = await _context.UserAvatars.FindAsync(id);
             if (userAva == null)
             {
                 return new ApiErrorResult<bool>("User avatar information could not be found");
             }
 
-            if (userAva.ImagePath != "default-avatar")
-            {
-                await _storageService.DeleteAvatarAsync(userAva.ImagePath);
-            }
+
             var imageIndex = thumnailImage.FileName.LastIndexOf(".");
             var imageType = thumnailImage.FileName.Substring(imageIndex + 1);
             if (imageType == "jpg" || imageType == "png")
             {
+                if (userAva.ImagePath != "default-avatar")
+                {
+                    await _storageService.DeleteAvatarAsync(userAva.ImagePath);
+                }
                 userAva.FizeSize = thumnailImage.Length;
                 userAva.Caption = thumnailImage.FileName;
                 userAva.ImagePath = await this.SaveAvatar(thumnailImage);

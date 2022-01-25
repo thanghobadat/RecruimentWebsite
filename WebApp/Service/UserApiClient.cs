@@ -50,7 +50,7 @@ namespace WebApp.Service
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
         }
 
-        public async Task<ApiResult<UserViewModel>> GetById(Guid id)
+        public async Task<ApiResult<UserAccountViewModel>> GetById(Guid id)
         {
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
             var client = _httpClientFactory.CreateClient();
@@ -61,12 +61,12 @@ namespace WebApp.Service
             var response = await client.GetAsync($"/api/users/{id}");
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<UserViewModel>>(body);
+                return JsonConvert.DeserializeObject<ApiSuccessResult<UserAccountViewModel>>(body);
 
-            return JsonConvert.DeserializeObject<ApiErrorResult<UserViewModel>>(body);
+            return JsonConvert.DeserializeObject<ApiErrorResult<UserAccountViewModel>>(body);
         }
 
-        public async Task<ApiResult<PageResult<UserViewModel>>> GetUserPagings(GetUserPagingRequest request)
+        public async Task<ApiResult<PageResult<UserAccountViewModel>>> GetUserPagings(GetUserPagingRequest request)
         {
             var client = _httpClientFactory.CreateClient();
 
@@ -80,7 +80,7 @@ namespace WebApp.Service
             var response = await client.GetAsync($"/api/users/paging?pageIndex=" +
                $"{request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}");
             var body = await response.Content.ReadAsStringAsync();
-            var users = JsonConvert.DeserializeObject<ApiSuccessResult<PageResult<UserViewModel>>>(body);
+            var users = JsonConvert.DeserializeObject<ApiSuccessResult<PageResult<UserAccountViewModel>>>(body);
             return users;
         }
 

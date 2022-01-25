@@ -36,6 +36,22 @@ namespace BackendApi.Controllers
             return Ok(resultToken);
         }
 
+        [HttpPost("RegisterAdmin")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminAccountRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _accountService.RegisterAdminAccount(request);
+            if (!result.ResultObj)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
         [HttpPost("RegisterUser")]
         [AllowAnonymous]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserAccountRequest request)
@@ -80,14 +96,14 @@ namespace BackendApi.Controllers
             var products = await _accountService.GetUserAccountPaging(request);
             return Ok(products);
         }
-        [HttpGet("GetUserById")]
-        public async Task<IActionResult> GetUserById(Guid id)
+        [HttpGet("GetUserAccountById")]
+        public async Task<IActionResult> GetUserAccountById(Guid id)
         {
             var user = await _accountService.GetUserById(id);
             return Ok(user);
         }
-        [HttpGet("GetCompanyById")]
-        public async Task<IActionResult> GetCompanyById(Guid id)
+        [HttpGet("GetCompanyAccountById")]
+        public async Task<IActionResult> GetCompanyAccountById(Guid id)
         {
             var company = await _accountService.GetCompanyById(id);
             return Ok(company);

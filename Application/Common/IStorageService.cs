@@ -11,8 +11,12 @@ namespace Application.Common
 
         Task SaveAvatarAsync(Stream mediaBinaryStream, string fileName);
         Task SaveImagesAsync(Stream mediaBinaryStream, string fileName);
+        Task SaveCoverImageAsync(Stream mediaBinaryStream, string fileName);
 
         Task DeleteAvatarAsync(string fileName);
         Task DeleteImagesAsync(string fileName);
+
+
+        Task DeleteCoverImageAsync(string fileName);
     }
 }
