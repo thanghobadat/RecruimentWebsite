@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using AutoMapper;
 using Data.EF;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,13 @@ namespace Application.Catalog
     {
         private readonly RecruimentWebsiteDbContext _context;
         private readonly IStorageService _storageService;
-        public UserService(RecruimentWebsiteDbContext context, IStorageService storageService)
+        private readonly IMapper _mapper;
+        public UserService(RecruimentWebsiteDbContext context, IStorageService storageService,
+            IMapper mapper)
         {
             _context = context;
             _storageService = storageService;
+            _mapper = mapper;
         }
 
         public async Task<ApiResult<UserInformationViewModel>> GetUserInformation(Guid userId)
@@ -29,17 +33,7 @@ namespace Application.Catalog
                 return new ApiErrorResult<UserInformationViewModel>("User information could not be found, please check again");
             }
 
-            var userInforVM = new UserInformationViewModel()
-            {
-                FirstName = userInfor.FirstName,
-                LastName = userInfor.LastName,
-                AcademicLevel = userInfor.AcademicLevel,
-                Address = userInfor.Address,
-                Sex = userInfor.Sex,
-                Age = userInfor.Age,
-                UserId = userInfor.UserId,
-
-            };
+            var userInforVM = _mapper.Map<UserInformationViewModel>(userInfor);
 
             var userAvatar = await this.GetUserAvatar(userId);
             userInforVM.UserAvatar = userAvatar.ResultObj;
@@ -54,15 +48,7 @@ namespace Application.Catalog
                 return new ApiErrorResult<UserAvatarViewModel>("Something wrong, Please check user id");
             }
 
-            var avatarVM = new UserAvatarViewModel()
-            {
-                UserId = userId,
-                Caption = avatar.Caption,
-                FileSize = avatar.FizeSize,
-                ImagePath = avatar.ImagePath,
-                DateCreated = avatar.DateCreated,
-                Id = avatar.Id
-            };
+            var avatarVM = _mapper.Map<UserAvatarViewModel>(avatar);
 
             return new ApiSuccessResult<UserAvatarViewModel>(avatarVM);
         }

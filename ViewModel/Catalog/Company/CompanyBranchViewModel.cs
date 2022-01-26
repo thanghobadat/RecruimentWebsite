@@ -3,6 +3,6 @@
     public class CompanyBranchViewModel
     {
         public int Id { get; set; }
-        public string Addresss { get; set; }
+        public string Address { get; set; }
     }
 }

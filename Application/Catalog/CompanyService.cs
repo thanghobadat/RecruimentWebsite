@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using AutoMapper;
 using Data.EF;
 using Data.Entities;
 using Microsoft.AspNetCore.Http;
@@ -18,10 +19,13 @@ namespace Application.Catalog
     {
         private readonly RecruimentWebsiteDbContext _context;
         private readonly IStorageService _storageService;
-        public CompanyService(RecruimentWebsiteDbContext context, IStorageService storageService)
+        private readonly IMapper _mapper;
+        public CompanyService(RecruimentWebsiteDbContext context, IStorageService storageService,
+            IMapper mapper)
         {
             _context = context;
             _storageService = storageService;
+            _mapper = mapper;
         }
 
         public async Task<ApiResult<bool>> CreateBranch(CreateBranchRequest request)
@@ -32,11 +36,7 @@ namespace Application.Catalog
                 return new ApiErrorResult<bool>("Company doesn't exist, please try again");
             }
 
-            var companyBranch = new CompanyBranch()
-            {
-                Address = request.Address,
-                CompanyId = request.CompanyId
-            };
+            var companyBranch = _mapper.Map<CompanyBranch>(request);
 
             await _context.CompanyBranches.AddAsync(companyBranch);
             var result = await _context.SaveChangesAsync();
@@ -187,12 +187,7 @@ namespace Application.Catalog
 
             }
 
-            var data = branch.Select(x => new CompanyBranchViewModel()
-            {
-                Id = x.Id,
-                Addresss = x.Address
-
-            }).ToList();
+            var data = branch.Select(branch => _mapper.Map<CompanyBranchViewModel>(branch)).ToList();
 
 
             return new ApiSuccessResult<List<CompanyBranchViewModel>>(data);
@@ -216,14 +211,7 @@ namespace Application.Catalog
             int totalRow = companyImages.Count();
             var data = companyImages.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(x => new CompanyImagesViewModel()
-                {
-                    Id = x.Id,
-                    DateCreated = x.DateCreated,
-                    Caption = x.Caption,
-                    FizeSize = x.FizeSize,
-                    ImagePath = x.ImagePath
-                }).ToList();
+                .Select(image => _mapper.Map<CompanyImagesViewModel>(image)).ToList();
 
             var pagedResult = new PageResult<CompanyImagesViewModel>()
             {
@@ -243,15 +231,7 @@ namespace Application.Catalog
                 return new ApiErrorResult<CompanyAvatarViewModel>("Something wrong, Please check company id");
             }
 
-            var avatarVM = new CompanyAvatarViewModel()
-            {
-                CompanyId = companyId,
-                Caption = avatar.Caption,
-                FileSize = avatar.FizeSize,
-                ImagePath = avatar.ImagePath,
-                DateCreated = avatar.DateCreated,
-                Id = avatar.Id
-            };
+            var avatarVM = _mapper.Map<CompanyAvatarViewModel>(avatar);
 
             return new ApiSuccessResult<CompanyAvatarViewModel>(avatarVM);
         }
@@ -264,15 +244,7 @@ namespace Application.Catalog
                 return new ApiErrorResult<CompanyCoverImageViewModel>("This company doesn't have cover image, Please upload cover image first");
             }
 
-            var coverImageVM = new CompanyCoverImageViewModel()
-            {
-                CompanyId = companyId,
-                Caption = coverImage.Caption,
-                FileSize = coverImage.FizeSize,
-                ImagePath = coverImage.ImagePath,
-                DateCreated = coverImage.DateCreated,
-                Id = coverImage.Id
-            };
+            var coverImageVM = _mapper.Map<CompanyCoverImageViewModel>(coverImage);
 
             return new ApiSuccessResult<CompanyCoverImageViewModel>(coverImageVM);
         }
@@ -285,14 +257,7 @@ namespace Application.Catalog
                 return new ApiErrorResult<CompanyInformationViewModel>("Company information could not be found, please check again");
             }
 
-            var companyInforVM = new CompanyInformationViewModel()
-            {
-                CompanyId = companyId,
-                Name = companyInfor.Name,
-                Description = companyInfor.Description,
-                WorkerNumber = companyInfor.WorkerNumber,
-                ContactName = companyInfor.ContactName
-            };
+            var companyInforVM = _mapper.Map<CompanyInformationViewModel>(companyInfor);
 
             var companyAvatar = await this.GetCompanyAvatar(companyId);
             companyInforVM.CompanyAvatar = companyAvatar.ResultObj;
@@ -302,24 +267,14 @@ namespace Application.Catalog
             var queryBranchs = await _context.CompanyBranches.Where(x => x.CompanyId == companyId).ToListAsync();
             var companyBranchs = queryBranchs.AsQueryable();
 
-            var companyBranchsVM = companyBranchs.Select(x => new CompanyBranchViewModel()
-            {
-                Addresss = x.Address
-            }).ToList();
+            var companyBranchsVM = companyBranchs.Select(branch => _mapper.Map<CompanyBranchViewModel>(branch)).ToList();
 
             companyInforVM.CompanyBranches = companyBranchsVM;
 
             var queryImages = await _context.CompanyImages.Where(x => x.CompanyId == companyId).ToListAsync();
             var companyImages = queryImages.AsQueryable();
 
-            var companyImagesVM = companyImages.Select(x => new CompanyImagesViewModel()
-            {
-                Id = x.Id,
-                DateCreated = x.DateCreated,
-                Caption = x.Caption,
-                FizeSize = x.FizeSize,
-                ImagePath = x.ImagePath
-            }).ToList();
+            var companyImagesVM = companyImages.Select(image => _mapper.Map<CompanyImagesViewModel>(image)).ToList();
 
             companyInforVM.CompanyImages = companyImagesVM;
             return new ApiSuccessResult<CompanyInformationViewModel>(companyInforVM);

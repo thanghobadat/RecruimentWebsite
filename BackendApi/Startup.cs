@@ -1,6 +1,8 @@
+using Application.AutoMapper;
 using Application.Catalog;
 using Application.Common;
 using Application.System.Users;
+using AutoMapper;
 using Data.EF;
 using Data.Entities;
 using FluentValidation.AspNetCore;
@@ -33,6 +35,13 @@ namespace BackendApi
         {
             services.AddDbContext<RecruimentWebsiteDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("RecruimentWebsite")));
             services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<RecruimentWebsiteDbContext>().AddDefaultTokenProviders();
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
             //services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen(c =>

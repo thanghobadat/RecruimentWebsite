@@ -1,4 +1,5 @@
-﻿using Data.EF;
+﻿using AutoMapper;
+using Data.EF;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -21,14 +22,18 @@ namespace Application.System.Users
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _config;
         private readonly RecruimentWebsiteDbContext _context;
+        private readonly IMapper _mapper;
+
         public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
-            RoleManager<AppRole> roleManager, IConfiguration config, RecruimentWebsiteDbContext context)
+            RoleManager<AppRole> roleManager, IConfiguration config, RecruimentWebsiteDbContext context,
+            IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _config = config;
             _context = context;
+            _mapper = mapper;
         }
         public async Task<string> Authenticate(LoginRequest request)
         {
@@ -99,14 +104,7 @@ namespace Application.System.Users
                 return new ApiErrorResult<UserAccountViewModel>("User does not exist ");
             }
 
-            var userVm = new UserAccountViewModel()
-            {
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
-                Id = user.Id,
-                UserName = user.UserName,
-                DateCreated = user.DateCreated,
-            };
+            var userVm = _mapper.Map<UserAccountViewModel>(user);
 
             return new ApiSuccessResult<UserAccountViewModel>(userVm);
         }
@@ -119,15 +117,7 @@ namespace Application.System.Users
                 return new ApiErrorResult<CompanyAccountViewModel>("User does not exist ");
             }
 
-            var companyVM = new CompanyAccountViewModel()
-            {
-                Id = company.Id,
-                Email = company.Email,
-                PhoneNumber = company.PhoneNumber,
-                UserName = company.UserName,
-                DateCreated = company.DateCreated,
-
-            };
+            var companyVM = _mapper.Map<CompanyAccountViewModel>(company);
 
             return new ApiSuccessResult<CompanyAccountViewModel>(companyVM);
         }
@@ -149,15 +139,7 @@ namespace Application.System.Users
 
             var data = query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(x => new CompanyAccountViewModel()
-                {
-                    Email = x.Email,
-                    PhoneNumber = x.PhoneNumber,
-                    UserName = x.UserName,
-                    Id = x.Id,
-                    DateCreated = x.DateCreated,
-
-                }).ToList();
+                .Select(company => _mapper.Map<CompanyAccountViewModel>(company)).ToList();
 
             var pagedResult = new PageResult<CompanyAccountViewModel>()
             {
@@ -181,16 +163,10 @@ namespace Application.System.Users
             }
             int totalRow = query.Count();
 
+
             var data = query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(x => new UserAccountViewModel()
-                {
-                    Email = x.Email,
-                    PhoneNumber = x.PhoneNumber,
-                    UserName = x.UserName,
-                    Id = x.Id,
-                    DateCreated = x.DateCreated,
-                }).ToList();
+                .Select(user => _mapper.Map<UserAccountViewModel>(user)).ToList();
 
             var pagedResult = new PageResult<UserAccountViewModel>()
             {
