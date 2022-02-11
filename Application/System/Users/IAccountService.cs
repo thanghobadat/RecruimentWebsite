@@ -11,8 +11,8 @@ namespace Application.System.Users
         Task<ApiResult<bool>> RegisterUserAccount(RegisterUserAccountRequest request);
         Task<ApiResult<bool>> RegisterCompanyAccount(RegisterCompanyAccountRequest request);
         Task<ApiResult<bool>> RegisterAdminAccount(RegisterAdminAccountRequest request);
-        Task<ApiResult<PageResult<UserAccountViewModel>>> GetUserAccountPaging(GetUserPagingRequest request);
-        Task<ApiResult<PageResult<CompanyAccountViewModel>>> GetCompanyAccountPaging(GetUserPagingRequest request);
+        Task<ApiResult<PageResult<UserAccountViewModel>>> GetUserAccountPaging(GetAccountPagingRequest request);
+        Task<ApiResult<PageResult<CompanyAccountViewModel>>> GetCompanyAccountPaging(GetAccountPagingRequest request);
         Task<ApiResult<UserAccountViewModel>> GetUserById(Guid id);
         Task<ApiResult<CompanyAccountViewModel>> GetCompanyById(Guid id);
         Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request);

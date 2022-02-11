@@ -85,13 +85,13 @@ namespace BackendApi.Controllers
         }
 
         [HttpGet("GetCompanyAccount")]
-        public async Task<IActionResult> GetCompanyAccountPaging([FromQuery] GetUserPagingRequest request)
+        public async Task<IActionResult> GetCompanyAccountPaging([FromQuery] GetAccountPagingRequest request)
         {
             var result = await _accountService.GetCompanyAccountPaging(request);
             return Ok(result);
         }
         [HttpGet("GetUserAccount")]
-        public async Task<IActionResult> GetUserAccountPaging([FromQuery] GetUserPagingRequest request)
+        public async Task<IActionResult> GetUserAccountPaging([FromQuery] GetAccountPagingRequest request)
         {
             var products = await _accountService.GetUserAccountPaging(request);
             return Ok(products);
@@ -152,8 +152,8 @@ namespace BackendApi.Controllers
         }
 
 
-        [HttpDelete("DeleteUser")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("DeleteAccount")]
+        public async Task<IActionResult> DeleteAccount(Guid id)
         {
             var result = await _accountService.Delete(id);
             return Ok(result);

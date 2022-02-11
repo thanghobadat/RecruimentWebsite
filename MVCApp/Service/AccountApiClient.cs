@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using MVCApp.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModel.Common;
 using ViewModel.System.Users;
 
 namespace MVCApp.Service
@@ -31,6 +34,76 @@ namespace MVCApp.Service
             var response = await client.PostAsync("/api/accounts/authenticate", httpContent);
             var token = await response.Content.ReadAsStringAsync();
             return token;
+        }
+
+        public async Task<ApiResult<bool>> ChangePassword(ChangePasswordRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.BaseAddress = new Uri("https://localhost:5001");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"/api/accounts/changePassword?id={request.Id}&newPassword={request.Password}", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
+        }
+
+        public async Task<ApiResult<bool>> DeleteAccount(Guid Id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.BaseAddress = new Uri("https://localhost:5001");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+
+            var response = await client.DeleteAsync($"/api/accounts/deleteAccount?id={Id}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
+        }
+
+        public async Task<ApiResult<PageResult<CompanyAccountViewModel>>> GetCompanyAccountPagings(GetAccountPagingRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.BaseAddress = new Uri("https://localhost:5001");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+
+            var response = await client.GetAsync($"/api/accounts/getCompanyAccount?pageIndex=" +
+               $"{request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}");
+            var body = await response.Content.ReadAsStringAsync();
+            var accounts = JsonConvert.DeserializeObject<ApiSuccessResult<PageResult<CompanyAccountViewModel>>>(body);
+            return accounts;
+        }
+
+        public async Task<ApiResult<PageResult<UserAccountViewModel>>> GetUserAccountPagings(GetAccountPagingRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.BaseAddress = new Uri("https://localhost:5001");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+
+            var response = await client.GetAsync($"/api/accounts/getUserAccount?pageIndex=" +
+               $"{request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}");
+            var body = await response.Content.ReadAsStringAsync();
+            var accounts = JsonConvert.DeserializeObject<ApiSuccessResult<PageResult<UserAccountViewModel>>>(body);
+            return accounts;
         }
     }
 }

@@ -74,7 +74,7 @@ namespace MVCApp.Controllers
             var authProperties = new AuthenticationProperties
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                IsPersistent = true
+                IsPersistent = false
             };
             HttpContext.Session.SetString("Token", token);
             await HttpContext.SignInAsync(

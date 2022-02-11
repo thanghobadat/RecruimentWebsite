@@ -1,0 +1,136 @@
+﻿@model MVCApp.ViewModels.AccountsViewModel
+
+@{
+    ViewData["Title"] = "Users List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $('msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Users List</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Home Page</a></li>
+        <li class="breadcrumb-item active">Accounts List</li>
+    </ol>
+
+    <div class="card mb-12">
+        <div class="card-header">
+            <div class="row">
+
+                <div class="col-md-6 col-xs-12">
+                    <a class="btn btn-success" asp-action="Register" asp-controller="User">Create Company</a>
+                </div>
+
+
+                <div class="col-md-6 col-xs-12">
+                    <form asp-action="Index" method="get">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <input type="text" value="@ViewBag.Keyword" name="keyword" class="form-control" />
+                            </div>
+                            <div class="cold-md-3">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                                <button type="button" onclick="window.location.href='/Account/Index'" class="btn btn-dark">Reset</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            @if (ViewBag.SuccessMsg != null)
+            {
+                <div id="msgAlert" class="alert alert-success" role="alert">
+                    @ViewBag.SuccessMsg
+                </div>
+            }
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+
+                        <th>User Name</th>
+
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.CompanyAccount.Items)
+                    {
+                        <tr>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PhoneNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Change Password", "ChangePassword", new { id = item.Id }, new { @class = "btn btn-primary" })
+                                @Html.ActionLink("Delete", "DeleteAccount", new { id = item.Id }, new { @class = "btn btn-success" })
+                            </td>
+                        </tr>
+
+
+
+                    }
+                </tbody>
+            </table>
+        </div>
+        @await Component.InvokeAsync("Pager", Model.CompanyAccount)
+    </div>
+
+
+
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+
+                        <th>User Name</th>
+
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.UserAccount.Items)
+                    {
+                        <tr>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserName)
+                            </td>
+
+                            <td>
+                                @Html.ActionLink("Change Password", "ChangePassword", new { id = item.Id }, new { @class = "btn btn-primary" })
+                                @Html.ActionLink("Delete", "DeleteAccount", new { id = item.Id }, new { @class = "btn btn-success" })
+                            </td>
+                        </tr>
+
+
+
+                    }
+                </tbody>
+            </table>
+        </div>
+        @await Component.InvokeAsync("Pager", Model.UserAccount)
+    </div>
+</div>

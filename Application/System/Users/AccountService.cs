@@ -123,7 +123,7 @@ namespace Application.System.Users
         }
 
 
-        public async Task<ApiResult<PageResult<CompanyAccountViewModel>>> GetCompanyAccountPaging(GetUserPagingRequest request)
+        public async Task<ApiResult<PageResult<CompanyAccountViewModel>>> GetCompanyAccountPaging(GetAccountPagingRequest request)
         {
 
 
@@ -150,7 +150,7 @@ namespace Application.System.Users
             };
             return new ApiSuccessResult<PageResult<CompanyAccountViewModel>>(pagedResult);
         }
-        public async Task<ApiResult<PageResult<UserAccountViewModel>>> GetUserAccountPaging(GetUserPagingRequest request)
+        public async Task<ApiResult<PageResult<UserAccountViewModel>>> GetUserAccountPaging(GetAccountPagingRequest request)
         {
             var users = await _userManager.GetUsersInRoleAsync("user");
 
