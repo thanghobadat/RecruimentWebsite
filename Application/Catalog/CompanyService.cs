@@ -3,6 +3,7 @@ using AutoMapper;
 using Data.EF;
 using Data.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,15 @@ namespace Application.Catalog
 {
     public class CompanyService : ICompanyService
     {
+        private readonly UserManager<AppUser> _userManager;
+
         private readonly RecruimentWebsiteDbContext _context;
         private readonly IStorageService _storageService;
         private readonly IMapper _mapper;
         public CompanyService(RecruimentWebsiteDbContext context, IStorageService storageService,
-            IMapper mapper)
+            IMapper mapper, UserManager<AppUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
             _storageService = storageService;
             _mapper = mapper;
@@ -251,6 +255,7 @@ namespace Application.Catalog
 
         public async Task<ApiResult<CompanyInformationViewModel>> GetCompanyInformation(Guid companyId)
         {
+
             var companyInfor = await _context.CompanyInformations.FindAsync(companyId);
             if (companyInfor == null)
             {
@@ -258,6 +263,9 @@ namespace Application.Catalog
             }
 
             var companyInforVM = _mapper.Map<CompanyInformationViewModel>(companyInfor);
+            var user = await _userManager.FindByIdAsync(companyId.ToString());
+            companyInforVM.Email = user.Email;
+            companyInforVM.PhoneNumber = user.PhoneNumber;
 
             var companyAvatar = await this.GetCompanyAvatar(companyId);
             companyInforVM.CompanyAvatar = companyAvatar.ResultObj;
@@ -285,7 +293,7 @@ namespace Application.Catalog
             var companyAva = await _context.CompanyAvatars.FindAsync(id);
             if (companyAva == null)
             {
-                return new ApiErrorResult<bool>("User avatar information could not be found");
+                return new ApiErrorResult<bool>("Company avatar information could not be found");
             }
 
 
@@ -324,6 +332,25 @@ namespace Application.Catalog
             branch.Address = request.Address;
             var result = await _context.SaveChangesAsync();
             if (result == 0)
+            {
+                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
+            }
+            return new ApiSuccessResult<bool>(true);
+        }
+
+        public async Task<ApiResult<bool>> UpdateCompanyInformation(Guid id, CompanyUpdateRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            user.Email = request.Email;
+            user.PhoneNumber = request.PhoneNumber;
+            var userInf = await _context.CompanyInformations.FindAsync(id);
+            userInf.Name = request.Name;
+            userInf.Description = request.Description;
+            userInf.WorkerNumber = request.WorkerNumber;
+            userInf.ContactName = request.ContactName;
+            var resultUserInf = await _context.SaveChangesAsync();
+
+            if (resultUserInf == 0)
             {
                 return new ApiErrorResult<bool>("An error occured, register unsuccessful");
             }

@@ -1,0 +1,139 @@
+﻿@model ViewModel.Catalog.Company.CompanyInformationViewModel
+@{
+    ViewData["Title"] = "Company Information";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $('msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Account List</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Home Page</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Account">Account List</a></li>
+        <li class="breadcrumb-item active">Company Information</li>
+    </ol>
+
+
+    <h2>Information</h2>
+
+    <div class="card-body">
+        <div class="row">
+            @if (ViewBag.SuccessMsg != null)
+            {
+                <div id="msgAlert" class="alert alert-success" role="alert">
+                    @ViewBag.SuccessMsg
+                </div>
+            }
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Worker Number</th>
+                        <th>Contact Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.CompanyId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.WorkerNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.ContactName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.PhoneNumber)
+                        </td>
+
+                        <td>
+                            @Html.ActionLink("Update Information", "UpdateCompanyInformation", new { id = Model.CompanyId }, new { @class = "btn btn-primary" })
+                            @Html.ActionLink("Delete", "DeleteAccount", new { id = Model.CompanyId }, new { @class = "btn btn-success" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+    <h2>Branch</h2>
+    <div class="col-md-6 col-xs-12">
+        <a class="btn btn-success" asp-action="Register" asp-controller="User">Create New Branch</a>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            @if (ViewBag.SuccessMsg != null)
+            {
+                <div id="msgAlert" class="alert alert-success" role="alert">
+                    @ViewBag.SuccessMsg
+                </div>
+            }
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+
+                        <th>Id</th>
+                        <th>Address</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CompanyBranches)
+                    {
+                        <tr>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Address)
+                            </td>
+
+                            <td>
+                                @Html.ActionLink("Change Password", "ChangePassword", new { id = item.Id }, new { @class = "btn btn-primary" })
+                                @Html.ActionLink("Delete", "DeleteAccount", new { id = item.Id }, new { @class = "btn btn-success" })
+                                @Html.ActionLink("Information", "Index", "Company", new { id = item.Id }, new { @class = "btn btn-success" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+
+
+
+</div>

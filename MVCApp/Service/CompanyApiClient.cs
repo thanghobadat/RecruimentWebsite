@@ -1,0 +1,62 @@
+﻿using Microsoft.AspNetCore.Http;
+using MVCApp.ViewModels;
+using Newtonsoft.Json;
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using ViewModel.Catalog.Company;
+using ViewModel.Common;
+
+namespace MVCApp.Service
+{
+    public class CompanyApiClient : ICompanyApiClient
+    {
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public CompanyApiClient(IHttpClientFactory httpClientFactory,
+             IHttpContextAccessor httpContextAccessor)
+        {
+            _httpClientFactory = httpClientFactory;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+
+
+        public async Task<ApiResult<CompanyInformationViewModel>> GetCompanyInformation(Guid Id)
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.BaseAddress = new Uri("https://localhost:5001");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+
+            var response = await client.GetAsync($"/api/companies/getCompanyInformation?companyId={Id}");
+            var body = await response.Content.ReadAsStringAsync();
+            var accounts = JsonConvert.DeserializeObject<ApiSuccessResult<CompanyInformationViewModel>>(body);
+            return accounts;
+        }
+
+        public async Task<ApiResult<bool>> UpdateCompanyInformation(Guid Id, CompanyInformationUpdateRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.BaseAddress = new Uri("https://localhost:5001");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"/api/companies/UpdateCompanyInformation?id={Id}", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
+        }
+    }
+}

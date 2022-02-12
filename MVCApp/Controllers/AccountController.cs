@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using MVCApp.Service;
 using MVCApp.ViewModels;
 using System;
@@ -12,12 +11,9 @@ namespace MVCApp.Controllers
     public class AccountController : BaseController
     {
 
-        private readonly IConfiguration _configuration;
         private readonly IAccountApiClient _accountApiClient;
-        public AccountController(IConfiguration configuration,
-            IAccountApiClient accountApiClient)
+        public AccountController(IAccountApiClient accountApiClient)
         {
-            _configuration = configuration;
             _accountApiClient = accountApiClient;
         }
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 1)

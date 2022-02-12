@@ -103,6 +103,21 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
 
+        [HttpPut("UpdateCompanyInformation")]
+        public async Task<IActionResult> UpdateCompanyInformation(Guid id, [FromBody] CompanyUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _companyService.UpdateCompanyInformation(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+
         [HttpPut("UpdateAvatar")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> UpdateAvatar([FromForm] int id, IFormFile thumnailImage)

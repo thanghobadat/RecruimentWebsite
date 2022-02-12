@@ -1,7 +1,9 @@
 ﻿using Application.Common;
 using AutoMapper;
 using Data.EF;
+using Data.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
@@ -14,11 +16,12 @@ namespace Application.Catalog
 {
     public class UserService : IUserService
     {
+        private readonly UserManager<AppUser> _userManager;
         private readonly RecruimentWebsiteDbContext _context;
         private readonly IStorageService _storageService;
         private readonly IMapper _mapper;
         public UserService(RecruimentWebsiteDbContext context, IStorageService storageService,
-            IMapper mapper)
+            IMapper mapper, UserManager<AppUser> userManager)
         {
             _context = context;
             _storageService = storageService;
@@ -97,5 +100,32 @@ namespace Application.Catalog
             return fileName;
         }
 
+
+
+        public async Task<ApiResult<bool>> UpdateUserInformation(Guid id, UserUpdateRequest request)
+        {
+
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            user.Email = request.Email;
+            user.PhoneNumber = request.PhoneNumber;
+
+
+            var userInf = await _context.UserInformations.FindAsync(id);
+            userInf.Age = request.Age;
+            userInf.FirstName = request.FirstName;
+            userInf.AcademicLevel = request.AcademicLevel;
+            userInf.LastName = request.LastName;
+            userInf.Sex = request.Sex;
+            userInf.Address = request.Address;
+            var resultUserInf = await _context.SaveChangesAsync();
+
+
+
+            if (resultUserInf == 0)
+            {
+                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
+            }
+            return new ApiSuccessResult<bool>(true);
+        }
     }
 }

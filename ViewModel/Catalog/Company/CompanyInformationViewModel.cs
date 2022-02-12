@@ -5,6 +5,8 @@ namespace ViewModel.Catalog.Company
 {
     public class CompanyInformationViewModel
     {
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
         public Guid CompanyId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

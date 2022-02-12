@@ -1,4 +1,4 @@
-﻿namespace ViewModel.System.Users
+﻿namespace ViewModel.Catalog.Company
 {
     public class CompanyUpdateRequest
     {

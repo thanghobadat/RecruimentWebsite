@@ -39,6 +39,7 @@ namespace MVCApp
 
             IMvcBuilder builder = services.AddRazorPages();
             services.AddTransient<IAccountApiClient, AccountApiClient>();
+            services.AddTransient<ICompanyApiClient, CompanyApiClient>();
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
 #if DEBUG

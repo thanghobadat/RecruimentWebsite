@@ -329,50 +329,9 @@ namespace Application.System.Users
             return new ApiSuccessResult<bool>(true);
         }
 
-        public async Task<ApiResult<bool>> UpdateCompany(Guid id, CompanyUpdateRequest request)
-        {
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            user.Email = request.Email;
-            user.PhoneNumber = request.PhoneNumber;
-            var userInf = await _context.CompanyInformations.FindAsync(id);
-            userInf.Name = request.Name;
-            userInf.Description = request.Description;
-            userInf.WorkerNumber = request.WorkerNumber;
-            userInf.ContactName = request.ContactName;
-            var resultUserInf = await _context.SaveChangesAsync();
-
-            if (resultUserInf == 0)
-            {
-                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
-            }
-            return new ApiSuccessResult<bool>(true);
-        }
-
-        public async Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request)
-        {
-
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            user.Email = request.Email;
-            user.PhoneNumber = request.PhoneNumber;
 
 
-            var userInf = await _context.UserInformations.FindAsync(id);
-            userInf.Age = request.Age;
-            userInf.FirstName = request.FirstName;
-            userInf.AcademicLevel = request.AcademicLevel;
-            userInf.LastName = request.LastName;
-            userInf.Sex = request.Sex;
-            userInf.Address = request.Address;
-            var resultUserInf = await _context.SaveChangesAsync();
-
-
-
-            if (resultUserInf == 0)
-            {
-                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
-            }
-            return new ApiSuccessResult<bool>(true);
-        }
+        
 
         public async Task<ApiResult<bool>> RegisterAdminAccount(RegisterAdminAccountRequest request)
         {

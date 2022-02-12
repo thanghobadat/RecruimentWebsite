@@ -1,7 +1,7 @@
 ﻿@model MVCApp.ViewModels.AccountsViewModel
 
 @{
-    ViewData["Title"] = "Users List";
+    ViewData["Title"] = "Account List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -14,7 +14,7 @@
 }
 
 <div class="container-fluid">
-    <h1 class="mt-4">Users List</h1>
+    <h1 class="mt-4">Account List</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="/">Home Page</a></li>
         <li class="breadcrumb-item active">Accounts List</li>
@@ -45,6 +45,7 @@
             </div>
         </div>
     </div>
+    <h2>Company Account</h2>
     <div class="card-body">
         <div class="row">
             @if (ViewBag.SuccessMsg != null)
@@ -73,15 +74,11 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.UserName)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PhoneNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Email)
-                            </td>
+
                             <td>
                                 @Html.ActionLink("Change Password", "ChangePassword", new { id = item.Id }, new { @class = "btn btn-primary" })
                                 @Html.ActionLink("Delete", "DeleteAccount", new { id = item.Id }, new { @class = "btn btn-success" })
+                                @Html.ActionLink("Information", "Index", "Company", new { id = item.Id }, new { @class = "btn btn-success" })
                             </td>
                         </tr>
 
@@ -96,6 +93,7 @@
 
 
 
+    <h2>User Account</h2>
 
     <div class="card-body">
 

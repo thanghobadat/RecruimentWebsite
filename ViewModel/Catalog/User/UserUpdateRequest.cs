@@ -1,7 +1,7 @@
 ﻿using Data.Enum;
 using System;
 
-namespace ViewModel.System.Users
+namespace ViewModel.Catalog.User
 {
     public class UserUpdateRequest
     {

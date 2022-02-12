@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using ViewModel.Catalog.User;
 
 namespace BackendApi.Controllers
 {
@@ -31,6 +32,20 @@ namespace BackendApi.Controllers
         public async Task<IActionResult> GetUserAvatar(Guid userId)
         {
             var result = await _userService.GetUserAvatar(userId);
+            return Ok(result);
+        }
+
+        [HttpPut("UpdateUserInformation")]
+        public async Task<IActionResult> UpdateUserInformation(Guid id, [FromBody] UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.UpdateUserInformation(id, request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
             return Ok(result);
         }
 

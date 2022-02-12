@@ -123,35 +123,6 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
 
-        [HttpPut("UpdateUser")]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserUpdateRequest request)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var result = await _accountService.UpdateUser(id, request);
-            if (!result.IsSuccessed)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
-
-        [HttpPut("UpdateCompany")]
-        public async Task<IActionResult> UpdateCompany(Guid id, [FromBody] CompanyUpdateRequest request)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var result = await _accountService.UpdateCompany(id, request);
-            if (!result.IsSuccessed)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
-
-
         [HttpDelete("DeleteAccount")]
         public async Task<IActionResult> DeleteAccount(Guid id)
         {

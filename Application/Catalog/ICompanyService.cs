@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ViewModel.Catalog.Company;
 using ViewModel.Common;
 
+
 namespace Application.Catalog
 {
     public interface ICompanyService
@@ -17,6 +18,7 @@ namespace Application.Catalog
         Task<ApiResult<bool>> CreateBranch(CreateBranchRequest request);
         Task<ApiResult<bool>> CreateCoverImage(CreateCoverImageRequest request);
         Task<ApiResult<bool>> CreateCompanyImages(CreateCompanyImageRequest request);
+        Task<ApiResult<bool>> UpdateCompanyInformation(Guid id, CompanyUpdateRequest request);
         Task<ApiResult<bool>> UpdateBranch(UpdateBranchRequest request);
         Task<ApiResult<bool>> UpdateAvatar(int id, IFormFile thumnailImage);
         Task<ApiResult<bool>> UpdateCoverImage(int id, IFormFile thumnailImage);
