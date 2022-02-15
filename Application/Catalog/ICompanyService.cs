@@ -10,7 +10,8 @@ namespace Application.Catalog
 {
     public interface ICompanyService
     {
-        Task<ApiResult<List<CompanyBranchViewModel>>> GetAllBranchPaging(GetCompanyBranchRequest request);
+        Task<ApiResult<List<CompanyBranchViewModel>>> GetAllCompanyBranch(GetCompanyBranchRequest request);
+        Task<ApiResult<CompanyBranchViewModel>> GetCompanyBranchById(int Id);
         Task<ApiResult<PageResult<CompanyImagesViewModel>>> GetAllImagesPaging(GetCompanyImagesRequest request);
         Task<ApiResult<CompanyAvatarViewModel>> GetCompanyAvatar(Guid companyId);
         Task<ApiResult<CompanyCoverImageViewModel>> GetCompanyCoverImage(Guid companyId);

@@ -76,9 +76,9 @@
                             </td>
 
                             <td>
-                                @Html.ActionLink("Change Password", "ChangePassword", new { id = item.Id }, new { @class = "btn btn-primary" })
-                                @Html.ActionLink("Delete", "DeleteAccount", new { id = item.Id }, new { @class = "btn btn-success" })
                                 @Html.ActionLink("Information", "Index", "Company", new { id = item.Id }, new { @class = "btn btn-success" })
+                                @Html.ActionLink("Change Password", "ChangePassword", new { id = item.Id }, new { @class = "btn btn-primary" })
+                                @Html.ActionLink("Delete", "DeleteAccount", new { id = item.Id }, new { @class = "btn btn-danger" })
                             </td>
                         </tr>
 

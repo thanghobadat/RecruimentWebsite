@@ -47,7 +47,13 @@ namespace BackendApi.Controllers
         [HttpGet("GetCompanyBranches")]
         public async Task<IActionResult> GetCompanyBranches([FromQuery] GetCompanyBranchRequest request)
         {
-            var result = await _companyService.GetAllBranchPaging(request);
+            var result = await _companyService.GetAllCompanyBranch(request);
+            return Ok(result);
+        }
+        [HttpGet("GetCompanyBranchById")]
+        public async Task<IActionResult> GetCompanyBranchById(int Id)
+        {
+            var result = await _companyService.GetCompanyBranchById(Id);
             return Ok(result);
         }
         [HttpGet("GetCompanyImages")]

@@ -22,7 +22,56 @@ namespace MVCApp.Service
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<ApiResult<bool>> CreateBranch(CompanyBranchCreateRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.BaseAddress = new Uri("https://localhost:5001");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"/api/companies/createNewBranch", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
+        }
+
+        public async Task<ApiResult<bool>> DeleteBranch(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.BaseAddress = new Uri("https://localhost:5001");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+
+            var response = await client.DeleteAsync($"/api/companies/DeleteBranch?id={id}");
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
+        }
+
+        public async Task<ApiResult<CompanyBranchViewModel>> GetCompanyBranchById(int Id)
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
+            client.BaseAddress = new Uri("https://localhost:5001");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+
+            var response = await client.GetAsync($"/api/companies/getCompanyBranchById?id={Id}");
+            var body = await response.Content.ReadAsStringAsync();
+            var companyBranch = JsonConvert.DeserializeObject<ApiSuccessResult<CompanyBranchViewModel>>(body);
+            return companyBranch;
+        }
 
         public async Task<ApiResult<CompanyInformationViewModel>> GetCompanyInformation(Guid Id)
         {
@@ -37,8 +86,26 @@ namespace MVCApp.Service
 
             var response = await client.GetAsync($"/api/companies/getCompanyInformation?companyId={Id}");
             var body = await response.Content.ReadAsStringAsync();
-            var accounts = JsonConvert.DeserializeObject<ApiSuccessResult<CompanyInformationViewModel>>(body);
-            return accounts;
+            var companyInfor = JsonConvert.DeserializeObject<ApiSuccessResult<CompanyInformationViewModel>>(body);
+            return companyInfor;
+        }
+
+        public async Task<ApiResult<bool>> UpdateBranch(CompanyBranchUpdateRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.BaseAddress = new Uri("https://localhost:5001");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"/api/companies/UpdateBranch", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
         }
 
         public async Task<ApiResult<bool>> UpdateCompanyInformation(Guid Id, CompanyInformationUpdateRequest request)

@@ -175,7 +175,7 @@ namespace Application.Catalog
             return new ApiSuccessResult<bool>(true);
         }
 
-        public async Task<ApiResult<List<CompanyBranchViewModel>>> GetAllBranchPaging(GetCompanyBranchRequest request)
+        public async Task<ApiResult<List<CompanyBranchViewModel>>> GetAllCompanyBranch(GetCompanyBranchRequest request)
         {
             var query = await _context.CompanyBranches.Where(x => x.CompanyId == request.CompanyId).ToListAsync();
 
@@ -238,6 +238,18 @@ namespace Application.Catalog
             var avatarVM = _mapper.Map<CompanyAvatarViewModel>(avatar);
 
             return new ApiSuccessResult<CompanyAvatarViewModel>(avatarVM);
+        }
+
+        public async Task<ApiResult<CompanyBranchViewModel>> GetCompanyBranchById(int Id)
+        {
+            var query = await _context.CompanyBranches.FindAsync(Id);
+
+            if (query == null)
+            {
+                return new ApiErrorResult<CompanyBranchViewModel>("Branch doesn't exist, Please check again");
+            }
+            var data = _mapper.Map<CompanyBranchViewModel>(query);
+            return new ApiSuccessResult<CompanyBranchViewModel>(data);
         }
 
         public async Task<ApiResult<CompanyCoverImageViewModel>> GetCompanyCoverImage(Guid companyId)

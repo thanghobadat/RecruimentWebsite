@@ -73,7 +73,6 @@
 
                         <td>
                             @Html.ActionLink("Update Information", "UpdateCompanyInformation", new { id = Model.CompanyId }, new { @class = "btn btn-primary" })
-                            @Html.ActionLink("Delete", "DeleteAccount", new { id = Model.CompanyId }, new { @class = "btn btn-success" })
                         </td>
                     </tr>
                 </tbody>
@@ -85,17 +84,10 @@
 
     <h2>Branch</h2>
     <div class="col-md-6 col-xs-12">
-        <a class="btn btn-success" asp-action="Register" asp-controller="User">Create New Branch</a>
+        <a class="btn btn-success" asp-action="CreateBranch" asp-controller="Company" asp-route-id="@Model.CompanyId">Create New Branch</a>
     </div>
     <div class="card-body">
-        <div class="row">
-            @if (ViewBag.SuccessMsg != null)
-            {
-                <div id="msgAlert" class="alert alert-success" role="alert">
-                    @ViewBag.SuccessMsg
-                </div>
-            }
-        </div>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -120,9 +112,8 @@
                             </td>
 
                             <td>
-                                @Html.ActionLink("Change Password", "ChangePassword", new { id = item.Id }, new { @class = "btn btn-primary" })
-                                @Html.ActionLink("Delete", "DeleteAccount", new { id = item.Id }, new { @class = "btn btn-success" })
-                                @Html.ActionLink("Information", "Index", "Company", new { id = item.Id }, new { @class = "btn btn-success" })
+                                @Html.ActionLink("Update", "UpdateBranch", new { id = item.Id, companyId = Model.CompanyId }, new { @class = "btn btn-primary" })
+                                @Html.ActionLink("Delete", "DeleteBranch", new { id = item.Id, companyId = Model.CompanyId }, new { @class = "btn btn-danger" })
                             </td>
                         </tr>
                     }
