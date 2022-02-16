@@ -125,6 +125,103 @@
 
 
 
+    <h2>Avatar</h2>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+
+                        <th>Id</th>
+                        <th>Image</th>
+                        <th>Caption</th>
+                        <th>File Size</th>
+                        <th>Date Created</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.CompanyAvatar.Id)
+                        </td>
+                        <td>
+                            <img src="https://localhost:5001/Avatars/@Model.CompanyAvatar.ImagePath" asp-append-version="true" height="50rem" width="50rem" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.CompanyAvatar.Caption)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.CompanyAvatar.FileSize)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.CompanyAvatar.DateCreated)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Update", "UpdateCompanyAvatar", new { id = Model.CompanyAvatar.Id, companyId = Model.CompanyId }, new { @class = "btn btn-primary" })
+                            @Html.ActionLink("Delete", "DeleteBranch", new { id = Model.CompanyAvatar.Id, companyId = Model.CompanyId }, new { @class = "btn btn-danger" })
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <h2>Cover Image</h2>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+
+                        <th>Id</th>
+                        <th>Image</th>
+                        <th>Caption</th>
+                        <th>File Size</th>
+                        <th>Date Created</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.CompanyCoverImage != null)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.CompanyCoverImage.Id)
+                            </td>
+                            <td>
+                                <img src="https://localhost:5001/CoverImages/@Model.CompanyCoverImage.ImagePath" asp-append-version="true" height="50rem" width="50rem" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.CompanyCoverImage.Caption)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.CompanyCoverImage.FileSize)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.CompanyCoverImage.DateCreated)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Update", "UpdateBranch", new { id = Model.CompanyAvatar.Id, companyId = Model.CompanyId }, new { @class = "btn btn-primary" })
+                                @Html.ActionLink("Delete", "DeleteBranch", new { id = Model.CompanyAvatar.Id, companyId = Model.CompanyId }, new { @class = "btn btn-danger" })
+                            </td>
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
 
 
 </div>

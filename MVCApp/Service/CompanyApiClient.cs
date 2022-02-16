@@ -2,6 +2,7 @@
 using MVCApp.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -101,6 +102,34 @@ namespace MVCApp.Service
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await client.PutAsync($"/api/companies/UpdateBranch", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
+
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
+        }
+
+        public async Task<ApiResult<bool>> UpdateCompanyAvatar(CompanyAvatarUpdateRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.BaseAddress = new Uri("https://localhost:5001");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+            var requestContent = new MultipartFormDataContent();
+
+            byte[] data;
+            using (var br = new BinaryReader(request.ThumnailImage.OpenReadStream()))
+            {
+                data = br.ReadBytes((int)request.ThumnailImage.OpenReadStream().Length);
+            }
+            ByteArrayContent bytes = new ByteArrayContent(data);
+            requestContent.Add(bytes, "thumnailImage", request.ThumnailImage.FileName);
+
+
+            //var json = JsonConvert.SerializeObject(request);
+            //var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"/api/companies/UpdateAvatar?id={request.Id}", requestContent);
             var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiResult<bool>>(result);

@@ -300,26 +300,26 @@ namespace Application.Catalog
             return new ApiSuccessResult<CompanyInformationViewModel>(companyInforVM);
         }
 
-        public async Task<ApiResult<bool>> UpdateAvatar(int id, IFormFile thumnailImage)
+        public async Task<ApiResult<bool>> UpdateAvatar(int Id, AvatarUpdateRequest request)
         {
-            var companyAva = await _context.CompanyAvatars.FindAsync(id);
+            var companyAva = await _context.CompanyAvatars.FindAsync(Id);
             if (companyAva == null)
             {
                 return new ApiErrorResult<bool>("Company avatar information could not be found");
             }
 
 
-            var imageIndex = thumnailImage.FileName.LastIndexOf(".");
-            var imageType = thumnailImage.FileName.Substring(imageIndex + 1);
+            var imageIndex = request.ThumnailImage.FileName.LastIndexOf(".");
+            var imageType = request.ThumnailImage.FileName.Substring(imageIndex + 1);
             if (imageType == "jpg" || imageType == "png")
             {
                 if (companyAva.ImagePath != "default-avatar")
                 {
                     await _storageService.DeleteAvatarAsync(companyAva.ImagePath);
                 }
-                companyAva.FizeSize = thumnailImage.Length;
-                companyAva.Caption = thumnailImage.FileName;
-                companyAva.ImagePath = await this.SaveAvatar(thumnailImage);
+                companyAva.FizeSize = request.ThumnailImage.Length;
+                companyAva.Caption = request.ThumnailImage.FileName;
+                companyAva.ImagePath = await this.SaveAvatar(request.ThumnailImage);
                 companyAva.DateCreated = DateTime.Now;
                 var result = await _context.SaveChangesAsync();
 

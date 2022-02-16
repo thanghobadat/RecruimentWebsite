@@ -126,12 +126,12 @@ namespace BackendApi.Controllers
 
         [HttpPut("UpdateAvatar")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UpdateAvatar([FromForm] int id, IFormFile thumnailImage)
+        public async Task<IActionResult> UpdateAvatar(int id, [FromForm] AvatarUpdateRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _companyService.UpdateAvatar(id, thumnailImage);
+            var result = await _companyService.UpdateAvatar(id, request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);

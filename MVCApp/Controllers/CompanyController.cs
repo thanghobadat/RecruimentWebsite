@@ -145,6 +145,8 @@ namespace MVCApp.Controllers
             throw new RecruimentWebsiteException(result.Message);
         }
 
+
+
         public async Task<IActionResult> DeleteBranch(int id, Guid companyId)
         {
             if (id <= 0)
@@ -156,6 +158,43 @@ namespace MVCApp.Controllers
             if (result.IsSuccessed)
             {
                 TempData["result"] = "Delete Branch Successfull";
+                return RedirectToAction("Index", new { Id = companyId });
+            }
+            throw new RecruimentWebsiteException(result.Message);
+        }
+
+        [HttpGet]
+        public IActionResult UpdateCompanyAvatar(int id, Guid companyId)
+        {
+            if (id <= 0)
+            {
+                throw new RecruimentWebsiteException("id must be greater than 0");
+            }
+
+            if (companyId == null)
+            {
+                throw new RecruimentWebsiteException("id is null, pleae try again");
+            }
+            ViewBag.companyId = companyId;
+            var updateRequest = new CompanyAvatarUpdateRequest()
+            {
+                Id = id,
+                ThumnailImage = null,
+
+            };
+            return View(updateRequest);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCompanyAvatar(CompanyAvatarUpdateRequest request, Guid companyId)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _companyApiClient.UpdateCompanyAvatar(request);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Update Company Avatar successfull";
                 return RedirectToAction("Index", new { Id = companyId });
             }
             throw new RecruimentWebsiteException(result.Message);

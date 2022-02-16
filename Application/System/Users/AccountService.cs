@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Common;
+using AutoMapper;
 using Data.EF;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -23,10 +24,10 @@ namespace Application.System.Users
         private readonly IConfiguration _config;
         private readonly RecruimentWebsiteDbContext _context;
         private readonly IMapper _mapper;
-
+        private readonly IStorageService _storageService;
         public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
             RoleManager<AppRole> roleManager, IConfiguration config, RecruimentWebsiteDbContext context,
-            IMapper mapper)
+            IMapper mapper, IStorageService storageService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -34,6 +35,7 @@ namespace Application.System.Users
             _config = config;
             _context = context;
             _mapper = mapper;
+            _storageService = storageService;
         }
         public async Task<string> Authenticate(LoginRequest request)
         {
@@ -89,6 +91,14 @@ namespace Application.System.Users
             {
                 return new ApiErrorResult<bool>("User does not exits");
             }
+            //var roles = await _userManager.GetRolesAsync(user);
+            //foreach (var role in roles)
+            //{
+            //    if (role == "company")
+            //    {
+            //        await _storageService.DeleteAvatarAsync()
+            //    }
+            //}
             var reult = await _userManager.DeleteAsync(user);
             if (reult.Succeeded)
                 return new ApiSuccessResult<bool>();
@@ -331,7 +341,7 @@ namespace Application.System.Users
 
 
 
-        
+
 
         public async Task<ApiResult<bool>> RegisterAdminAccount(RegisterAdminAccountRequest request)
         {

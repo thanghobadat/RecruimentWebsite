@@ -21,7 +21,7 @@ namespace Application.Catalog
         Task<ApiResult<bool>> CreateCompanyImages(CreateCompanyImageRequest request);
         Task<ApiResult<bool>> UpdateCompanyInformation(Guid id, CompanyUpdateRequest request);
         Task<ApiResult<bool>> UpdateBranch(UpdateBranchRequest request);
-        Task<ApiResult<bool>> UpdateAvatar(int id, IFormFile thumnailImage);
+        Task<ApiResult<bool>> UpdateAvatar(int Id, AvatarUpdateRequest request);
         Task<ApiResult<bool>> UpdateCoverImage(int id, IFormFile thumnailImage);
         Task<ApiResult<bool>> DeleteBranch(int id);
         Task<ApiResult<bool>> DeleteCoverImage(int id);
