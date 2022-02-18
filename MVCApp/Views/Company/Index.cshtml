@@ -172,7 +172,12 @@
 
     </div>
     <h2>Cover Image</h2>
-
+    @if (Model.CompanyCoverImage == null)
+    {
+        <div class="col-md-6 col-xs-12">
+            <a class="btn btn-success" asp-action="CreateCompanyCoverImage" asp-controller="Company" asp-route-id="@Model.CompanyId">Create Cover Image</a>
+        </div>
+    }
     <div class="card-body">
 
         <div class="table-responsive">
@@ -209,10 +214,70 @@
                                 @Html.DisplayFor(modelItem => Model.CompanyCoverImage.DateCreated)
                             </td>
                             <td>
-                                @Html.ActionLink("Update", "UpdateBranch", new { id = Model.CompanyAvatar.Id, companyId = Model.CompanyId }, new { @class = "btn btn-primary" })
-                                @Html.ActionLink("Delete", "DeleteBranch", new { id = Model.CompanyAvatar.Id, companyId = Model.CompanyId }, new { @class = "btn btn-danger" })
+                                @Html.ActionLink("Update", "UpdateCompanyCoverImage", new { id = Model.CompanyCoverImage.Id, companyId = Model.CompanyId }, new { @class = "btn btn-primary" })
+                                @Html.ActionLink("Delete", "DeleteCompanyCoverImage", new { id = Model.CompanyCoverImage.Id, companyId = Model.CompanyId }, new { @class = "btn btn-danger" })
                             </td>
                         </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+    <h2>Images</h2>
+
+    <div class="col-md-6 col-xs-12">
+        <a class="btn btn-success" asp-action="CreateCompanyImages" asp-controller="Company" asp-route-id="@Model.CompanyId">Create Images</a>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+
+                        <th>Id</th>
+                        <th>Image</th>
+                        <th>Caption</th>
+                        <th>File Size</th>
+                        <th>Date Created</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.CompanyCoverImage != null)
+                    {
+                        foreach (var item in Model.CompanyImages)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
+                                    <img src="https://localhost:5001/Images/@item.ImagePath" asp-append-version="true" height="50rem" width="50rem" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Caption)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FileSize)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateCreated)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Update", "UpdateCompanyImages", new { id = item.Id, companyId = Model.CompanyId }, new { @class = "btn btn-primary" })
+                                    @Html.ActionLink("Delete", "DeleteCompanyImages", new { id = item.Id, companyId = Model.CompanyId }, new { @class = "btn btn-danger" })
+                                </td>
+                            </tr>
+                        }
+
                     }
 
 

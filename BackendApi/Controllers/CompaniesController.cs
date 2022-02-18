@@ -1,9 +1,7 @@
 ﻿using Application.Catalog;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using ViewModel.Catalog.Company;
 
@@ -141,12 +139,12 @@ namespace BackendApi.Controllers
 
         [HttpPut("UpdateCoverImage")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UpdateCoverImage([FromForm] int id, IFormFile thumnailImage)
+        public async Task<IActionResult> UpdateCoverImage(int id, [FromForm] UpdateCoverImageRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _companyService.UpdateCoverImage(id, thumnailImage);
+            var result = await _companyService.UpdateCoverImage(id, request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
@@ -188,7 +186,7 @@ namespace BackendApi.Controllers
         }
 
         [HttpDelete("DeleteImages")]
-        public async Task<IActionResult> DeleteImages(List<int> id)
+        public async Task<IActionResult> DeleteImages(int id)
         {
             var result = await _companyService.DeleteImages(id);
             if (!result.IsSuccessed)

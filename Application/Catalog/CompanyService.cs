@@ -101,11 +101,11 @@ namespace Application.Catalog
 
             var coverImage = new CompanyCoverImage()
             {
-                FizeSize = request.ThumnailIage.Length,
-                Caption = request.ThumnailIage.FileName,
+                FizeSize = request.ThumnailImage.Length,
+                Caption = request.ThumnailImage.FileName,
                 DateCreated = DateTime.Now,
                 CompanyId = request.CompanyId,
-                ImagePath = await this.SaveCoverImage(request.ThumnailIage)
+                ImagePath = await this.SaveCoverImage(request.ThumnailImage)
             };
 
             await _context.CompanyCoverImages.AddAsync(coverImage);
@@ -153,20 +153,16 @@ namespace Application.Catalog
             return new ApiSuccessResult<bool>(true);
         }
 
-        public async Task<ApiResult<bool>> DeleteImages(List<int> listId)
+        public async Task<ApiResult<bool>> DeleteImages(int id)
         {
-            foreach (var id in listId)
+
+            var image = await _context.CompanyImages.FindAsync(id);
+            if (image == null)
             {
-                var image = await _context.CompanyImages.FindAsync(id);
-                if (image == null)
-                {
-                    return new ApiErrorResult<bool>("Image doesn't exist");
-                }
-                await _storageService.DeleteImagesAsync(image.ImagePath);
-                _context.CompanyImages.Remove(image);
+                return new ApiErrorResult<bool>("Image doesn't exist");
             }
-
-
+            await _storageService.DeleteImagesAsync(image.ImagePath);
+            _context.CompanyImages.Remove(image);
             var result = await _context.SaveChangesAsync();
             if (result == 0)
             {
@@ -369,21 +365,21 @@ namespace Application.Catalog
             return new ApiSuccessResult<bool>(true);
         }
 
-        public async Task<ApiResult<bool>> UpdateCoverImage(int id, IFormFile thumnailImage)
+        public async Task<ApiResult<bool>> UpdateCoverImage(int id, UpdateCoverImageRequest request)
         {
             var companyCoverImage = await _context.CompanyCoverImages.FindAsync(id);
             if (companyCoverImage == null)
             {
-                return new ApiErrorResult<bool>("User avatar information could not be found");
+                return new ApiErrorResult<bool>("Company Cover Image could not be found");
             }
-            var imageIndex = thumnailImage.FileName.LastIndexOf(".");
-            var imageType = thumnailImage.FileName.Substring(imageIndex + 1);
+            var imageIndex = request.ThumnailImage.FileName.LastIndexOf(".");
+            var imageType = request.ThumnailImage.FileName.Substring(imageIndex + 1);
             if (imageType == "jpg" || imageType == "png")
             {
                 await _storageService.DeleteCoverImageAsync(companyCoverImage.ImagePath);
-                companyCoverImage.FizeSize = thumnailImage.Length;
-                companyCoverImage.Caption = thumnailImage.FileName;
-                companyCoverImage.ImagePath = await this.SaveCoverImage(thumnailImage);
+                companyCoverImage.FizeSize = request.ThumnailImage.Length;
+                companyCoverImage.Caption = request.ThumnailImage.FileName;
+                companyCoverImage.ImagePath = await this.SaveCoverImage(request.ThumnailImage);
                 companyCoverImage.DateCreated = DateTime.Now;
                 var result = await _context.SaveChangesAsync();
 

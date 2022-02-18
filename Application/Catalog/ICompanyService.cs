@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ViewModel.Catalog.Company;
@@ -22,10 +21,10 @@ namespace Application.Catalog
         Task<ApiResult<bool>> UpdateCompanyInformation(Guid id, CompanyUpdateRequest request);
         Task<ApiResult<bool>> UpdateBranch(UpdateBranchRequest request);
         Task<ApiResult<bool>> UpdateAvatar(int Id, AvatarUpdateRequest request);
-        Task<ApiResult<bool>> UpdateCoverImage(int id, IFormFile thumnailImage);
+        Task<ApiResult<bool>> UpdateCoverImage(int id, UpdateCoverImageRequest request);
         Task<ApiResult<bool>> DeleteBranch(int id);
         Task<ApiResult<bool>> DeleteCoverImage(int id);
-        Task<ApiResult<bool>> DeleteImages(List<int> listId);
+        Task<ApiResult<bool>> DeleteImages(int id);
 
     }
 }

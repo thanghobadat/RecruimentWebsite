@@ -15,6 +15,11 @@ namespace MVCApp.Service
         Task<ApiResult<bool>> UpdateBranch(CompanyBranchUpdateRequest request);
         Task<ApiResult<bool>> DeleteBranch(int id);
         Task<ApiResult<bool>> UpdateCompanyAvatar(CompanyAvatarUpdateRequest request);
+        Task<ApiResult<bool>> CreateCompanyCoverImage(CompanyCoverImageCreateRequest request);
+        Task<ApiResult<bool>> UpdateCompanyCoverImage(CompanyCoverImageUpdateRequest request);
+        Task<ApiResult<bool>> DeleteCompanyCoverImage(int id);
+        Task<ApiResult<bool>> CreateCompanyImages(CompanyImagesCreateRequest request);
+        Task<ApiResult<bool>> DeleteCompanyImages(int id);
 
 
     }

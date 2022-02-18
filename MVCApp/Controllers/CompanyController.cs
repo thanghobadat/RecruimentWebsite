@@ -35,6 +35,8 @@ namespace MVCApp.Controllers
             throw new RecruimentWebsiteException(companyInfor.Message);
         }
 
+
+
         [HttpGet]
         public IActionResult CreateBranch(Guid Id)
         {
@@ -195,6 +197,129 @@ namespace MVCApp.Controllers
             if (result.IsSuccessed)
             {
                 TempData["result"] = "Update Company Avatar successfull";
+                return RedirectToAction("Index", new { Id = companyId });
+            }
+            throw new RecruimentWebsiteException(result.Message);
+        }
+
+        [HttpGet]
+        public IActionResult CreateCompanyCoverImage(Guid Id)
+        {
+            ViewBag.CompanyId = Id;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCompanyCoverImage(CompanyCoverImageCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _companyApiClient.CreateCompanyCoverImage(request);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Create Cover Image successfull";
+                return RedirectToAction("Index", new { Id = request.CompanyId });
+
+            }
+            ModelState.AddModelError("", result.Message);
+
+
+            return View(request);
+        }
+
+
+        [HttpGet]
+        public IActionResult UpdateCompanyCoverImage(int id, Guid companyId)
+        {
+            if (id <= 0)
+            {
+                throw new RecruimentWebsiteException("id must be greater than 0");
+            }
+
+            if (companyId == null)
+            {
+                throw new RecruimentWebsiteException("id is null, pleae try again");
+            }
+            ViewBag.companyId = companyId;
+            var updateRequest = new CompanyCoverImageUpdateRequest()
+            {
+                Id = id,
+                ThumnailImage = null,
+
+            };
+            return View(updateRequest);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCompanyCoverImage(CompanyCoverImageUpdateRequest request, Guid companyId)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _companyApiClient.UpdateCompanyCoverImage(request);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Update Company Avatar successfull";
+                return RedirectToAction("Index", new { Id = companyId });
+            }
+            throw new RecruimentWebsiteException(result.Message);
+        }
+
+        public async Task<IActionResult> DeleteCompanyCoverImage(int id, Guid companyId)
+        {
+            if (id <= 0)
+            {
+                throw new RecruimentWebsiteException("id must be greater than 0");
+            }
+
+            var result = await _companyApiClient.DeleteCompanyCoverImage(id);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Delete Cover Image Successfull";
+                return RedirectToAction("Index", new { Id = companyId });
+            }
+            throw new RecruimentWebsiteException(result.Message);
+        }
+
+
+        [HttpGet]
+        public IActionResult CreateCompanyImages(Guid Id)
+        {
+            ViewBag.CompanyId = Id;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCompanyImages(CompanyImagesCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _companyApiClient.CreateCompanyImages(request);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Create Images successfull";
+                return RedirectToAction("Index", new { Id = request.CompanyId });
+
+            }
+            ModelState.AddModelError("", result.Message);
+
+
+            return View(request);
+        }
+
+        public async Task<IActionResult> DeleteCompanyImages(int id, Guid companyId)
+        {
+            if (id <= 0)
+            {
+                throw new RecruimentWebsiteException("id must be greater than 0");
+            }
+
+            var result = await _companyApiClient.DeleteCompanyImages(id);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Delete Image Successfull";
                 return RedirectToAction("Index", new { Id = companyId });
             }
             throw new RecruimentWebsiteException(result.Message);

@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace ViewModel.Catalog.Company
+namespace MVCApp.ViewModels
 {
-    public class CreateCoverImageRequest
+    public class CompanyCoverImageCreateRequest
     {
         public Guid CompanyId { get; set; }
+        [Display(Name = "Choose Image")]
         public IFormFile ThumnailImage { get; set; }
     }
 }

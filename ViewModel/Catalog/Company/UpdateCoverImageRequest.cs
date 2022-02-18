@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
 
 namespace ViewModel.Catalog.Company
 {
-    public class CreateCoverImageRequest
+    public class UpdateCoverImageRequest
     {
-        public Guid CompanyId { get; set; }
         public IFormFile ThumnailImage { get; set; }
     }
 }
