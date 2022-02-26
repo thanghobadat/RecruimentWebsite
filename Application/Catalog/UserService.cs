@@ -26,6 +26,7 @@ namespace Application.Catalog
             _context = context;
             _storageService = storageService;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<ApiResult<UserInformationViewModel>> GetUserInformation(Guid userId)
@@ -37,7 +38,9 @@ namespace Application.Catalog
             }
 
             var userInforVM = _mapper.Map<UserInformationViewModel>(userInfor);
-
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            userInforVM.Email = user.Email;
+            userInforVM.PhoneNumber = user.PhoneNumber;
             var userAvatar = await this.GetUserAvatar(userId);
             userInforVM.UserAvatar = userAvatar.ResultObj;
             return new ApiSuccessResult<UserInformationViewModel>(userInforVM);

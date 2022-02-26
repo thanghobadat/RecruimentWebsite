@@ -1,0 +1,141 @@
+﻿@model ViewModel.Catalog.User.UserInformationViewModel
+@using Data.Enum;
+@{
+    ViewData["Title"] = "User Information";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $('msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Account List</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Home Page</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Account">Account List</a></li>
+        <li class="breadcrumb-item active">User Information</li>
+    </ol>
+
+    <h2>Information</h2>
+
+    <div class="card-body">
+        <div class="row">
+            @if (ViewBag.SuccessMsg != null)
+            {
+                <div id="msgAlert" class="alert alert-success" role="alert">
+                    @ViewBag.SuccessMsg
+                </div>
+            }
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+
+                        <th>Id</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Age</th>
+                        <th>Sex</th>
+                        <th>Address</th>
+                        <th>Academic Level</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.UserId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.Age)
+                        </td>
+                        <td>
+
+                            @Html.DisplayFor(modelItem => Model.Sex)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.AcademicLevel)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.PhoneNumber)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Update Information", "UpdateUserInformation", new { id = Model.UserId }, new { @class = "btn btn-primary" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <h2>Avatar</h2>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+
+                            <th>Id</th>
+                            <th>Image</th>
+                            <th>Caption</th>
+                            <th>File Size</th>
+                            <th>Date Created</th>
+                            <th>Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.UserAvatar.Id)
+                            </td>
+                            <td>
+                                <img src="https://localhost:5001/Avatars/@Model.UserAvatar.ImagePath" asp-append-version="true" height="50rem" width="50rem" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.UserAvatar.Caption)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.UserAvatar.FileSize)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.UserAvatar.DateCreated)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Update", "UpdateCompanyAvatar", new { id = Model.UserAvatar.Id, companyId = Model.UserId }, new { @class = "btn btn-primary" })
+                                @Html.ActionLink("Delete", "DeleteBranch", new { id = Model.UserAvatar.Id, companyId = Model.UserId }, new { @class = "btn btn-danger" })
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>

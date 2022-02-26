@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MVCApp.Service;
 using MVCApp.ViewModels;
 using System;
@@ -7,6 +8,7 @@ using ViewModel.Exceptions;
 
 namespace MVCApp.Controllers
 {
+    [Authorize]
     public class CompanyController : BaseController
     {
         private readonly ICompanyApiClient _companyApiClient;

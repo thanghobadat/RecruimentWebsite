@@ -118,7 +118,7 @@
                             </td>
 
                             <td>
-                                @Html.ActionLink("Change Password", "ChangePassword", new { id = item.Id }, new { @class = "btn btn-primary" })
+                                @Html.ActionLink("Information", "Index", "User", new { id = item.Id }, new { @class = "btn btn-success" })
                                 @Html.ActionLink("Delete", "DeleteAccount", new { id = item.Id }, new { @class = "btn btn-success" })
                             </td>
                         </tr>

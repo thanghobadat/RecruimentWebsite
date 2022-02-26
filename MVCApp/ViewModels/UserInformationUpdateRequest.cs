@@ -1,11 +1,11 @@
 ﻿using Data.Enum;
 using System;
 
-namespace ViewModel.Catalog.User
+namespace MVCApp.ViewModels
 {
-    public class UserInformationViewModel
+    public class UserInformationUpdateRequest
     {
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int Age { get; set; }
@@ -14,6 +14,5 @@ namespace ViewModel.Catalog.User
         public string AcademicLevel { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public UserAvatarViewModel UserAvatar { get; set; }
     }
 }

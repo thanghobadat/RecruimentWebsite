@@ -267,7 +267,7 @@ namespace Application.System.Users
                 CompanyId = user.Id,
                 FizeSize = 1,
                 DateCreated = DateTime.Now,
-                ImagePath = "default-avatar",
+                ImagePath = "default-avatar.jpg",
                 Caption = "default-avatar"
             };
             await _context.CompanyAvatars.AddAsync(companyAvatar);
@@ -327,7 +327,7 @@ namespace Application.System.Users
                 UserId = user.Id,
                 FizeSize = 1,
                 DateCreated = DateTime.Now,
-                ImagePath = "default-avatar",
+                ImagePath = "default-avatar.jpg",
                 Caption = "default-avatar"
             };
             await _context.UserAvatars.AddAsync(userAvatar);
