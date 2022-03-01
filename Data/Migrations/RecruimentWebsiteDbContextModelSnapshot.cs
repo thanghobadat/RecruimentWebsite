@@ -46,24 +46,8 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "ca63357a-1bb4-4ad1-be69-d60095f9e2a2",
-                            Description = "Company role",
-                            Name = "company",
-                            NormalizedName = "company"
-                        },
-                        new
-                        {
-                            Id = new Guid("fa17bc58-9669-4f6a-95ef-e2d7f2bd8e7d"),
-                            ConcurrencyStamp = "72c18eda-d50e-4d9f-8582-e7c7eb6c4a87",
-                            Description = "User role",
-                            Name = "user",
-                            NormalizedName = "user"
-                        },
-                        new
-                        {
-                            Id = new Guid("45b7e88d-8052-4a50-a299-c479fbc52ee9"),
-                            ConcurrencyStamp = "5106cd81-5147-4471-85cc-fb464e23977d",
+                            Id = new Guid("5e49d779-61a6-452c-9d04-96c27c64bdc2"),
+                            ConcurrencyStamp = "4d7ac0c7-a119-4f53-afca-c383414e6696",
                             Description = "Admin role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -133,58 +117,157 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
+                            Id = new Guid("e2753881-3c39-429d-a1b2-13c0698605ff"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f3b0640a-ae21-432c-9ddd-d5f4d79055d5",
-                            DateCreated = new DateTime(2022, 1, 14, 9, 36, 53, 689, DateTimeKind.Local).AddTicks(8466),
+                            ConcurrencyStamp = "67ceccc2-dc48-4581-99c4-ad696663c790",
+                            DateCreated = new DateTime(2022, 3, 1, 19, 24, 26, 877, DateTimeKind.Local).AddTicks(7454),
                             Email = "hoangthanh01022000@gmail.com",
                             EmailConfirmed = true,
                             IsSave = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "hoangthanh01022000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGC7GvZL/tzdc9LNoCG8Q98P9keR39TEXtBhoCBEwqssF2wMSU+Z2fgz7+Uy8WJaEg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        },
-                        new
-                        {
-                            Id = new Guid("802f5a7f-c487-46e3-a4a9-84a1f1b9b94c"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "c6be4913-a625-412c-9158-eaba5daddadc",
-                            DateCreated = new DateTime(2022, 1, 14, 9, 36, 53, 697, DateTimeKind.Local).AddTicks(6269),
-                            Email = "hoangthanh01022000@gmail.com",
-                            EmailConfirmed = true,
-                            IsSave = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "hoangthanh01022000@gmail.com",
-                            NormalizedUserName = "user",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEUOLY0tnf2rPKADcxJ7j52U7zg9g5HGJ/sYyJZD3ytTKSKz7NLBsNCK2321WyDC/Q==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "user"
-                        },
-                        new
-                        {
-                            Id = new Guid("9902a6c2-59dd-4064-b570-5ce1e4682567"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "3ceb112f-dd9b-49a3-bb00-9068018a122a",
-                            DateCreated = new DateTime(2022, 1, 14, 9, 36, 53, 704, DateTimeKind.Local).AddTicks(5259),
-                            Email = "hoangthanh01022000@gmail.com",
-                            EmailConfirmed = true,
-                            IsSave = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "hoangthanh01022000@gmail.com",
-                            NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAbYRXVI/POYrx1nq2DjsEt+tvF+sOuG16ZsPmupQD3XJnWTaumrmdEsGdoqYrdb6g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBXlYBIOt00QXL+ZYMTMQAjPeuwpX70nSPnV8wV4foS5K251CSSL4b5UGlfFmej8mw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
+                });
+
+            modelBuilder.Entity("Data.Entities.Branch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Branches");
+                });
+
+            modelBuilder.Entity("Data.Entities.BranchRecruitment", b =>
+                {
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecruimentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BranchId", "RecruimentId");
+
+                    b.HasIndex("RecruimentId");
+
+                    b.ToTable("BranchRecruiments");
+                });
+
+            modelBuilder.Entity("Data.Entities.Career", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Careers");
+                });
+
+            modelBuilder.Entity("Data.Entities.CareerRecruitment", b =>
+                {
+                    b.Property<int>("CareerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecruimentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CareerId", "RecruimentId");
+
+                    b.HasIndex("RecruimentId");
+
+                    b.ToTable("CareerRecruitments");
+                });
+
+            modelBuilder.Entity("Data.Entities.Chat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 3, 1, 19, 24, 26, 823, DateTimeKind.Local).AddTicks(4988));
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("Data.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecruimentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubcommentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecruimentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Data.Entities.CompanyAvatar", b =>
@@ -223,21 +306,17 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.CompanyBranch", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
+                    b.HasKey("BranchId", "CompanyId");
 
                     b.HasIndex("CompanyId");
 
@@ -336,6 +415,133 @@ namespace Data.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("CompanyInformations");
+                });
+
+            modelBuilder.Entity("Data.Entities.CurriculumVitae", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("RecruimentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 3, 1, 19, 24, 26, 845, DateTimeKind.Local).AddTicks(8499));
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "RecruimentId");
+
+                    b.HasIndex("RecruimentId");
+
+                    b.ToTable("CurriculumVitaes");
+                });
+
+            modelBuilder.Entity("Data.Entities.Follow", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "CompanyId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Follows");
+                });
+
+            modelBuilder.Entity("Data.Entities.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 3, 1, 19, 24, 26, 850, DateTimeKind.Local).AddTicks(1059));
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("Data.Entities.Recruitment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Benefits")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailedExperience")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Education")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Experience")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("none");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Rank")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Salary")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Recruitments");
                 });
 
             modelBuilder.Entity("Data.Entities.UserAvatar", b =>
@@ -481,18 +687,8 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
-                            RoleId = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc")
-                        },
-                        new
-                        {
-                            UserId = new Guid("802f5a7f-c487-46e3-a4a9-84a1f1b9b94c"),
-                            RoleId = new Guid("fa17bc58-9669-4f6a-95ef-e2d7f2bd8e7d")
-                        },
-                        new
-                        {
-                            UserId = new Guid("9902a6c2-59dd-4064-b570-5ce1e4682567"),
-                            RoleId = new Guid("45b7e88d-8052-4a50-a299-c479fbc52ee9")
+                            UserId = new Guid("e2753881-3c39-429d-a1b2-13c0698605ff"),
+                            RoleId = new Guid("5e49d779-61a6-452c-9d04-96c27c64bdc2")
                         });
                 });
 
@@ -516,6 +712,82 @@ namespace Data.Migrations
                     b.ToTable("AppUserTokens");
                 });
 
+            modelBuilder.Entity("Data.Entities.BranchRecruitment", b =>
+                {
+                    b.HasOne("Data.Entities.Branch", "Branch")
+                        .WithMany("BranchRecruiments")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.Recruitment", "Recruitment")
+                        .WithMany("BranchRecruiments")
+                        .HasForeignKey("RecruimentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Recruitment");
+                });
+
+            modelBuilder.Entity("Data.Entities.CareerRecruitment", b =>
+                {
+                    b.HasOne("Data.Entities.Career", "Career")
+                        .WithMany("CareerRecruitments")
+                        .HasForeignKey("CareerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.Recruitment", "Recruitment")
+                        .WithMany("CareerRecruitments")
+                        .HasForeignKey("RecruimentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Career");
+
+                    b.Navigation("Recruitment");
+                });
+
+            modelBuilder.Entity("Data.Entities.Chat", b =>
+                {
+                    b.HasOne("Data.Entities.CompanyInformation", "CompanyInformation")
+                        .WithMany("Chats")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.UserInformation", "UserInformation")
+                        .WithMany("Chats")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CompanyInformation");
+
+                    b.Navigation("UserInformation");
+                });
+
+            modelBuilder.Entity("Data.Entities.Comment", b =>
+                {
+                    b.HasOne("Data.Entities.Recruitment", "Recruitment")
+                        .WithMany("Comments")
+                        .HasForeignKey("RecruimentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.UserInformation", "UserInformation")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recruitment");
+
+                    b.Navigation("UserInformation");
+                });
+
             modelBuilder.Entity("Data.Entities.CompanyAvatar", b =>
                 {
                     b.HasOne("Data.Entities.CompanyInformation", "CompanyInformation")
@@ -529,11 +801,19 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.CompanyBranch", b =>
                 {
+                    b.HasOne("Data.Entities.Branch", "Branch")
+                        .WithMany("CompanyBranches")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Data.Entities.CompanyInformation", "CompanyInformation")
                         .WithMany("CompanyBranches")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Branch");
 
                     b.Navigation("CompanyInformation");
                 });
@@ -571,6 +851,63 @@ namespace Data.Migrations
                     b.Navigation("AppUser");
                 });
 
+            modelBuilder.Entity("Data.Entities.CurriculumVitae", b =>
+                {
+                    b.HasOne("Data.Entities.Recruitment", "Recruitment")
+                        .WithMany("CurriculumVitaes")
+                        .HasForeignKey("RecruimentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.UserInformation", "UserInformation")
+                        .WithMany("CurriculumVitaes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recruitment");
+
+                    b.Navigation("UserInformation");
+                });
+
+            modelBuilder.Entity("Data.Entities.Follow", b =>
+                {
+                    b.HasOne("Data.Entities.CompanyInformation", "CompanyInformation")
+                        .WithMany("Follows")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.UserInformation", "UserInformation")
+                        .WithMany("Follows")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CompanyInformation");
+
+                    b.Navigation("UserInformation");
+                });
+
+            modelBuilder.Entity("Data.Entities.Notification", b =>
+                {
+                    b.HasOne("Data.Entities.CompanyInformation", "CompanyInformation")
+                        .WithMany("Notifications")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.UserInformation", "UserInformation")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CompanyInformation");
+
+                    b.Navigation("UserInformation");
+                });
+
             modelBuilder.Entity("Data.Entities.UserAvatar", b =>
                 {
                     b.HasOne("Data.Entities.UserInformation", "UserInformation")
@@ -600,8 +937,22 @@ namespace Data.Migrations
                     b.Navigation("UserInformation");
                 });
 
+            modelBuilder.Entity("Data.Entities.Branch", b =>
+                {
+                    b.Navigation("BranchRecruiments");
+
+                    b.Navigation("CompanyBranches");
+                });
+
+            modelBuilder.Entity("Data.Entities.Career", b =>
+                {
+                    b.Navigation("CareerRecruitments");
+                });
+
             modelBuilder.Entity("Data.Entities.CompanyInformation", b =>
                 {
+                    b.Navigation("Chats");
+
                     b.Navigation("CompanyAvatar");
 
                     b.Navigation("CompanyBranches");
@@ -609,10 +960,35 @@ namespace Data.Migrations
                     b.Navigation("CompanyCoverImage");
 
                     b.Navigation("CompanyImages");
+
+                    b.Navigation("Follows");
+
+                    b.Navigation("Notifications");
+                });
+
+            modelBuilder.Entity("Data.Entities.Recruitment", b =>
+                {
+                    b.Navigation("BranchRecruiments");
+
+                    b.Navigation("CareerRecruitments");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("CurriculumVitaes");
                 });
 
             modelBuilder.Entity("Data.Entities.UserInformation", b =>
                 {
+                    b.Navigation("Chats");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("CurriculumVitaes");
+
+                    b.Navigation("Follows");
+
+                    b.Navigation("Notifications");
+
                     b.Navigation("UserAvatar");
                 });
 #pragma warning restore 612, 618

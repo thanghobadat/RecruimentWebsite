@@ -17,13 +17,24 @@ namespace Data.EF
         {
             modelBuilder.ApplyConfiguration(new AppUserConfiguration());
             modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
-            modelBuilder.ApplyConfiguration(new CompanyInformationConfiguration());
-            modelBuilder.ApplyConfiguration(new UserInformationConfiguration());
-            modelBuilder.ApplyConfiguration(new UserAvatarconfiguration());
+            modelBuilder.ApplyConfiguration(new BranchConfiguration());
+            modelBuilder.ApplyConfiguration(new BranchRecruitmentConfiguration());
+            modelBuilder.ApplyConfiguration(new CareerConfiguration());
+            modelBuilder.ApplyConfiguration(new CareerRecruitmentConfiguration());
+            modelBuilder.ApplyConfiguration(new ChatConfiguration());
+            modelBuilder.ApplyConfiguration(new CommentConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyAvatarConfiguration());
+            modelBuilder.ApplyConfiguration(new CompanyBranchConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyCoverImageConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyImageConfiguration());
-            modelBuilder.ApplyConfiguration(new CompanyBranchConfiguration());
+            modelBuilder.ApplyConfiguration(new CompanyInformationConfiguration());
+            modelBuilder.ApplyConfiguration(new CurriculumVitaeConfiguration());
+            modelBuilder.ApplyConfiguration(new FollowConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationConfiguration());
+            modelBuilder.ApplyConfiguration(new RecruitmentConfiguration());
+            modelBuilder.ApplyConfiguration(new UserAvatarconfiguration());
+            modelBuilder.ApplyConfiguration(new UserInformationConfiguration());
+
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -40,6 +51,16 @@ namespace Data.EF
         public DbSet<CompanyImage> CompanyImages { get; set; }
         public DbSet<UserAvatar> UserAvatars { get; set; }
         public DbSet<CompanyCoverImage> CompanyCoverImages { get; set; }
+        public DbSet<Branch> branches { get; set; }
+        public DbSet<BranchRecruitment> BranchRecruitments { get; set; }
+        public DbSet<Career> Careers { get; set; }
+        public DbSet<CareerRecruitment> CareerRecruitments { get; set; }
+        public DbSet<Chat> Chats { get; set; }
+        public DbSet<CurriculumVitae> CurriculumVitaes { get; set; }
+        public DbSet<Follow> Follows { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Recruitment> Recruitments { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
     }
 }

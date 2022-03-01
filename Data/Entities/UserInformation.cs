@@ -1,5 +1,6 @@
 ﻿using Data.Enum;
 using System;
+using System.Collections.Generic;
 
 namespace Data.Entities
 {
@@ -14,5 +15,11 @@ namespace Data.Entities
         public string AcademicLevel { get; set; }
         public AppUser AppUser { get; set; }
         public UserAvatar UserAvatar { get; set; }
+        public List<CurriculumVitae> CurriculumVitaes { get; set; }
+        public List<Notification> Notifications { get; set; }
+        public List<Follow> Follows { get; set; }
+        public List<Chat> Chats { get; set; }
+        public List<Comment> Comments { get; set; }
+
     }
 }

@@ -13,8 +13,11 @@ namespace Data.Entities
         public AppUser AppUser { get; set; }
         public List<CompanyImage> CompanyImages { get; set; }
         public List<CompanyBranch> CompanyBranches { get; set; }
+        public List<Notification> Notifications { get; set; }
         public CompanyAvatar CompanyAvatar { get; set; }
         public CompanyCoverImage CompanyCoverImage { get; set; }
+        public List<Follow> Follows { get; set; }
+        public List<Chat> Chats { get; set; }
 
     }
 }

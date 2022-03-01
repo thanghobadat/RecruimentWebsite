@@ -11,7 +11,6 @@ namespace Data.Configuration
             builder.ToTable("UserInformations");
 
             builder.HasKey(x => x.UserId);
-
             builder.Property(x => x.FirstName).IsRequired();
             builder.Property(x => x.LastName).IsRequired();
             builder.Property(x => x.Age).IsRequired();

@@ -118,7 +118,7 @@ namespace BackendApi.Controllers
             var result = await _accountService.ChangePassword(id, newPassword);
             if (!result.IsSuccessed)
             {
-                return BadRequest(result);
+                return BadRequest(result.Message);
             }
             return Ok(result);
         }

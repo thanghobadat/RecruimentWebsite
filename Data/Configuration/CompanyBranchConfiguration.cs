@@ -9,11 +9,12 @@ namespace Data.Configuration
         public void Configure(EntityTypeBuilder<CompanyBranch> builder)
         {
             builder.ToTable("CompanyBranches");
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).UseIdentityColumn();
+            builder.HasKey(t => new { t.BranchId, t.CompanyId });
             builder.Property(x => x.Address).IsRequired();
             builder.HasOne(ci => ci.CompanyInformation).WithMany(ca => ca.CompanyBranches)
                 .HasForeignKey(pc => pc.CompanyId);
+            builder.HasOne(ci => ci.Branch).WithMany(ca => ca.CompanyBranches)
+                .HasForeignKey(pc => pc.BranchId);
         }
     }
 }

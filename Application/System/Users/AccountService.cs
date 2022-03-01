@@ -3,6 +3,7 @@ using AutoMapper;
 using Data.EF;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -91,14 +92,33 @@ namespace Application.System.Users
             {
                 return new ApiErrorResult<bool>("User does not exits");
             }
-            //var roles = await _userManager.GetRolesAsync(user);
-            //foreach (var role in roles)
-            //{
-            //    if (role == "company")
-            //    {
-            //        await _storageService.DeleteAvatarAsync()
-            //    }
-            //}
+            var roles = await _userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                if (role == "company")
+                {
+                    var avatar = await _context.CompanyAvatars.FirstOrDefaultAsync(x => x.CompanyId == id);
+                    if (avatar.ImagePath != "default-avatar")
+                    {
+                        await _storageService.DeleteAvatarAsync(avatar.ImagePath);
+                    }
+                    var coverImage = await _context.CompanyCoverImages.FirstOrDefaultAsync(x => x.CompanyId == id);
+                    await _storageService.DeleteCoverImageAsync(coverImage.ImagePath);
+                    var images = await _context.CompanyImages.Where(x => x.CompanyId == id).ToListAsync();
+                    foreach (var image in images)
+                    {
+                        await _storageService.DeleteCoverImageAsync(image.ImagePath);
+                    }
+                }
+                else
+                {
+                    var avatar = await _context.UserAvatars.FirstOrDefaultAsync(x => x.UserId == id);
+                    if (avatar.ImagePath != "default-avatar")
+                    {
+                        await _storageService.DeleteAvatarAsync(avatar.ImagePath);
+                    }
+                }
+            }
             var reult = await _userManager.DeleteAsync(user);
             if (reult.Succeeded)
                 return new ApiSuccessResult<bool>();
@@ -163,8 +183,6 @@ namespace Application.System.Users
         public async Task<ApiResult<PageResult<UserAccountViewModel>>> GetUserAccountPaging(GetAccountPagingRequest request)
         {
             var users = await _userManager.GetUsersInRoleAsync("user");
-
-
             var query = users.AsQueryable();
 
             if (!string.IsNullOrEmpty(request.Keyword))
