@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(RecruimentWebsiteDbContext))]
-    [Migration("20220301122427_initial")]
+    [Migration("20220302065236_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,8 +48,8 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5e49d779-61a6-452c-9d04-96c27c64bdc2"),
-                            ConcurrencyStamp = "4d7ac0c7-a119-4f53-afca-c383414e6696",
+                            Id = new Guid("6f2e5b4b-8ec5-4341-8379-2226cb8c2273"),
+                            ConcurrencyStamp = "5dbc1da2-ee7f-4de4-a74f-a93552f6925e",
                             Description = "Admin role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -119,17 +119,17 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e2753881-3c39-429d-a1b2-13c0698605ff"),
+                            Id = new Guid("5fae9dbf-3d39-43fc-b16f-61fce83bcca0"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "67ceccc2-dc48-4581-99c4-ad696663c790",
-                            DateCreated = new DateTime(2022, 3, 1, 19, 24, 26, 877, DateTimeKind.Local).AddTicks(7454),
+                            ConcurrencyStamp = "8fe7e2e7-efbc-4854-a4fc-230fd42f1f2d",
+                            DateCreated = new DateTime(2022, 3, 2, 13, 52, 36, 73, DateTimeKind.Local).AddTicks(1683),
                             Email = "hoangthanh01022000@gmail.com",
                             EmailConfirmed = true,
                             IsSave = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "hoangthanh01022000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBXlYBIOt00QXL+ZYMTMQAjPeuwpX70nSPnV8wV4foS5K251CSSL4b5UGlfFmej8mw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECk8XEaojqoXV+q8vBLqz0ZlZM0jl3pFbO+ezjmSjODGUj/SNOoh8QytBAxB6qFwNQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -147,10 +147,6 @@ namespace Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -229,7 +225,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 1, 19, 24, 26, 823, DateTimeKind.Local).AddTicks(4988));
+                        .HasDefaultValue(new DateTime(2022, 3, 2, 13, 52, 36, 14, DateTimeKind.Local).AddTicks(2428));
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -250,9 +246,15 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("RecruimentId")
                         .HasColumnType("int");
@@ -260,14 +262,11 @@ namespace Data.Migrations
                     b.Property<string>("SubcommentId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("RecruimentId");
+                    b.HasIndex("AccountId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("RecruimentId");
 
                     b.ToTable("Comments");
                 });
@@ -430,7 +429,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 1, 19, 24, 26, 845, DateTimeKind.Local).AddTicks(8499));
+                        .HasDefaultValue(new DateTime(2022, 3, 2, 13, 52, 36, 37, DateTimeKind.Local).AddTicks(4564));
 
                     b.Property<string>("FilePath")
                         .IsRequired()
@@ -475,7 +474,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 1, 19, 24, 26, 850, DateTimeKind.Local).AddTicks(1059));
+                        .HasDefaultValue(new DateTime(2022, 3, 2, 13, 52, 36, 41, DateTimeKind.Local).AddTicks(9844));
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -500,6 +499,9 @@ namespace Data.Migrations
 
                     b.Property<string>("Benefits")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -542,6 +544,9 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId")
+                        .IsUnique();
 
                     b.ToTable("Recruitments");
                 });
@@ -689,8 +694,8 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("e2753881-3c39-429d-a1b2-13c0698605ff"),
-                            RoleId = new Guid("5e49d779-61a6-452c-9d04-96c27c64bdc2")
+                            UserId = new Guid("5fae9dbf-3d39-43fc-b16f-61fce83bcca0"),
+                            RoleId = new Guid("6f2e5b4b-8ec5-4341-8379-2226cb8c2273")
                         });
                 });
 
@@ -773,21 +778,21 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Comment", b =>
                 {
+                    b.HasOne("Data.Entities.AppUser", "AppUser")
+                        .WithMany("Comments")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Data.Entities.Recruitment", "Recruitment")
                         .WithMany("Comments")
                         .HasForeignKey("RecruimentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Data.Entities.UserInformation", "UserInformation")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("AppUser");
 
                     b.Navigation("Recruitment");
-
-                    b.Navigation("UserInformation");
                 });
 
             modelBuilder.Entity("Data.Entities.CompanyAvatar", b =>
@@ -858,13 +863,13 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.Recruitment", "Recruitment")
                         .WithMany("CurriculumVitaes")
                         .HasForeignKey("RecruimentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.UserInformation", "UserInformation")
                         .WithMany("CurriculumVitaes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Recruitment");
@@ -910,6 +915,17 @@ namespace Data.Migrations
                     b.Navigation("UserInformation");
                 });
 
+            modelBuilder.Entity("Data.Entities.Recruitment", b =>
+                {
+                    b.HasOne("Data.Entities.CompanyInformation", "CompanyInformation")
+                        .WithOne("Recruitment")
+                        .HasForeignKey("Data.Entities.Recruitment", "CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyInformation");
+                });
+
             modelBuilder.Entity("Data.Entities.UserAvatar", b =>
                 {
                     b.HasOne("Data.Entities.UserInformation", "UserInformation")
@@ -934,6 +950,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.AppUser", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("CompanyInformation");
 
                     b.Navigation("UserInformation");
@@ -966,6 +984,8 @@ namespace Data.Migrations
                     b.Navigation("Follows");
 
                     b.Navigation("Notifications");
+
+                    b.Navigation("Recruitment");
                 });
 
             modelBuilder.Entity("Data.Entities.Recruitment", b =>
@@ -982,8 +1002,6 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.UserInformation", b =>
                 {
                     b.Navigation("Chats");
-
-                    b.Navigation("Comments");
 
                     b.Navigation("CurriculumVitaes");
 

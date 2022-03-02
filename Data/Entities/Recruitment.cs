@@ -21,6 +21,9 @@ namespace Data.Entities
         public List<BranchRecruitment> BranchRecruiments { get; set; }
         public List<CurriculumVitae> CurriculumVitaes { get; set; }
         public List<Comment> Comments { get; set; }
+        public Guid CompanyId { get; set; }
+        public CompanyInformation CompanyInformation { get; set; }
+
 
 
 

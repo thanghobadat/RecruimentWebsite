@@ -15,7 +15,6 @@ namespace Data.Configuration
 
 
             builder.Property(x => x.City).IsRequired();
-            builder.Property(x => x.Country).IsRequired();
 
         }
     }

@@ -8,16 +8,19 @@ namespace Application.Common
     {
         private readonly string _userContentFolderAvatar;
         private readonly string _userContentFolderImages;
-        private readonly string _userContentFolderCoverImages;
+        private readonly string _userContentFolderCoverImage;
+        private readonly string _userContentFolderCV;
         private const string USER_CONTENT_FOLDER_NAME_Avatar = "Avatars";
         private const string USER_CONTENT_FOLDER_NAME_Images = "Images";
         private const string USER_CONTENT_FOLDER_NAME_Cover_Images = "CoverImages";
+        private const string USER_CONTENT_FOLDER_NAME_CV = "CVs";
 
         public FileStorageService(IWebHostEnvironment webHostEnvironment)
         {
-            _userContentFolderAvatar = Path.GetFullPath($"wwwroot/{USER_CONTENT_FOLDER_NAME_Avatar}");
-            _userContentFolderImages = Path.GetFullPath($"wwwroot/{USER_CONTENT_FOLDER_NAME_Images}");
-            _userContentFolderCoverImages = Path.GetFullPath($"wwwroot/{USER_CONTENT_FOLDER_NAME_Cover_Images}");
+            _userContentFolderAvatar = Path.Combine(webHostEnvironment.WebRootPath, USER_CONTENT_FOLDER_NAME_Avatar);
+            _userContentFolderImages = Path.Combine(webHostEnvironment.WebRootPath, USER_CONTENT_FOLDER_NAME_Images);
+            _userContentFolderCoverImage = Path.Combine(webHostEnvironment.WebRootPath, USER_CONTENT_FOLDER_NAME_Cover_Images);
+            _userContentFolderCV = Path.Combine(webHostEnvironment.WebRootPath, USER_CONTENT_FOLDER_NAME_CV);
         }
 
         public string GetFileUrlAvatar(string fileName)
@@ -59,14 +62,30 @@ namespace Application.Common
 
         public async Task SaveCoverImageAsync(Stream mediaBinaryStream, string fileName)
         {
-            var filePath = Path.Combine(_userContentFolderCoverImages, fileName);
+            var filePath = Path.Combine(_userContentFolderCoverImage, fileName);
             using var output = new FileStream(filePath, FileMode.Create);
             await mediaBinaryStream.CopyToAsync(output);
         }
 
         public async Task DeleteCoverImageAsync(string fileName)
         {
-            var filePath = Path.Combine(_userContentFolderCoverImages, fileName);
+            var filePath = Path.Combine(_userContentFolderCoverImage, fileName);
+            if (File.Exists(filePath))
+            {
+                await Task.Run(() => File.Delete(filePath));
+            }
+        }
+
+        public async Task SaveCVAsync(Stream mediaBinaryStream, string fileName)
+        {
+            var filePath = Path.Combine(_userContentFolderCV, fileName);
+            using var output = new FileStream(filePath, FileMode.Create);
+            await mediaBinaryStream.CopyToAsync(output);
+        }
+
+        public async Task DeleteCVAsync(string fileName)
+        {
+            var filePath = Path.Combine(_userContentFolderCV, fileName);
             if (File.Exists(filePath))
             {
                 await Task.Run(() => File.Delete(filePath));

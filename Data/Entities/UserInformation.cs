@@ -19,7 +19,6 @@ namespace Data.Entities
         public List<Notification> Notifications { get; set; }
         public List<Follow> Follows { get; set; }
         public List<Chat> Chats { get; set; }
-        public List<Comment> Comments { get; set; }
 
     }
 }

@@ -12,12 +12,13 @@ namespace Data.Configuration
 
             builder.ToTable("Comments");
             builder.Property(x => x.Content).IsRequired();
+            builder.Property(x => x.DateCreated).IsRequired();
 
-            builder.HasOne(t => t.UserInformation).WithMany(pc => pc.Comments)
-                .HasForeignKey(pc => pc.UserId);
+            builder.HasOne(t => t.AppUser).WithMany(pc => pc.Comments)
+                .HasForeignKey(pc => pc.AccountId).OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(t => t.Recruitment).WithMany(pc => pc.Comments)
-              .HasForeignKey(pc => pc.RecruimentId);
+              .HasForeignKey(pc => pc.RecruimentId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

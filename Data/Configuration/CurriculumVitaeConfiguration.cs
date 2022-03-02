@@ -16,10 +16,10 @@ namespace Data.Configuration
             builder.Property(x => x.DateCreated).IsRequired().HasDefaultValue(DateTime.Now);
 
             builder.HasOne(t => t.UserInformation).WithMany(pc => pc.CurriculumVitaes)
-                .HasForeignKey(pc => pc.UserId);
+                .HasForeignKey(pc => pc.UserId).OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(t => t.Recruitment).WithMany(pc => pc.CurriculumVitaes)
-              .HasForeignKey(pc => pc.RecruimentId);
+              .HasForeignKey(pc => pc.RecruimentId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

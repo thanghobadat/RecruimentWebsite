@@ -10,13 +10,13 @@ namespace Application.Common
         string GetFileUrlImages(string fileName);
 
         Task SaveAvatarAsync(Stream mediaBinaryStream, string fileName);
+        Task SaveCVAsync(Stream mediaBinaryStream, string fileName);
         Task SaveImagesAsync(Stream mediaBinaryStream, string fileName);
         Task SaveCoverImageAsync(Stream mediaBinaryStream, string fileName);
 
         Task DeleteAvatarAsync(string fileName);
         Task DeleteImagesAsync(string fileName);
-
-
+        Task DeleteCVAsync(string fileName);
         Task DeleteCoverImageAsync(string fileName);
     }
 }
