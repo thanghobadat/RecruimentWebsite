@@ -1,7 +1,10 @@
-﻿namespace ViewModel.Catalog.Company
+﻿using System;
+
+namespace ViewModel.Catalog.Company
 {
     public class CompanyUpdateRequest
     {
+        public Guid CompanyId { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string Name { get; set; }

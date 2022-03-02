@@ -73,13 +73,16 @@ namespace Application.System.Users
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
-                return new ApiErrorResult<bool>("User does not exits");
+                return new ApiErrorResult<bool>("Account does not exits");
             }
             await _userManager.RemovePasswordAsync(user);
             var resultUser = await _userManager.AddPasswordAsync(user, newPassword);
             if (!resultUser.Succeeded)
             {
-                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
+                foreach (var error in resultUser.Errors)
+                {
+                    return new ApiErrorResult<bool>(error.Description);
+                }
 
             }
             return new ApiSuccessResult<bool>(true);
@@ -263,12 +266,15 @@ namespace Application.System.Users
                 IsSave = false
             };
             var resultUser = await _userManager.CreateAsync(user, request.Password);
-            await _userManager.AddToRoleAsync(user, "company");
             if (!resultUser.Succeeded)
             {
-                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
+                foreach (var error in resultUser.Errors)
+                {
+                    return new ApiErrorResult<bool>(error.Description);
+                }
 
             }
+            await _userManager.AddToRoleAsync(user, "company");
 
             var companyInf = new CompanyInformation()
             {
@@ -322,12 +328,15 @@ namespace Application.System.Users
                 IsSave = false
             };
             var resultUser = await _userManager.CreateAsync(user, request.Password);
-            await _userManager.AddToRoleAsync(user, "user");
             if (!resultUser.Succeeded)
             {
-                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
+                foreach (var error in resultUser.Errors)
+                {
+                    return new ApiErrorResult<bool>(error.Description);
+                }
 
             }
+            await _userManager.AddToRoleAsync(user, "user");
             var userInf = new UserInformation()
             {
                 UserId = user.Id,
@@ -352,6 +361,7 @@ namespace Application.System.Users
             var resultUserInf = await _context.SaveChangesAsync();
             if (resultUserInf == 0)
             {
+                await _userManager.DeleteAsync(user);
                 return new ApiErrorResult<bool>("An error occured, register unsuccessful");
             }
             return new ApiSuccessResult<bool>(true);

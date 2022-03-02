@@ -309,7 +309,7 @@ namespace Application.Catalog
             var imageType = request.ThumnailImage.FileName.Substring(imageIndex + 1);
             if (imageType == "jpg" || imageType == "png")
             {
-                if (companyAva.ImagePath != "default-avatar")
+                if (companyAva.ImagePath != "default-avatar.jpg")
                 {
                     await _storageService.DeleteAvatarAsync(companyAva.ImagePath);
                 }
@@ -346,12 +346,12 @@ namespace Application.Catalog
             return new ApiSuccessResult<bool>(true);
         }
 
-        public async Task<ApiResult<bool>> UpdateCompanyInformation(Guid id, CompanyUpdateRequest request)
+        public async Task<ApiResult<bool>> UpdateCompanyInformation(CompanyUpdateRequest request)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.FindByIdAsync(request.CompanyId.ToString());
             user.Email = request.Email;
             user.PhoneNumber = request.PhoneNumber;
-            var userInf = await _context.CompanyInformations.FindAsync(id);
+            var userInf = await _context.CompanyInformations.FindAsync(request.CompanyId);
             userInf.Name = request.Name;
             userInf.Description = request.Description;
             userInf.WorkerNumber = request.WorkerNumber;

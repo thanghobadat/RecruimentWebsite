@@ -18,7 +18,7 @@ namespace Application.Catalog
         Task<ApiResult<bool>> CreateBranch(CreateBranchRequest request);
         Task<ApiResult<bool>> CreateCoverImage(CreateCoverImageRequest request);
         Task<ApiResult<bool>> CreateCompanyImages(CreateCompanyImageRequest request);
-        Task<ApiResult<bool>> UpdateCompanyInformation(Guid id, CompanyUpdateRequest request);
+        Task<ApiResult<bool>> UpdateCompanyInformation(CompanyUpdateRequest request);
         Task<ApiResult<bool>> UpdateBranch(UpdateBranchRequest request);
         Task<ApiResult<bool>> UpdateAvatar(int Id, AvatarUpdateRequest request);
         Task<ApiResult<bool>> UpdateCoverImage(int id, UpdateCoverImageRequest request);

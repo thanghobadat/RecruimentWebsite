@@ -1,5 +1,4 @@
 ﻿using Application.Catalog;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ namespace BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class CompaniesController : ControllerBase
     {
         private readonly ICompanyService _companyService;
@@ -108,12 +107,12 @@ namespace BackendApi.Controllers
         }
 
         [HttpPut("UpdateCompanyInformation")]
-        public async Task<IActionResult> UpdateCompanyInformation(Guid id, [FromBody] CompanyUpdateRequest request)
+        public async Task<IActionResult> UpdateCompanyInformation([FromBody] CompanyUpdateRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _companyService.UpdateCompanyInformation(id, request);
+            var result = await _companyService.UpdateCompanyInformation(request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);

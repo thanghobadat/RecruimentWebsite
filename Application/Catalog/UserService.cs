@@ -64,7 +64,7 @@ namespace Application.Catalog
             var userAva = await _context.UserAvatars.FindAsync(id);
             if (userAva == null)
             {
-                return new ApiErrorResult<bool>("User avatar information could not be found");
+                return new ApiErrorResult<bool>("User avatar could not be found");
             }
 
 
@@ -72,7 +72,7 @@ namespace Application.Catalog
             var imageType = thumnailImage.FileName.Substring(imageIndex + 1);
             if (imageType == "jpg" || imageType == "png")
             {
-                if (userAva.ImagePath != "default-avatar")
+                if (userAva.ImagePath != "default-avatar.jpg")
                 {
                     await _storageService.DeleteAvatarAsync(userAva.ImagePath);
                 }
@@ -81,9 +81,6 @@ namespace Application.Catalog
                 userAva.ImagePath = await this.SaveAvatar(thumnailImage);
                 userAva.DateCreated = DateTime.Now;
                 var result = await _context.SaveChangesAsync();
-
-
-
                 if (result == 0)
                 {
                     return new ApiErrorResult<bool>("An error occured, register unsuccessful");
@@ -105,15 +102,15 @@ namespace Application.Catalog
 
 
 
-        public async Task<ApiResult<bool>> UpdateUserInformation(Guid id, UserUpdateRequest request)
+        public async Task<ApiResult<bool>> UpdateUserInformation(UserUpdateRequest request)
         {
 
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
             user.Email = request.Email;
             user.PhoneNumber = request.PhoneNumber;
 
 
-            var userInf = await _context.UserInformations.FindAsync(id);
+            var userInf = await _context.UserInformations.FindAsync(request.UserId);
             userInf.Age = request.Age;
             userInf.FirstName = request.FirstName;
             userInf.AcademicLevel = request.AcademicLevel;
@@ -121,9 +118,6 @@ namespace Application.Catalog
             userInf.Sex = request.Sex;
             userInf.Address = request.Address;
             var resultUserInf = await _context.SaveChangesAsync();
-
-
-
             if (resultUserInf == 0)
             {
                 return new ApiErrorResult<bool>("An error occured, register unsuccessful");

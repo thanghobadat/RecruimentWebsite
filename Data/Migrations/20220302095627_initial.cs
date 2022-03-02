@@ -323,7 +323,7 @@ namespace Data.Migrations
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 3, 2, 13, 52, 36, 14, DateTimeKind.Local).AddTicks(2428))
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 3, 2, 16, 56, 26, 847, DateTimeKind.Local).AddTicks(4017))
                 },
                 constraints: table =>
                 {
@@ -375,7 +375,7 @@ namespace Data.Migrations
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 3, 2, 13, 52, 36, 41, DateTimeKind.Local).AddTicks(9844))
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 3, 2, 16, 56, 26, 877, DateTimeKind.Local).AddTicks(5333))
                 },
                 constraints: table =>
                 {
@@ -501,7 +501,7 @@ namespace Data.Migrations
                     RecruimentId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 3, 2, 13, 52, 36, 37, DateTimeKind.Local).AddTicks(4564))
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 3, 2, 16, 56, 26, 873, DateTimeKind.Local).AddTicks(182))
                 },
                 constraints: table =>
                 {
@@ -523,17 +523,22 @@ namespace Data.Migrations
             migrationBuilder.InsertData(
                 table: "AppRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
-                values: new object[] { new Guid("6f2e5b4b-8ec5-4341-8379-2226cb8c2273"), "5dbc1da2-ee7f-4de4-a74f-a93552f6925e", "Admin role", "admin", "admin" });
+                values: new object[,]
+                {
+                    { new Guid("b8761f12-3b3b-4ee0-a07f-618b21b9b701"), "5862748d-8105-412b-b651-120273e7415d", "Company role", "company", "company" },
+                    { new Guid("cf293194-a30e-4416-83c6-2571067cc7d0"), "02a796ef-fcc1-41e4-8c02-fe0ad74b54c2", "User role", "user", "user" },
+                    { new Guid("72c41370-50ea-47ac-9d77-f58a313e0eb7"), "d349dd7e-075f-4386-99c0-85372c7c9121", "Admin role", "admin", "admin" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AppUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("6f2e5b4b-8ec5-4341-8379-2226cb8c2273"), new Guid("5fae9dbf-3d39-43fc-b16f-61fce83bcca0") });
+                values: new object[] { new Guid("72c41370-50ea-47ac-9d77-f58a313e0eb7"), new Guid("41cc17b5-463c-4d87-a3a9-0f5f7ed0c07e") });
 
             migrationBuilder.InsertData(
                 table: "AppUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateCreated", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("5fae9dbf-3d39-43fc-b16f-61fce83bcca0"), 0, "8fe7e2e7-efbc-4854-a4fc-230fd42f1f2d", new DateTime(2022, 3, 2, 13, 52, 36, 73, DateTimeKind.Local).AddTicks(1683), "hoangthanh01022000@gmail.com", true, false, null, "hoangthanh01022000@gmail.com", "admin", "AQAAAAEAACcQAAAAECk8XEaojqoXV+q8vBLqz0ZlZM0jl3pFbO+ezjmSjODGUj/SNOoh8QytBAxB6qFwNQ==", null, false, "", false, "admin" });
+                values: new object[] { new Guid("41cc17b5-463c-4d87-a3a9-0f5f7ed0c07e"), 0, "ddd4eeb7-4c30-4345-bc22-68e127beddbe", new DateTime(2022, 3, 2, 16, 56, 26, 916, DateTimeKind.Local).AddTicks(6520), "hoangthanh01022000@gmail.com", true, false, null, "hoangthanh01022000@gmail.com", "admin", "AQAAAAEAACcQAAAAEGyz0WGVSvs7NM9vbqMCBdfj7AhEcHRMYMguufblJY1sMS31OKWHNCgIPmF+EroWGw==", null, false, "", false, "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BranchRecruiments_RecruimentId",

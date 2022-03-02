@@ -46,8 +46,24 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6f2e5b4b-8ec5-4341-8379-2226cb8c2273"),
-                            ConcurrencyStamp = "5dbc1da2-ee7f-4de4-a74f-a93552f6925e",
+                            Id = new Guid("b8761f12-3b3b-4ee0-a07f-618b21b9b701"),
+                            ConcurrencyStamp = "5862748d-8105-412b-b651-120273e7415d",
+                            Description = "Company role",
+                            Name = "company",
+                            NormalizedName = "company"
+                        },
+                        new
+                        {
+                            Id = new Guid("cf293194-a30e-4416-83c6-2571067cc7d0"),
+                            ConcurrencyStamp = "02a796ef-fcc1-41e4-8c02-fe0ad74b54c2",
+                            Description = "User role",
+                            Name = "user",
+                            NormalizedName = "user"
+                        },
+                        new
+                        {
+                            Id = new Guid("72c41370-50ea-47ac-9d77-f58a313e0eb7"),
+                            ConcurrencyStamp = "d349dd7e-075f-4386-99c0-85372c7c9121",
                             Description = "Admin role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -117,17 +133,17 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5fae9dbf-3d39-43fc-b16f-61fce83bcca0"),
+                            Id = new Guid("41cc17b5-463c-4d87-a3a9-0f5f7ed0c07e"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8fe7e2e7-efbc-4854-a4fc-230fd42f1f2d",
-                            DateCreated = new DateTime(2022, 3, 2, 13, 52, 36, 73, DateTimeKind.Local).AddTicks(1683),
+                            ConcurrencyStamp = "ddd4eeb7-4c30-4345-bc22-68e127beddbe",
+                            DateCreated = new DateTime(2022, 3, 2, 16, 56, 26, 916, DateTimeKind.Local).AddTicks(6520),
                             Email = "hoangthanh01022000@gmail.com",
                             EmailConfirmed = true,
                             IsSave = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "hoangthanh01022000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAECk8XEaojqoXV+q8vBLqz0ZlZM0jl3pFbO+ezjmSjODGUj/SNOoh8QytBAxB6qFwNQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGyz0WGVSvs7NM9vbqMCBdfj7AhEcHRMYMguufblJY1sMS31OKWHNCgIPmF+EroWGw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -223,7 +239,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 2, 13, 52, 36, 14, DateTimeKind.Local).AddTicks(2428));
+                        .HasDefaultValue(new DateTime(2022, 3, 2, 16, 56, 26, 847, DateTimeKind.Local).AddTicks(4017));
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -427,7 +443,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 2, 13, 52, 36, 37, DateTimeKind.Local).AddTicks(4564));
+                        .HasDefaultValue(new DateTime(2022, 3, 2, 16, 56, 26, 873, DateTimeKind.Local).AddTicks(182));
 
                     b.Property<string>("FilePath")
                         .IsRequired()
@@ -472,7 +488,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 2, 13, 52, 36, 41, DateTimeKind.Local).AddTicks(9844));
+                        .HasDefaultValue(new DateTime(2022, 3, 2, 16, 56, 26, 877, DateTimeKind.Local).AddTicks(5333));
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -692,8 +708,8 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("5fae9dbf-3d39-43fc-b16f-61fce83bcca0"),
-                            RoleId = new Guid("6f2e5b4b-8ec5-4341-8379-2226cb8c2273")
+                            UserId = new Guid("41cc17b5-463c-4d87-a3a9-0f5f7ed0c07e"),
+                            RoleId = new Guid("72c41370-50ea-47ac-9d77-f58a313e0eb7")
                         });
                 });
 

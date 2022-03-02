@@ -1,5 +1,4 @@
 ﻿using Application.Catalog;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,7 +9,7 @@ namespace BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -36,12 +35,12 @@ namespace BackendApi.Controllers
         }
 
         [HttpPut("UpdateUserInformation")]
-        public async Task<IActionResult> UpdateUserInformation(Guid id, [FromBody] UserUpdateRequest request)
+        public async Task<IActionResult> UpdateUserInformation([FromBody] UserUpdateRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _userService.UpdateUserInformation(id, request);
+            var result = await _userService.UpdateUserInformation(request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
