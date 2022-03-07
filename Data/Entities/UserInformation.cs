@@ -16,7 +16,6 @@ namespace Data.Entities
         public AppUser AppUser { get; set; }
         public UserAvatar UserAvatar { get; set; }
         public List<CurriculumVitae> CurriculumVitaes { get; set; }
-        public List<Notification> Notifications { get; set; }
         public List<Follow> Follows { get; set; }
         public List<Chat> Chats { get; set; }
 

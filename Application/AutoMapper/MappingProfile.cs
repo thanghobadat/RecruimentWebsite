@@ -28,10 +28,10 @@ namespace Application.AutoMapper
             CreateMap<CompanyInformationViewModel, CompanyInformation>();
 
             //Company Branch
-            CreateMap<CompanyBranch, CompanyBranchViewModel>();
-            CreateMap<CompanyBranchViewModel, CompanyBranch>();
-            CreateMap<CompanyBranch, CreateBranchRequest>();
-            CreateMap<CreateBranchRequest, CompanyBranch>();
+            //CreateMap<CompanyBranch, CompanyBranchViewModel>();
+            //CreateMap<CompanyBranchViewModel, CompanyBranch>();
+            //CreateMap<CompanyBranch, CreateBranchRequest>();
+            //CreateMap<CreateBranchRequest, CompanyBranch>();
 
             //Company Images
             CreateMap<CompanyImage, CompanyImagesViewModel>();

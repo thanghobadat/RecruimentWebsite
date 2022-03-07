@@ -41,18 +41,8 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet("GetCompanyBranches")]
-        public async Task<IActionResult> GetCompanyBranches([FromQuery] GetCompanyBranchRequest request)
-        {
-            var result = await _companyService.GetAllCompanyBranch(request);
-            return Ok(result);
-        }
-        [HttpGet("GetCompanyBranchById")]
-        public async Task<IActionResult> GetCompanyBranchById(int Id)
-        {
-            var result = await _companyService.GetCompanyBranchById(Id);
-            return Ok(result);
-        }
+
+
         [HttpGet("GetCompanyImages")]
         public async Task<IActionResult> GetCompanyImages([FromQuery] GetCompanyImagesRequest request)
         {
@@ -61,20 +51,7 @@ namespace BackendApi.Controllers
         }
 
 
-        [HttpPost("CreateNewBranch")]
-        public async Task<IActionResult> CreateNewBranch([FromBody] CreateBranchRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var result = await _companyService.CreateBranch(request);
-            if (!result.IsSuccessed)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
+
 
         [HttpPost("CreateCompanyImages")]
         [Consumes("multipart/form-data")]
@@ -102,6 +79,20 @@ namespace BackendApi.Controllers
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("AddBranchToCompany")]
+        public async Task<IActionResult> AddBranchToCompany([FromBody] AddBranchViewModel request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _companyService.AddBranch(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result.Message);
             }
             return Ok(result);
         }
@@ -151,16 +142,7 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
 
-        [HttpPut("UpdateBranch")]
-        public async Task<IActionResult> UpdateBranch([FromBody] UpdateBranchRequest request)
-        {
-            var result = await _companyService.UpdateBranch(request);
-            if (!result.IsSuccessed)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
+
 
         [HttpDelete("DeleteCoverImage")]
         public async Task<IActionResult> DeleteCoverImage(int id)
@@ -173,16 +155,7 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("DeleteBranch")]
-        public async Task<IActionResult> DeleteBranch(int id)
-        {
-            var result = await _companyService.DeleteBranch(id);
-            if (!result.IsSuccessed)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
+
 
         [HttpDelete("DeleteImages")]
         public async Task<IActionResult> DeleteImages(int id)
@@ -194,5 +167,18 @@ namespace BackendApi.Controllers
             }
             return Ok(result);
         }
+
+        [HttpDelete("RemoveBranch")]
+        public async Task<IActionResult> RemoveBranch(int id, Guid companyId)
+        {
+            var result = await _companyService.RemoveBranch(id, companyId);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result);
+        }
+
+
     }
 }

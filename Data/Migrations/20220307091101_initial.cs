@@ -168,6 +168,27 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 3, 7, 16, 11, 0, 505, DateTimeKind.Local).AddTicks(7195))
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_AppUsers_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "AppUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserInformations",
                 columns: table => new
                 {
@@ -323,7 +344,7 @@ namespace Data.Migrations
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 3, 2, 16, 56, 26, 847, DateTimeKind.Local).AddTicks(4017))
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 3, 7, 16, 11, 0, 475, DateTimeKind.Local).AddTicks(1218))
                 },
                 constraints: table =>
                 {
@@ -360,34 +381,6 @@ namespace Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Follows_UserInformations_UserId",
-                        column: x => x.UserId,
-                        principalTable: "UserInformations",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Notifications",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 3, 2, 16, 56, 26, 877, DateTimeKind.Local).AddTicks(5333))
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Notifications", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Notifications_CompanyInformations_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "CompanyInformations",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Notifications_UserInformations_UserId",
                         column: x => x.UserId,
                         principalTable: "UserInformations",
                         principalColumn: "UserId",
@@ -501,7 +494,7 @@ namespace Data.Migrations
                     RecruimentId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 3, 2, 16, 56, 26, 873, DateTimeKind.Local).AddTicks(182))
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 3, 7, 16, 11, 0, 500, DateTimeKind.Local).AddTicks(7310))
                 },
                 constraints: table =>
                 {
@@ -525,20 +518,20 @@ namespace Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("b8761f12-3b3b-4ee0-a07f-618b21b9b701"), "5862748d-8105-412b-b651-120273e7415d", "Company role", "company", "company" },
-                    { new Guid("cf293194-a30e-4416-83c6-2571067cc7d0"), "02a796ef-fcc1-41e4-8c02-fe0ad74b54c2", "User role", "user", "user" },
-                    { new Guid("72c41370-50ea-47ac-9d77-f58a313e0eb7"), "d349dd7e-075f-4386-99c0-85372c7c9121", "Admin role", "admin", "admin" }
+                    { new Guid("5a5a6b22-c16c-488f-8c2c-36741b4ff55e"), "242521a2-7f80-4a55-9447-6bb014162cf7", "Company role", "company", "company" },
+                    { new Guid("b2555e17-3b7d-48a8-8f5c-4becc36d0eed"), "ccf74cf7-3f7e-4db9-834b-de628d2122e2", "User role", "user", "user" },
+                    { new Guid("c7b92a34-a345-4273-a0e8-b16032c08ace"), "95267d4e-fe62-4cf5-bd57-abeeaaaa9e32", "Admin role", "admin", "admin" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AppUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("72c41370-50ea-47ac-9d77-f58a313e0eb7"), new Guid("41cc17b5-463c-4d87-a3a9-0f5f7ed0c07e") });
+                values: new object[] { new Guid("c7b92a34-a345-4273-a0e8-b16032c08ace"), new Guid("8841e141-d060-4fd7-b55b-903e64dd757a") });
 
             migrationBuilder.InsertData(
                 table: "AppUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateCreated", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("41cc17b5-463c-4d87-a3a9-0f5f7ed0c07e"), 0, "ddd4eeb7-4c30-4345-bc22-68e127beddbe", new DateTime(2022, 3, 2, 16, 56, 26, 916, DateTimeKind.Local).AddTicks(6520), "hoangthanh01022000@gmail.com", true, false, null, "hoangthanh01022000@gmail.com", "admin", "AQAAAAEAACcQAAAAEGyz0WGVSvs7NM9vbqMCBdfj7AhEcHRMYMguufblJY1sMS31OKWHNCgIPmF+EroWGw==", null, false, "", false, "admin" });
+                values: new object[] { new Guid("8841e141-d060-4fd7-b55b-903e64dd757a"), 0, "fcd69333-8288-44d2-82e7-4bc2c91f56c6", new DateTime(2022, 3, 7, 16, 11, 0, 536, DateTimeKind.Local).AddTicks(6695), "hoangthanh01022000@gmail.com", true, false, null, "hoangthanh01022000@gmail.com", "admin", "AQAAAAEAACcQAAAAEBgJRl/lSyVu4QBw+aXVhL3muuflL/QlB5vJWLWb9BcIIG97gOGi+f1Pv8K7HB4JpQ==", null, false, "", false, "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BranchRecruiments_RecruimentId",
@@ -603,14 +596,9 @@ namespace Data.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notifications_CompanyId",
+                name: "IX_Notifications_AccountId",
                 table: "Notifications",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Notifications_UserId",
-                table: "Notifications",
-                column: "UserId");
+                column: "AccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Recruitments_CompanyId",

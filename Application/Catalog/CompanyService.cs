@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -32,24 +31,25 @@ namespace Application.Catalog
             _mapper = mapper;
         }
 
-        public async Task<ApiResult<bool>> CreateBranch(CreateBranchRequest request)
+        public async Task<ApiResult<bool>> AddBranch(AddBranchViewModel request)
         {
-            var company = await _context.CompanyInformations.FindAsync(request.CompanyId);
-            if (company == null)
+            var companyBranch = new CompanyBranch()
             {
-                return new ApiErrorResult<bool>("Company doesn't exist, please try again");
-            }
-
-            var companyBranch = _mapper.Map<CompanyBranch>(request);
+                BranchId = request.BranchId,
+                CompanyId = request.CompanyId,
+                Address = request.Address
+            };
 
             await _context.CompanyBranches.AddAsync(companyBranch);
             var result = await _context.SaveChangesAsync();
             if (result == 0)
             {
-                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
+                return new ApiErrorResult<bool>("An error occured, add branch unsuccessful");
             }
             return new ApiSuccessResult<bool>(true);
         }
+
+
 
         public async Task<ApiResult<bool>> CreateCompanyImages(CreateCompanyImageRequest request)
         {
@@ -117,23 +117,7 @@ namespace Application.Catalog
             return new ApiSuccessResult<bool>(true);
         }
 
-        public async Task<ApiResult<bool>> DeleteBranch(int id)
-        {
-            var branch = await _context.CompanyBranches.FindAsync(id);
-            if (branch == null)
-            {
-                return new ApiErrorResult<bool>("Branch doesn't exist");
-            }
 
-
-            _context.CompanyBranches.Remove(branch);
-            var result = await _context.SaveChangesAsync();
-            if (result == 0)
-            {
-                return new ApiErrorResult<bool>("An error occured, delete unsuccessful");
-            }
-            return new ApiSuccessResult<bool>(true);
-        }
 
         public async Task<ApiResult<bool>> DeleteCoverImage(int id)
         {
@@ -171,27 +155,7 @@ namespace Application.Catalog
             return new ApiSuccessResult<bool>(true);
         }
 
-        public async Task<ApiResult<List<CompanyBranchViewModel>>> GetAllCompanyBranch(GetCompanyBranchRequest request)
-        {
-            var query = await _context.CompanyBranches.Where(x => x.CompanyId == request.CompanyId).ToListAsync();
 
-            if (query == null)
-            {
-                return new ApiErrorResult<List<CompanyBranchViewModel>>("Branch doesn't exist, Please check again");
-            }
-
-            var branch = query.AsQueryable();
-            if (!string.IsNullOrEmpty(request.Keyword))
-            {
-                branch = branch.Where(x => x.Address.Contains(request.Keyword));
-
-            }
-
-            var data = branch.Select(branch => _mapper.Map<CompanyBranchViewModel>(branch)).ToList();
-
-
-            return new ApiSuccessResult<List<CompanyBranchViewModel>>(data);
-        }
 
         public async Task<ApiResult<PageResult<CompanyImagesViewModel>>> GetAllImagesPaging(GetCompanyImagesRequest request)
         {
@@ -236,17 +200,7 @@ namespace Application.Catalog
             return new ApiSuccessResult<CompanyAvatarViewModel>(avatarVM);
         }
 
-        public async Task<ApiResult<CompanyBranchViewModel>> GetCompanyBranchById(int Id)
-        {
-            var query = await _context.CompanyBranches.FindAsync(Id);
 
-            if (query == null)
-            {
-                return new ApiErrorResult<CompanyBranchViewModel>("Branch doesn't exist, Please check again");
-            }
-            var data = _mapper.Map<CompanyBranchViewModel>(query);
-            return new ApiSuccessResult<CompanyBranchViewModel>(data);
-        }
 
         public async Task<ApiResult<CompanyCoverImageViewModel>> GetCompanyCoverImage(Guid companyId)
         {
@@ -280,13 +234,6 @@ namespace Application.Catalog
             var companyCoverImage = await this.GetCompanyCoverImage(companyId);
             companyInforVM.CompanyCoverImage = companyCoverImage.ResultObj;
 
-            var queryBranchs = await _context.CompanyBranches.Where(x => x.CompanyId == companyId).ToListAsync();
-            var companyBranchs = queryBranchs.AsQueryable();
-
-            var companyBranchsVM = companyBranchs.Select(branch => _mapper.Map<CompanyBranchViewModel>(branch)).ToList();
-
-            companyInforVM.CompanyBranches = companyBranchsVM;
-
             var queryImages = await _context.CompanyImages.Where(x => x.CompanyId == companyId).ToListAsync();
             var companyImages = queryImages.AsQueryable();
 
@@ -294,6 +241,23 @@ namespace Application.Catalog
 
             companyInforVM.CompanyImages = companyImagesVM;
             return new ApiSuccessResult<CompanyInformationViewModel>(companyInforVM);
+        }
+
+        public async Task<ApiResult<bool>> RemoveBranch(int id, Guid companyId)
+        {
+            var companyBranch = await _context.CompanyBranches.FirstOrDefaultAsync(x => x.BranchId == id && x.CompanyId == companyId);
+            if (companyBranch == null)
+            {
+                return new ApiErrorResult<bool>("branch is currently not assigned to the company");
+            }
+
+            _context.CompanyBranches.Remove(companyBranch);
+            var result = await _context.SaveChangesAsync();
+            if (result == 0)
+            {
+                return new ApiErrorResult<bool>("Delete unsuccessful");
+            }
+            return new ApiSuccessResult<bool>();
         }
 
         public async Task<ApiResult<bool>> UpdateAvatar(int Id, AvatarUpdateRequest request)
@@ -329,22 +293,7 @@ namespace Application.Catalog
 
         }
 
-        public async Task<ApiResult<bool>> UpdateBranch(UpdateBranchRequest request)
-        {
-            var branch = await _context.CompanyBranches.FindAsync(request.Id);
-            if (branch == null)
-            {
-                return new ApiErrorResult<bool>("Branch doesn't exist");
-            }
 
-            branch.Address = request.Address;
-            var result = await _context.SaveChangesAsync();
-            if (result == 0)
-            {
-                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
-            }
-            return new ApiSuccessResult<bool>(true);
-        }
 
         public async Task<ApiResult<bool>> UpdateCompanyInformation(CompanyUpdateRequest request)
         {

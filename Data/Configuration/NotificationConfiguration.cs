@@ -15,11 +15,12 @@ namespace Data.Configuration
             builder.Property(x => x.Content).IsRequired();
             builder.Property(x => x.DateCreated).IsRequired().HasDefaultValue(DateTime.Now);
 
-            builder.HasOne(t => t.UserInformation).WithMany(pc => pc.Notifications)
-                .HasForeignKey(pc => pc.UserId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(t => t.AppUser).WithMany(pc => pc.Notifications)
+                .HasForeignKey(pc => pc.AccountId);
+            //.OnDelete(DeleteBehavior.Restrict)
 
-            builder.HasOne(t => t.CompanyInformation).WithMany(pc => pc.Notifications)
-              .HasForeignKey(pc => pc.CompanyId).OnDelete(DeleteBehavior.Restrict);
+
+
         }
     }
 }

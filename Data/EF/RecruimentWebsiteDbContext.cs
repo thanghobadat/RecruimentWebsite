@@ -51,7 +51,7 @@ namespace Data.EF
         public DbSet<CompanyImage> CompanyImages { get; set; }
         public DbSet<UserAvatar> UserAvatars { get; set; }
         public DbSet<CompanyCoverImage> CompanyCoverImages { get; set; }
-        public DbSet<Branch> branches { get; set; }
+        public DbSet<Branch> Branches { get; set; }
         public DbSet<BranchRecruitment> BranchRecruitments { get; set; }
         public DbSet<Career> Careers { get; set; }
         public DbSet<CareerRecruitment> CareerRecruitments { get; set; }

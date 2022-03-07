@@ -34,6 +34,20 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
 
+        [HttpPost("FollowCompany")]
+        public async Task<IActionResult> FollowCompany(Guid userId, Guid companyId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.FollowCompany(userId, companyId);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result);
+        }
+
         [HttpPut("UpdateUserInformation")]
         public async Task<IActionResult> UpdateUserInformation([FromBody] UserUpdateRequest request)
         {

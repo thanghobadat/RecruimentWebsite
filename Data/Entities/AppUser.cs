@@ -11,5 +11,7 @@ namespace Data.Entities
         public UserInformation UserInformation { get; set; }
         public CompanyInformation CompanyInformation { get; set; }
         public List<Comment> Comments { get; set; }
+        public List<Notification> Notifications { get; set; }
+
     }
 }

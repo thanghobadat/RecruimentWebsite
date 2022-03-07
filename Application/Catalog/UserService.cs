@@ -124,5 +124,44 @@ namespace Application.Catalog
             }
             return new ApiSuccessResult<bool>(true);
         }
+
+        public async Task<ApiResult<bool>> FollowCompany(Guid userId, Guid companyId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("User doesn't exist");
+            }
+            var userinf = await _context.UserInformations.FindAsync(userId);
+            var company = await _userManager.FindByIdAsync(companyId.ToString());
+            if (company == null)
+            {
+                return new ApiErrorResult<bool>("Company doesn't exist");
+            }
+
+            var follow = new Follow()
+            {
+                UserId = userId,
+                CompanyId = companyId
+            };
+
+            var noti = new Notification()
+            {
+                AccountId = companyId,
+                Content = userinf.FirstName + " " + userinf.LastName + " just followed your company",
+                DateCreated = DateTime.Now
+            };
+
+            await _context.Follows.AddAsync(follow);
+            await _context.Notifications.AddAsync(noti);
+            var result = await _context.SaveChangesAsync();
+            if (result == 0)
+            {
+                return new ApiErrorResult<bool>("An error occured, please re enter");
+            }
+            return new ApiSuccessResult<bool>(true);
+
+
+        }
     }
 }
