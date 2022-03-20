@@ -100,7 +100,13 @@ namespace Application.Catalog
             return fileName;
         }
 
-
+        private async Task<string> SaveCV(IFormFile file)
+        {
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+            await _storageService.SaveCVAsync(file.OpenReadStream(), fileName);
+            return fileName;
+        }
 
         public async Task<ApiResult<bool>> UpdateUserInformation(UserUpdateRequest request)
         {
@@ -163,5 +169,68 @@ namespace Application.Catalog
 
 
         }
+
+        public async Task<ApiResult<bool>> SubmitCV(SubmitCVRequest request)
+        {
+            var user = await _context.UserInformations.FindAsync(request.UserId);
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("User doesn't exist");
+            }
+            var recruitment = await _context.Recruitments.FindAsync(request.RecruitmentId);
+            if (recruitment == null)
+            {
+                return new ApiErrorResult<bool>("User doesn't exist");
+            }
+            var imageIndex = request.File.FileName.LastIndexOf(".");
+            var imageType = request.File.FileName.Substring(imageIndex + 1);
+            if (imageType == "pdf")
+            {
+                var CV = new CurriculumVitae()
+                {
+                    RecruimentId = request.RecruitmentId,
+                    UserId = request.UserId,
+                    FilePath = await this.SaveCV(request.File),
+                    DateCreated = DateTime.Now
+                };
+
+                await _context.CurriculumVitaes.AddAsync(CV);
+                var result = await _context.SaveChangesAsync();
+                if (result == 0)
+                {
+                    return new ApiErrorResult<bool>("An error occured, please re enter");
+                }
+
+                var noti = new Notification()
+                {
+                    AccountId = recruitment.CompanyId,
+                    Content = user.FirstName + " " + user.LastName + " just applied, please check",
+                    DateCreated = DateTime.Now
+                };
+
+                await _context.Notifications.AddAsync(noti);
+                await _context.SaveChangesAsync();
+                return new ApiSuccessResult<bool>(true);
+            }
+
+
+            return new ApiErrorResult<bool>("CVs only accept pdf files");
+
+        }
+
+        //public async Task<ApiResult<bool>> Comment(CommentRequest request)
+        //{
+        //    var user = await _context.UserInformations.FindAsync(request.AccountId);
+        //    if (user == null)
+        //    {
+        //        return new ApiErrorResult<bool>("User doesn't exist");
+        //    }
+
+        //    var recruitment = await _context.Recruitments.FindAsync(request.RecruitmentId);
+        //    if (recruitment == null)
+        //    {
+        //        return new ApiErrorResult<bool>("Recruitment doesn't exist");
+        //    }
+        //}
     }
 }

@@ -50,7 +50,19 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetAllRecruitmentPaging")]
+        public async Task<IActionResult> GetCompanyImages([FromQuery] GetRecruitmentRequest request)
+        {
+            var result = await _companyService.GetAllRecruitmentPaging(request);
+            return Ok(result);
+        }
 
+        [HttpGet("GetRecruitmentById")]
+        public async Task<IActionResult> GetRecruitmentById(int id)
+        {
+            var result = await _companyService.GetRecruitmentById(id);
+            return Ok(result);
+        }
 
 
         [HttpPost("CreateCompanyImages")]
@@ -86,8 +98,7 @@ namespace BackendApi.Controllers
         [HttpPost("AddBranchToCompany")]
         public async Task<IActionResult> AddBranchToCompany([FromBody] AddBranchViewModel request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+
 
             var result = await _companyService.AddBranch(request);
             if (!result.IsSuccessed)
@@ -96,12 +107,57 @@ namespace BackendApi.Controllers
             }
             return Ok(result);
         }
+        [HttpPost("AddBranchToRecruitment")]
+        public async Task<IActionResult> AddBranchToRecruitment(int recruimentId, int branchId)
+        {
+
+
+            var result = await _companyService.AddBranchToRecruitment(recruimentId, branchId);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result);
+        }
+        [HttpPost("AddCareerToRecruitment")]
+        public async Task<IActionResult> AddCareerToRecruitment(int recruimentId, int branchId)
+        {
+
+
+            var result = await _companyService.AddCareerToRecruitment(recruimentId, branchId);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result);
+        }
+        [HttpPost("CreateNewRecruiment")]
+        public async Task<IActionResult> CreateNewRecruiment([FromBody] RecruitmentCreateRequest request)
+        {
+            var result = await _companyService.CreateNewRecruitment(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("Comment")]
+        public async Task<IActionResult> Comment([FromBody] CommentRequest request)
+        {
+            var result = await _companyService.Comment(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result);
+        }
+
 
         [HttpPut("UpdateCompanyInformation")]
         public async Task<IActionResult> UpdateCompanyInformation([FromBody] CompanyUpdateRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+
 
             var result = await _companyService.UpdateCompanyInformation(request);
             if (!result.IsSuccessed)
@@ -116,8 +172,7 @@ namespace BackendApi.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> UpdateAvatar(int id, [FromForm] AvatarUpdateRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+
 
             var result = await _companyService.UpdateAvatar(id, request);
             if (!result.IsSuccessed)
@@ -131,8 +186,7 @@ namespace BackendApi.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> UpdateCoverImage(int id, [FromForm] UpdateCoverImageRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+
 
             var result = await _companyService.UpdateCoverImage(id, request);
             if (!result.IsSuccessed)

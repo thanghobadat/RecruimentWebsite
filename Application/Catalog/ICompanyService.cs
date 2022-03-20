@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ViewModel.Catalog.Company;
 using ViewModel.Common;
@@ -23,7 +24,14 @@ namespace Application.Catalog
 
         Task<ApiResult<bool>> AddBranch(AddBranchViewModel request);
         Task<ApiResult<bool>> RemoveBranch(int id, Guid companyId);
-
+        //chưa test
+        Task<ApiResult<bool>> CreateNewRecruitment(RecruitmentCreateRequest request);
+        Task<ApiResult<bool>> AddBranchToRecruitment(int recruimentId, int branchId);
+        Task<ApiResult<bool>> AddCareerToRecruitment(int recruimentId, int careerId);
+        Task<ApiResult<bool>> Comment(CommentRequest request);
+        Task<ApiResult<List<CommentViewModel>>> GetCommentRecruitment(int id);
+        Task<ApiResult<PageResult<RecruitmentPagingResult>>> GetAllRecruitmentPaging(GetRecruitmentRequest request);
+        Task<ApiResult<RecruitmentViewModel>> GetRecruitmentById(int id);
 
     }
 }

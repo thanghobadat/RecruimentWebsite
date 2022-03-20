@@ -1,0 +1,17 @@
+﻿using ViewModel.Common;
+
+namespace ViewModel.Catalog.Company
+{
+    public class GetRecruitmentRequest : PagingRequestBase
+    {
+        public string Rank { get; set; }
+        public string Experience { get; set; }
+        public int Salary { get; set; }
+        public string Education { get; set; }
+        public string Type { get; set; }
+        public string Branch { get; set; }
+        public string Career { get; set; }
+
+
+    }
+}

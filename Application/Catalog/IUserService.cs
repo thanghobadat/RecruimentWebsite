@@ -15,6 +15,9 @@ namespace Application.Catalog
 
         Task<ApiResult<bool>> UpdateUserAvatar(int id, IFormFile thumnailImage);
         Task<ApiResult<bool>> FollowCompany(Guid userId, Guid companyId);
+        // chưa test
+
+        Task<ApiResult<bool>> SubmitCV(SubmitCVRequest request);
 
 
     }

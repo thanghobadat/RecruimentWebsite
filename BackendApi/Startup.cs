@@ -34,7 +34,9 @@ namespace BackendApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<RecruimentWebsiteDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("RecruimentWebsite")));
+
             services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<RecruimentWebsiteDbContext>().AddDefaultTokenProviders();
+            services.AddCors(c => { c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin()); });
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
@@ -128,7 +130,7 @@ namespace BackendApi
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseAuthorization();
             app.UseSwagger();
             app.UseSwaggerUI(c =>

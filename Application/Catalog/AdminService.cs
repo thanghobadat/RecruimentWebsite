@@ -5,6 +5,7 @@ using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewModel.Catalog.Admin;
@@ -34,7 +35,7 @@ namespace Application.Catalog
 
             if (branch != null)
             {
-                return new ApiErrorResult<bool>("branch is exist");
+                return new ApiErrorResult<bool>("Tỉnh thành đã tồn tại, vui lòng nhập lại");
             }
 
             branch = new Branch()
@@ -45,19 +46,19 @@ namespace Application.Catalog
             var result = await _context.SaveChangesAsync();
             if (result == 0)
             {
-                return new ApiErrorResult<bool>("Create unsuccessful");
+                return new ApiErrorResult<bool>("Tỉnh thành đã tồn tại, vui lòng nhập lại");
             }
 
             return new ApiSuccessResult<bool>();
         }
 
-        public async Task<ApiResult<bool>> CreateCareer(CareerViewModel request)
+        public async Task<ApiResult<bool>> CreateCareer(CareerCreateRequest request)
         {
             var career = await _context.Careers.FirstOrDefaultAsync(x => x.Name.Contains(request.Name));
 
             if (career != null)
             {
-                return new ApiErrorResult<bool>("Career is exist");
+                return new ApiErrorResult<bool>("Công việc đã tồn tại, vui lòng nhập lại");
             }
 
             career = new Career()
@@ -69,7 +70,7 @@ namespace Application.Catalog
             var result = await _context.SaveChangesAsync();
             if (result == 0)
             {
-                return new ApiErrorResult<bool>("Create unsuccessful");
+                return new ApiErrorResult<bool>("Công việc đã tồn tại, vui lòng nhập lại");
             }
 
             return new ApiSuccessResult<bool>();
@@ -80,14 +81,14 @@ namespace Application.Catalog
             var branch = await _context.Branches.FindAsync(id);
             if (branch == null)
             {
-                return new ApiErrorResult<bool>("Branch doesn't exist");
+                return new ApiErrorResult<bool>("Tỉnh thành này không tồn tại, vui lòng thử lại");
             }
 
             _context.Branches.Remove(branch);
             var result = await _context.SaveChangesAsync();
             if (result == 0)
             {
-                return new ApiErrorResult<bool>("Delete unsuccessful");
+                return new ApiErrorResult<bool>("Xóa không thành công, vui lòng thử lại");
             }
             return new ApiSuccessResult<bool>();
         }
@@ -97,81 +98,43 @@ namespace Application.Catalog
             var career = await _context.Careers.FindAsync(id);
             if (career == null)
             {
-                return new ApiErrorResult<bool>("Career doesn't exist");
+                return new ApiErrorResult<bool>("Công việc này không tồn tại, vui lòng thử lại");
             }
 
             _context.Careers.Remove(career);
             var result = await _context.SaveChangesAsync();
             if (result == 0)
             {
-                return new ApiErrorResult<bool>("Delete unsuccessful");
+                return new ApiErrorResult<bool>("Xóa không thành công, vui lòng thử lại");
             }
             return new ApiSuccessResult<bool>();
         }
 
-        public async Task<PageResult<BranchViewModel>> GetAllBranchPaging(GetBranchPagingRequest request)
+        public async Task<List<BranchViewModel>> GetAllBranchPaging()
         {
-            var query = await _context.Branches.ToListAsync();
-            var Branches = query.AsQueryable();
-
-            if (!string.IsNullOrEmpty(request.Keyword))
+            var query = await _context.Branches.OrderBy(x => x.City).ToListAsync();
+            var data = query.Select(x => new BranchViewModel()
             {
-                Branches = Branches.Where(x => x.City.Contains(request.Keyword));
-            }
-
-
-            int totalRow = Branches.Count();
-
-            var data = Branches.Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .Select(x => new BranchViewModel()
-                {
-                    Id = x.Id,
-                    City = x.City,
-                }).ToList();
-
-            var pagedResult = new PageResult<BranchViewModel>()
-            {
-                TotalRecords = totalRow,
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                Items = data
-            };
-
-            return pagedResult;
+                Id = x.Id,
+                City = x.City,
+            }).ToList();
+            return data;
         }
 
-        public async Task<PageResult<CareerViewModel>> GetAllCareerPaging(GetCareerPagingRequest request)
+        public async Task<List<CareerViewModel>> GetAllCareerPaging()
         {
-            var query = await _context.Careers.ToListAsync();
-            var careers = query.AsQueryable();
+            var query = await _context.Careers.OrderBy(x => x.Name).ToListAsync();
 
-            if (!string.IsNullOrEmpty(request.Keyword))
+            var data = query.Select(x => new CareerViewModel()
             {
-                careers = careers.Where(x => x.Name.Contains(request.Keyword));
-            }
+                Id = x.Id,
+                Name = x.Name,
+                DateCreated = x.DateCreated
+            }).ToList();
 
 
-            int totalRow = careers.Count();
 
-            var data = careers.Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .Select(x => new CareerViewModel()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    DateCreated = x.DateCreated
-                }).ToList();
-
-            var pagedResult = new PageResult<CareerViewModel>()
-            {
-                TotalRecords = totalRow,
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                Items = data
-            };
-
-            return pagedResult;
+            return data;
         }
 
         public async Task<ApiResult<BranchViewModel>> GetBranchById(int id)
@@ -180,7 +143,7 @@ namespace Application.Catalog
 
             if (branch == null)
             {
-                return new ApiErrorResult<BranchViewModel>("Branch doesn't exits");
+                return new ApiErrorResult<BranchViewModel>("Tỉnh thành này không tồn tại, vui lòng thử lại");
             }
 
             var branchViewModel = new BranchViewModel()
@@ -197,7 +160,7 @@ namespace Application.Catalog
 
             if (career == null)
             {
-                return new ApiErrorResult<CareerViewModel>("Career doesn't exits");
+                return new ApiErrorResult<CareerViewModel>("Công việc này không tồn tại, vui lòng thử lại");
             }
 
             var careerViewModel = new CareerViewModel()
@@ -212,7 +175,7 @@ namespace Application.Catalog
         {
             if (await _context.Branches.AnyAsync(x => x.City == request.City && x.Id != request.Id))
             {
-                return new ApiErrorResult<bool>("Category is exist");
+                return new ApiErrorResult<bool>("Tỉnh thành này đã tồn tại, vui lòng nhập lại");
             }
 
             var branch = await _context.Branches.FindAsync(request.Id);
@@ -222,17 +185,17 @@ namespace Application.Catalog
             var result = await _context.SaveChangesAsync();
             if (result == 0)
             {
-                return new ApiErrorResult<bool>("You entered duplicate data, please try again");
+                return new ApiErrorResult<bool>("Tỉnh thành này đã tồn tại, vui lòng nhập lại");
             }
 
             return new ApiSuccessResult<bool>();
         }
 
-        public async Task<ApiResult<bool>> UpdateCareer(CareerViewModel request)
+        public async Task<ApiResult<bool>> UpdateCareer(CareerUpdateRequest request)
         {
             if (await _context.Careers.AnyAsync(x => x.Name == request.Name && x.Id != request.Id))
             {
-                return new ApiErrorResult<bool>("Career is exist");
+                return new ApiErrorResult<bool>("Công việc này đã tồn tại, vui lòng nhập lại");
             }
 
             var career = await _context.Careers.FindAsync(request.Id);
@@ -242,7 +205,7 @@ namespace Application.Catalog
             var result = await _context.SaveChangesAsync();
             if (result == 0)
             {
-                return new ApiErrorResult<bool>("You entered duplicate data, please try again");
+                return new ApiErrorResult<bool>("Công việc này đã tồn tại, vui lòng nhập tên khác");
             }
 
             return new ApiSuccessResult<bool>();

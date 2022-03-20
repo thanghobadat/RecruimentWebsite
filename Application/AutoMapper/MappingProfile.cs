@@ -27,11 +27,7 @@ namespace Application.AutoMapper
             CreateMap<CompanyInformation, CompanyInformationViewModel>().ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.UserId));
             CreateMap<CompanyInformationViewModel, CompanyInformation>();
 
-            //Company Branch
-            //CreateMap<CompanyBranch, CompanyBranchViewModel>();
-            //CreateMap<CompanyBranchViewModel, CompanyBranch>();
-            //CreateMap<CompanyBranch, CreateBranchRequest>();
-            //CreateMap<CreateBranchRequest, CompanyBranch>();
+
 
             //Company Images
             CreateMap<CompanyImage, CompanyImagesViewModel>();
@@ -46,6 +42,10 @@ namespace Application.AutoMapper
             CreateMap<CompanyCoverImageViewModel, CompanyCoverImage>();
             CreateMap<CompanyCoverImage, CreateCoverImageRequest>();
             CreateMap<CreateCoverImageRequest, CompanyCoverImage>();
+
+            //recruitment
+            CreateMap<Recruitment, RecruitmentViewModel>();
+            CreateMap<RecruitmentViewModel, Recruitment>();
         }
     }
 }
