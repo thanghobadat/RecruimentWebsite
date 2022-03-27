@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using MVCApp.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -36,23 +35,7 @@ namespace MVCApp.Service
             return token;
         }
 
-        public async Task<ApiResult<bool>> ChangePassword(ChangePasswordRequest request)
-        {
-            var client = _httpClientFactory.CreateClient();
-            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
-            client.BaseAddress = new Uri("https://localhost:5001");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
-            var json = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await client.PutAsync($"/api/accounts/changePassword?id={request.Id}&newPassword={request.Password}", httpContent);
-            var result = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
-
-            return JsonConvert.DeserializeObject<ApiResult<bool>>(result);
-        }
 
         public async Task<ApiResult<bool>> DeleteAccount(Guid Id)
         {
@@ -88,7 +71,7 @@ namespace MVCApp.Service
             return accounts;
         }
 
-        public async Task<ApiResult<PageResult<UserAccountViewModel>>> GetUserAccountPagings(GetAccountPagingRequest request)
+        public async Task<ApiResult<PageResult<AccountViewModel>>> GetUserAccountPagings(GetAccountPagingRequest request)
         {
             var client = _httpClientFactory.CreateClient();
 
@@ -102,7 +85,7 @@ namespace MVCApp.Service
             var response = await client.GetAsync($"/api/accounts/getUserAccount?pageIndex=" +
                $"{request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}");
             var body = await response.Content.ReadAsStringAsync();
-            var accounts = JsonConvert.DeserializeObject<ApiSuccessResult<PageResult<UserAccountViewModel>>>(body);
+            var accounts = JsonConvert.DeserializeObject<ApiSuccessResult<PageResult<AccountViewModel>>>(body);
             return accounts;
         }
     }

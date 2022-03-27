@@ -9,11 +9,14 @@ namespace Application.Catalog
 {
     public interface ICompanyService
     {
-
-        Task<ApiResult<PageResult<CompanyImagesViewModel>>> GetAllImagesPaging(GetCompanyImagesRequest request);
+        // đã dùng 
+        Task<ApiResult<CompanyInformationViewModel>> GetCompanyInformation(Guid companyId);
         Task<ApiResult<CompanyAvatarViewModel>> GetCompanyAvatar(Guid companyId);
         Task<ApiResult<CompanyCoverImageViewModel>> GetCompanyCoverImage(Guid companyId);
-        Task<ApiResult<CompanyInformationViewModel>> GetCompanyInformation(Guid companyId);
+        Task<ApiResult<PageResult<CompanyImagesViewModel>>> GetAllImagesPaging(GetCompanyImagesRequest request);
+
+        //
+
         Task<ApiResult<bool>> CreateCoverImage(CreateCoverImageRequest request);
         Task<ApiResult<bool>> CreateCompanyImages(CreateCompanyImageRequest request);
         Task<ApiResult<bool>> UpdateCompanyInformation(CompanyUpdateRequest request);

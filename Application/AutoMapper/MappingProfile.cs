@@ -11,8 +11,8 @@ namespace Application.AutoMapper
         public MappingProfile()
         {
             // Add as many of these lines as you need to map your objects
-            CreateMap<AppUser, UserAccountViewModel>();
-            CreateMap<UserAccountViewModel, AppUser>();
+            CreateMap<AppUser, AccountViewModel>();
+            CreateMap<AccountViewModel, AppUser>();
 
             CreateMap<AppUser, CompanyAccountViewModel>();
             CreateMap<CompanyAccountViewModel, AppUser>();

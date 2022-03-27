@@ -11,5 +11,6 @@ namespace Data.Entities
         public CompanyInformation CompanyInformation { get; set; }
         public string Content { get; set; }
         public DateTime DateCreated { get; set; }
+        public string Performer { get; set; }
     }
 }

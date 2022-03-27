@@ -515,9 +515,7 @@ namespace Application.Catalog
             }
 
             var companyInforVM = _mapper.Map<CompanyInformationViewModel>(companyInfor);
-            var user = await _userManager.FindByIdAsync(companyId.ToString());
-            companyInforVM.Email = user.Email;
-            companyInforVM.PhoneNumber = user.PhoneNumber;
+            
 
             var companyAvatar = await this.GetCompanyAvatar(companyId);
             companyInforVM.CompanyAvatar = companyAvatar.ResultObj;

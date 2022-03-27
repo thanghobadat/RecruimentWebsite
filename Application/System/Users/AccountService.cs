@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -38,15 +39,15 @@ namespace Application.System.Users
             _mapper = mapper;
             _storageService = storageService;
         }
-        public async Task<string> Authenticate(LoginRequest request)
+        public async Task<ApiResult<LoginViewModel>> Authenticate(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
 
-            if (user == null) return "User doesn't exits";
+            if (user == null) return new ApiErrorResult<LoginViewModel>("Tài khoản này không tồn tại");
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
             if (!result.Succeeded)
             {
-                return "Wrong username or password, please re-enter";
+                return new ApiErrorResult<LoginViewModel>("Sai mật khẩu, vui lòng nhập lại");
             }
             var roles = await _userManager.GetRolesAsync(user);
 
@@ -64,19 +65,29 @@ namespace Application.System.Users
                 claims,
                 expires: DateTime.Now.AddHours(3),
                 signingCredentials: creds);
+            var role = roles[0];
+            var loginVM = new LoginViewModel()
+            {
+                Role = role,
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Id = user.Id,
+                UserName = request.UserName,
+                Email = user.Email
+            };
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+
+            return new ApiSuccessResult<LoginViewModel>(loginVM);
         }
 
-        public async Task<ApiResult<bool>> ChangePassword(Guid id, string newPassword)
+        public async Task<ApiResult<bool>> ChangePassword(ChangePasswordRequest request)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.FindByIdAsync(request.Id);
             if (user == null)
             {
                 return new ApiErrorResult<bool>("Account does not exits");
             }
             await _userManager.RemovePasswordAsync(user);
-            var resultUser = await _userManager.AddPasswordAsync(user, newPassword);
+            var resultUser = await _userManager.AddPasswordAsync(user, request.NewPassword);
             if (!resultUser.Succeeded)
             {
                 foreach (var error in resultUser.Errors)
@@ -129,120 +140,6 @@ namespace Application.System.Users
             return new ApiErrorResult<bool>("Delete failed");
         }
 
-        public async Task<ApiResult<UserAccountViewModel>> GetUserById(Guid id)
-        {
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user == null)
-            {
-                return new ApiErrorResult<UserAccountViewModel>("User does not exist ");
-            }
-
-            var userVm = _mapper.Map<UserAccountViewModel>(user);
-
-            return new ApiSuccessResult<UserAccountViewModel>(userVm);
-        }
-
-        public async Task<ApiResult<CompanyAccountViewModel>> GetCompanyById(Guid id)
-        {
-            var company = await _userManager.FindByIdAsync(id.ToString());
-            if (company == null)
-            {
-                return new ApiErrorResult<CompanyAccountViewModel>("User does not exist ");
-            }
-
-            var companyVM = _mapper.Map<CompanyAccountViewModel>(company);
-
-            return new ApiSuccessResult<CompanyAccountViewModel>(companyVM);
-        }
-
-
-        public async Task<ApiResult<PageResult<CompanyAccountViewModel>>> GetCompanyAccountPaging(GetAccountPagingRequest request)
-        {
-
-
-            var companies = await _userManager.GetUsersInRoleAsync("company");
-
-            var query = companies.AsQueryable();
-
-            if (!string.IsNullOrEmpty(request.Keyword))
-            {
-                query = query.Where(x => x.UserName.Contains(request.Keyword));
-            }
-            int totalRow = query.Count();
-
-            var data = query.Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .Select(company => _mapper.Map<CompanyAccountViewModel>(company)).ToList();
-
-            var pagedResult = new PageResult<CompanyAccountViewModel>()
-            {
-                TotalRecords = totalRow,
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                Items = data
-            };
-            return new ApiSuccessResult<PageResult<CompanyAccountViewModel>>(pagedResult);
-        }
-        public async Task<ApiResult<PageResult<UserAccountViewModel>>> GetUserAccountPaging(GetAccountPagingRequest request)
-        {
-            var users = await _userManager.GetUsersInRoleAsync("user");
-            var query = users.AsQueryable();
-
-            if (!string.IsNullOrEmpty(request.Keyword))
-            {
-                query = query.Where(x => x.UserName.Contains(request.Keyword));
-            }
-            int totalRow = query.Count();
-
-
-            var data = query.Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .Select(user => _mapper.Map<UserAccountViewModel>(user)).ToList();
-
-            var pagedResult = new PageResult<UserAccountViewModel>()
-            {
-                TotalRecords = totalRow,
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                Items = data
-            };
-            return new ApiSuccessResult<PageResult<UserAccountViewModel>>(pagedResult);
-        }
-
-        //public async Task<ApiResult<PageResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request)
-        //{
-        //    //convert thằng query dưới cho giống thằng trên
-        //    //var query = _userManager.Users;
-        //    var users = await _userManager.GetUsersInRoleAsync("company");
-        //    var query = users.AsQueryable();
-
-        //    if (!string.IsNullOrEmpty(request.Keyword))
-        //    {
-        //        query = query.Where(x => x.UserName.Contains(request.Keyword)
-        //         || x.PhoneNumber.Contains(request.Keyword));
-        //    }
-        //    int totalRow = await query.CountAsync();
-
-        //    var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
-        //        .Take(request.PageSize)
-        //        .Select(x => new UserViewModel()
-        //        {
-        //            Email = x.Email,
-        //            PhoneNumber = x.PhoneNumber,
-        //            UserName = x.UserName,
-        //            Id = x.Id,
-        //        }).ToListAsync();
-
-        //    //4. Select and projection
-        //    var pagedResult = new PageResult<UserViewModel>()
-        //    {
-        //        TotalRecords = totalRow,
-        //        PageIndex = request.PageIndex,
-        //        PageSize = request.PageSize,
-        //        Items = data
-        //    };
-        //    return new ApiSuccessResult<PageResult<UserViewModel>>(pagedResult);
-        //}
 
         public async Task<ApiResult<bool>> RegisterCompanyAccount(RegisterCompanyAccountRequest request)
         {
@@ -401,6 +298,27 @@ namespace Application.System.Users
             }
 
             return new ApiSuccessResult<bool>(true);
+        }
+
+        public async Task<ApiResult<List<AccountViewModel>>> GetAllAccount()
+        {
+            var accountVMS = new List<AccountViewModel>();
+            var companies = await _userManager.GetUsersInRoleAsync("company");
+            var companyVMs = companies.Select(company => _mapper.Map<AccountViewModel>(company)).ToList();
+            foreach (var companyVM in companyVMs)
+            {
+                companyVM.Role = "company";
+                accountVMS.Add(companyVM);
+            }
+
+            var users = await _userManager.GetUsersInRoleAsync("user");
+            var userVMs = users.Select(company => _mapper.Map<AccountViewModel>(company)).ToList();
+            foreach (var userVM in userVMs)
+            {
+                userVM.Role = "user";
+                accountVMS.Add(userVM);
+            }
+            return new ApiSuccessResult<List<AccountViewModel>>(accountVMS);
         }
     }
 }

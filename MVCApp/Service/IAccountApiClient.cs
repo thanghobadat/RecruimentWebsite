@@ -10,8 +10,7 @@ namespace MVCApp.Service
     {
         Task<string> Authenticate(LoginRequest request);
         Task<ApiResult<PageResult<CompanyAccountViewModel>>> GetCompanyAccountPagings(GetAccountPagingRequest request);
-        Task<ApiResult<PageResult<UserAccountViewModel>>> GetUserAccountPagings(GetAccountPagingRequest request);
-        Task<ApiResult<bool>> ChangePassword(ChangePasswordRequest request);
+        Task<ApiResult<PageResult<AccountViewModel>>> GetUserAccountPagings(GetAccountPagingRequest request);
         Task<ApiResult<bool>> DeleteAccount(Guid Id);
     }
 }

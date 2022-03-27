@@ -21,17 +21,13 @@ namespace BackendApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             var resultToken = await _accountService.Authenticate(request);
 
 
-            if (string.IsNullOrEmpty(resultToken))
+            if (!resultToken.IsSuccessed)
             {
-                return BadRequest(resultToken);
+                return BadRequest(resultToken.Message);
             }
             return Ok(resultToken);
         }
@@ -84,38 +80,22 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet("GetCompanyAccount")]
-        public async Task<IActionResult> GetCompanyAccountPaging([FromQuery] GetAccountPagingRequest request)
+        [HttpGet("GetAllAccount")]
+        public async Task<IActionResult> GetAllAccount()
         {
-            var result = await _accountService.GetCompanyAccountPaging(request);
+            var result = await _accountService.GetAllAccount();
             return Ok(result);
         }
-        [HttpGet("GetUserAccount")]
-        public async Task<IActionResult> GetUserAccountPaging([FromQuery] GetAccountPagingRequest request)
-        {
-            var products = await _accountService.GetUserAccountPaging(request);
-            return Ok(products);
-        }
-        [HttpGet("GetUserAccountById")]
-        public async Task<IActionResult> GetUserAccountById(Guid id)
-        {
-            var user = await _accountService.GetUserById(id);
-            return Ok(user);
-        }
-        [HttpGet("GetCompanyAccountById")]
-        public async Task<IActionResult> GetCompanyAccountById(Guid id)
-        {
-            var company = await _accountService.GetCompanyById(id);
-            return Ok(company);
-        }
+
+
 
         [HttpPut("ChangePassword")]
-        public async Task<IActionResult> ChangePassword(Guid id, string newPassword)
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _accountService.ChangePassword(id, newPassword);
+            var result = await _accountService.ChangePassword(request);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result.Message);

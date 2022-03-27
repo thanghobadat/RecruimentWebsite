@@ -82,8 +82,7 @@ namespace MVCApp.Controllers
                     WorkerNumber = information.ResultObj.WorkerNumber,
                     ContactName = information.ResultObj.ContactName,
                     Id = Id,
-                    PhoneNumber = information.ResultObj.PhoneNumber,
-                    Email = information.ResultObj.Email,
+
 
                 };
                 return View(updateRequest);

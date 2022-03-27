@@ -15,6 +15,7 @@ namespace Data.Configuration
             builder.Property(t => t.Id).UseIdentityColumn();
 
             builder.Property(t => t.Content).IsRequired();
+            builder.Property(t => t.Performer).IsRequired();
             builder.Property(t => t.DateCreated).IsRequired().HasDefaultValue(DateTime.Now);
 
             builder.HasOne(t => t.UserInformation).WithMany(pc => pc.Chats)
