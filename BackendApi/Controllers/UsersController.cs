@@ -51,9 +51,6 @@ namespace BackendApi.Controllers
         [HttpPut("UpdateUserInformation")]
         public async Task<IActionResult> UpdateUserInformation([FromBody] UserUpdateRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var result = await _userService.UpdateUserInformation(request);
             if (!result.IsSuccessed)
             {
@@ -61,6 +58,23 @@ namespace BackendApi.Controllers
             }
             return Ok(result);
         }
+
+        [HttpPut("ChangePasswordUser")]
+        public async Task<IActionResult> ChangePasswordUser([FromBody] ChangePasswordUserRequest request)
+        {
+            var result = await _userService.ChangePasswordUser(request);
+
+            return Ok(result);
+        }
+
+        [HttpPut("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            var result = await _userService.ForgotPassword(request);
+
+            return Ok(result);
+        }
+
 
         [HttpPut("UpdateUserAvatar")]
         [Consumes("multipart/form-data")]

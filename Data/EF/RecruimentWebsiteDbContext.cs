@@ -34,6 +34,7 @@ namespace Data.EF
             modelBuilder.ApplyConfiguration(new RecruitmentConfiguration());
             modelBuilder.ApplyConfiguration(new UserAvatarconfiguration());
             modelBuilder.ApplyConfiguration(new UserInformationConfiguration());
+            modelBuilder.ApplyConfiguration(new MailSettingConfiguration());
 
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
@@ -45,6 +46,7 @@ namespace Data.EF
         }
 
         public DbSet<UserInformation> UserInformations { get; set; }
+        public DbSet<MailSetting> MailSettings { get; set; }
         public DbSet<CompanyInformation> CompanyInformations { get; set; }
         public DbSet<CompanyAvatar> CompanyAvatars { get; set; }
         public DbSet<CompanyBranch> CompanyBranches { get; set; }

@@ -9,7 +9,15 @@ namespace Data.Extension
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<MailSetting>().HasData(new MailSetting
+            {
+                Id = 1,
+                Email = "hoangthanh01022000@gmail.com",
+                DisplayName = "Admin",
+                Password = "Thanhngo@123",
+                Host = "smtp.gmail.com",
+                Port = 587
+            });
 
             // any guid
             var roleId = Guid.NewGuid();
@@ -21,7 +29,7 @@ namespace Data.Extension
                 Description = "Company role"
             });
 
-           
+
 
 
             var roleId1 = Guid.NewGuid();
@@ -33,7 +41,7 @@ namespace Data.Extension
                 Description = "User role"
             });
 
-            
+
 
             var roleId2 = Guid.NewGuid();
             var adminId = Guid.NewGuid();

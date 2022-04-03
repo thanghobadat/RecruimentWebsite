@@ -2,9 +2,11 @@
 using AutoMapper;
 using Data.EF;
 using Data.Entities;
+using MailKit.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
 using System;
 using System.IO;
 using System.Net.Http.Headers;
@@ -20,6 +22,7 @@ namespace Application.Catalog
         private readonly RecruimentWebsiteDbContext _context;
         private readonly IStorageService _storageService;
         private readonly IMapper _mapper;
+
         public UserService(RecruimentWebsiteDbContext context, IStorageService storageService,
             IMapper mapper, UserManager<AppUser> userManager)
         {
@@ -216,6 +219,67 @@ namespace Application.Catalog
 
             return new ApiErrorResult<bool>("CVs only accept pdf files");
 
+        }
+
+        public async Task<ApiResult<bool>> ChangePasswordUser(ChangePasswordUserRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
+                {
+                    return new ApiErrorResult<bool>(item.Description);
+                }
+            }
+            return new ApiSuccessResult<bool>(true);
+        }
+
+        public async Task<ApiResult<bool>> ForgotPassword(ForgotPasswordRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("Tài khoản đăng nhập hiện không tồn tại!");
+            }
+            if (request.Email != user.Email)
+            {
+                return new ApiErrorResult<bool>("Email không chính xác, vui lòng kiểm tra lại");
+
+            }
+            await _userManager.RemovePasswordAsync(user);
+            await _userManager.AddPasswordAsync(user, "NewPassword@123");
+            string to = request.Email;
+            string subject = "Mật khẩu của bạn đã được thay đổi";
+            string body = "Mật khẩu mới của bạn là: NewPassword@123";
+
+            var mailSetting = await _context.MailSettings.FirstOrDefaultAsync();
+
+            var email = new MimeMessage();
+
+            email.Sender = new MailboxAddress(mailSetting.DisplayName, mailSetting.Email);
+            email.From.Add(new MailboxAddress(mailSetting.DisplayName, mailSetting.Email));
+            email.To.Add(new MailboxAddress(to, to));
+            email.Subject = subject;
+            var builder = new BodyBuilder();
+            builder.HtmlBody = body;
+            email.Body = builder.ToMessageBody();
+            using var smtp = new MailKit.Net.Smtp.SmtpClient();
+            try
+            {
+                //kết nối máy chủ
+                await smtp.ConnectAsync(mailSetting.Host, mailSetting.Port, SecureSocketOptions.StartTls);
+                // xác thực
+                await smtp.AuthenticateAsync(mailSetting.Email, mailSetting.Password);
+                //gởi
+                await smtp.SendAsync(email);
+            }
+            catch (Exception e)
+            {
+                return new ApiErrorResult<bool>("there was an error when sending mail but still created the idea. Error: " + e.Message);
+            }
+            smtp.Disconnect(true);
+            return new ApiSuccessResult<bool>(true);
         }
 
         //public async Task<ApiResult<bool>> Comment(CommentRequest request)

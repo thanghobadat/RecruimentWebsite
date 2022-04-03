@@ -304,6 +304,7 @@ namespace Application.System.Users
         {
             var accountVMS = new List<AccountViewModel>();
             var companies = await _userManager.GetUsersInRoleAsync("company");
+
             var companyVMs = companies.Select(company => _mapper.Map<AccountViewModel>(company)).ToList();
             foreach (var companyVM in companyVMs)
             {
@@ -312,7 +313,7 @@ namespace Application.System.Users
             }
 
             var users = await _userManager.GetUsersInRoleAsync("user");
-            var userVMs = users.Select(company => _mapper.Map<AccountViewModel>(company)).ToList();
+            var userVMs = users.Select(user => _mapper.Map<AccountViewModel>(user)).ToList();
             foreach (var userVM in userVMs)
             {
                 userVM.Role = "user";

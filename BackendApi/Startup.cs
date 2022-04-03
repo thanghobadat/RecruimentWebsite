@@ -44,6 +44,7 @@ namespace BackendApi
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
             //services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen(c =>

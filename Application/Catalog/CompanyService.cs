@@ -515,7 +515,7 @@ namespace Application.Catalog
             }
 
             var companyInforVM = _mapper.Map<CompanyInformationViewModel>(companyInfor);
-            
+
 
             var companyAvatar = await this.GetCompanyAvatar(companyId);
             companyInforVM.CompanyAvatar = companyAvatar.ResultObj;
@@ -607,26 +607,68 @@ namespace Application.Catalog
 
         }
 
-
-
-        public async Task<ApiResult<bool>> UpdateCompanyInformation(CompanyUpdateRequest request)
+        public async Task<ApiResult<bool>> UpdateCompanyName(Guid id, string name)
         {
-            var user = await _userManager.FindByIdAsync(request.CompanyId.ToString());
-            user.Email = request.Email;
-            user.PhoneNumber = request.PhoneNumber;
-            var userInf = await _context.CompanyInformations.FindAsync(request.CompanyId);
-            userInf.Name = request.Name;
-            userInf.Description = request.Description;
-            userInf.WorkerNumber = request.WorkerNumber;
-            userInf.ContactName = request.ContactName;
-            var resultUserInf = await _context.SaveChangesAsync();
-
-            if (resultUserInf == 0)
+            var user = await _context.CompanyInformations.FindAsync(id);
+            if (user == null)
             {
-                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
+                return new ApiErrorResult<bool>("Tài khoản không tồn tại, vui lòng thử lại");
+            }
+            user.Name = name;
+            var result = await _context.SaveChangesAsync();
+            if (result == 0)
+            {
+                return new ApiErrorResult<bool>("Vui lòng thay đổi dữ liệu");
             }
             return new ApiSuccessResult<bool>(true);
         }
+        public async Task<ApiResult<bool>> UpdateCompanyContactName(Guid id, string contactName)
+        {
+            var user = await _context.CompanyInformations.FindAsync(id);
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("Tài khoản không tồn tại, vui lòng thử lại");
+            }
+            user.ContactName = contactName;
+            var result = await _context.SaveChangesAsync();
+            if (result == 0)
+            {
+                return new ApiErrorResult<bool>("Vui lòng thay đổi dữ liệu");
+            }
+            return new ApiSuccessResult<bool>(true);
+        }
+
+        public async Task<ApiResult<bool>> UpdateCompanyDescription(Guid id, string description)
+        {
+            var user = await _context.CompanyInformations.FindAsync(id);
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("Tài khoản không tồn tại, vui lòng thử lại");
+            }
+            user.Description = description;
+            var result = await _context.SaveChangesAsync();
+            if (result == 0)
+            {
+                return new ApiErrorResult<bool>("Vui lòng thay đổi dữ liệu");
+            }
+            return new ApiSuccessResult<bool>(true);
+        }
+        public async Task<ApiResult<bool>> UpdateCompanyWorkerNumber(Guid id, int workerNumber)
+        {
+            var user = await _context.CompanyInformations.FindAsync(id);
+            if (user == null)
+            {
+                return new ApiErrorResult<bool>("Tài khoản không tồn tại, vui lòng thử lại");
+            }
+            user.WorkerNumber = workerNumber;
+            var result = await _context.SaveChangesAsync();
+            if (result == 0)
+            {
+                return new ApiErrorResult<bool>("Vui lòng thay đổi dữ liệu");
+            }
+            return new ApiSuccessResult<bool>(true);
+        }
+
 
         public async Task<ApiResult<bool>> UpdateCoverImage(int id, UpdateCoverImageRequest request)
         {

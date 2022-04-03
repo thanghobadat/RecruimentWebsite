@@ -46,24 +46,24 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("275dbac8-a1d2-484d-83f2-07718316271c"),
-                            ConcurrencyStamp = "75e221b4-cbf8-4dd0-951c-10396e39104f",
+                            Id = new Guid("71b20899-4673-47f7-84fb-40fe7e10d137"),
+                            ConcurrencyStamp = "cea14a8d-678d-45ce-9036-3553cee20c50",
                             Description = "Company role",
                             Name = "company",
                             NormalizedName = "company"
                         },
                         new
                         {
-                            Id = new Guid("72ae53ec-a8cd-4a42-a6c5-827212e258f7"),
-                            ConcurrencyStamp = "07535ff3-ab6a-47de-b522-321ff53d96be",
+                            Id = new Guid("05ddc91e-18ae-4ed6-b804-36b75e50d880"),
+                            ConcurrencyStamp = "71871563-1d74-421d-80db-a4026441a188",
                             Description = "User role",
                             Name = "user",
                             NormalizedName = "user"
                         },
                         new
                         {
-                            Id = new Guid("25aad933-26f6-4343-a506-9fb41e90be1d"),
-                            ConcurrencyStamp = "9d6d9fea-3f4e-4eac-951d-a7388f0825b6",
+                            Id = new Guid("5ca85098-3392-4e71-b85c-fa00171d1def"),
+                            ConcurrencyStamp = "a2e2d531-f163-4c32-8cd9-ee32e59796ad",
                             Description = "Admin role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -133,17 +133,17 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c83601d0-fe9b-4b1c-adf5-1f2ef704e5ef"),
+                            Id = new Guid("42560043-fbe2-4520-a7d1-86c5854ea59e"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5dee17e1-b532-49af-be0b-af4b7c607410",
-                            DateCreated = new DateTime(2022, 3, 27, 16, 47, 43, 117, DateTimeKind.Local).AddTicks(1604),
+                            ConcurrencyStamp = "75d9b258-821a-4adb-8408-f6bce8a867de",
+                            DateCreated = new DateTime(2022, 4, 1, 15, 26, 50, 239, DateTimeKind.Local).AddTicks(1991),
                             Email = "hoangthanh01022000@gmail.com",
                             EmailConfirmed = true,
                             IsSave = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "hoangthanh01022000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDvbg+rCEWP/tw5WfR7JfYr6eUT6xLksA7V4xfWIJmRVPrbLKFgmbhj7T3buwuq7mQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHn3TojVYRXeVsDJFMRvOMVuWHiLz6LL8KNp0pdrDpCHe5wT7SJsKcOQXKtDHJu5uA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -239,7 +239,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 27, 16, 47, 43, 54, DateTimeKind.Local).AddTicks(9173));
+                        .HasDefaultValue(new DateTime(2022, 4, 1, 15, 26, 50, 181, DateTimeKind.Local).AddTicks(2862));
 
                     b.Property<string>("Performer")
                         .IsRequired()
@@ -447,7 +447,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 27, 16, 47, 43, 77, DateTimeKind.Local).AddTicks(1832));
+                        .HasDefaultValue(new DateTime(2022, 4, 1, 15, 26, 50, 203, DateTimeKind.Local).AddTicks(6042));
 
                     b.Property<string>("FilePath")
                         .IsRequired()
@@ -475,6 +475,50 @@ namespace Data.Migrations
                     b.ToTable("Follows");
                 });
 
+            modelBuilder.Entity("Data.Entities.MailSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Host")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Port")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MailSettings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DisplayName = "Admin",
+                            Email = "hoangthanh01022000@gmail.com",
+                            Host = "smtp.gmail.com",
+                            Password = "Thanhngo@123",
+                            Port = 587
+                        });
+                });
+
             modelBuilder.Entity("Data.Entities.Notification", b =>
                 {
                     b.Property<int>("Id")
@@ -492,7 +536,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 27, 16, 47, 43, 81, DateTimeKind.Local).AddTicks(2721));
+                        .HasDefaultValue(new DateTime(2022, 4, 1, 15, 26, 50, 207, DateTimeKind.Local).AddTicks(9790));
 
                     b.HasKey("Id");
 
@@ -707,8 +751,8 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("c83601d0-fe9b-4b1c-adf5-1f2ef704e5ef"),
-                            RoleId = new Guid("25aad933-26f6-4343-a506-9fb41e90be1d")
+                            UserId = new Guid("42560043-fbe2-4520-a7d1-86c5854ea59e"),
+                            RoleId = new Guid("5ca85098-3392-4e71-b85c-fa00171d1def")
                         });
                 });
 

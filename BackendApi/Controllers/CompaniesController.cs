@@ -154,19 +154,56 @@ namespace BackendApi.Controllers
         }
 
 
-        [HttpPut("UpdateCompanyInformation")]
-        public async Task<IActionResult> UpdateCompanyInformation([FromBody] CompanyUpdateRequest request)
+
+
+        [HttpPut("UpdateCompanyName")]
+        public async Task<IActionResult> UpdateCompanyName([FromBody] CompanyNameUpdateRequest request)
         {
 
 
-            var result = await _companyService.UpdateCompanyInformation(request);
+            var result = await _companyService.UpdateCompanyName(request.Id, request.Name);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result);
             }
             return Ok(result);
         }
+        [HttpPut("UpdateCompanyDescription")]
+        public async Task<IActionResult> UpdateCompanyDescription([FromBody] CompanyDescriptionUpdateRequest request)
+        {
 
+
+            var result = await _companyService.UpdateCompanyDescription(request.Id, request.Description);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [HttpPut("UpdateCompanyWorkerNumber")]
+        public async Task<IActionResult> UpdateCompanyWorkerNumber([FromBody] CompanyWorkerNumberUpdateRequest request)
+        {
+
+
+            var result = await _companyService.UpdateCompanyWorkerNumber(request.Id, request.WorkerNumber);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [HttpPut("UpdateCompanyContactName")]
+        public async Task<IActionResult> UpdateCompanyContactName([FromBody] CompanyContactNameUpdateRequest request)
+        {
+
+
+            var result = await _companyService.UpdateCompanyContactName(request.Id, request.ContactName);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
 
         [HttpPut("UpdateAvatar")]
         [Consumes("multipart/form-data")]
