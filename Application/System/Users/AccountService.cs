@@ -319,6 +319,13 @@ namespace Application.System.Users
                 userVM.Role = "user";
                 accountVMS.Add(userVM);
             }
+            var admins = await _userManager.GetUsersInRoleAsync("admin");
+            var adminVMs = admins.Select(admin => _mapper.Map<AccountViewModel>(admin)).ToList();
+            foreach (var adminVM in adminVMs)
+            {
+                adminVM.Role = "admin";
+                accountVMS.Add(adminVM);
+            }
             return new ApiSuccessResult<List<AccountViewModel>>(accountVMS);
         }
     }

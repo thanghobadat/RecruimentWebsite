@@ -46,9 +46,24 @@ namespace BackendApi.Controllers
         [HttpGet("GetCompanyImages")]
         public async Task<IActionResult> GetCompanyImages([FromQuery] GetCompanyImagesRequest request)
         {
-            var result = await _companyService.GetAllImagesPaging(request);
+            var result = await _companyService.GetAllImages(request);
             return Ok(result);
         }
+
+        [HttpGet("GetBranchesNotExist")]
+        public async Task<IActionResult> GetBranchesNotExist(Guid companyId)
+        {
+            var result = await _companyService.GetBranchesNotExist(companyId);
+            return Ok(result);
+        }
+
+        [HttpGet("GetCompanyBrahches")]
+        public async Task<IActionResult> GetCompanyBrahches(Guid companyId)
+        {
+            var result = await _companyService.GetCompanyBranch(companyId);
+            return Ok(result);
+        }
+
 
         [HttpGet("GetAllRecruitmentPaging")]
         public async Task<IActionResult> GetCompanyImages([FromQuery] GetRecruitmentRequest request)
@@ -69,8 +84,7 @@ namespace BackendApi.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateCompanyImages([FromForm] CreateCompanyImageRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+
 
             var result = await _companyService.CreateCompanyImages(request);
             if (!result.IsSuccessed)

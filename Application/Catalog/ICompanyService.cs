@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ViewModel.Catalog.Admin;
 using ViewModel.Catalog.Company;
 using ViewModel.Common;
 
@@ -13,7 +14,10 @@ namespace Application.Catalog
         Task<ApiResult<CompanyInformationViewModel>> GetCompanyInformation(Guid companyId);
         Task<ApiResult<CompanyAvatarViewModel>> GetCompanyAvatar(Guid companyId);
         Task<ApiResult<CompanyCoverImageViewModel>> GetCompanyCoverImage(Guid companyId);
-        Task<ApiResult<PageResult<CompanyImagesViewModel>>> GetAllImagesPaging(GetCompanyImagesRequest request);
+        Task<ApiResult<List<CompanyImagesViewModel>>> GetAllImages(GetCompanyImagesRequest request);
+        Task<ApiResult<List<CompanyBranchViewModel>>> GetCompanyBranch(Guid companyId);
+        Task<List<BranchViewModel>> GetBranchesNotExist(Guid companyId);
+
         Task<ApiResult<bool>> CreateCoverImage(CreateCoverImageRequest request);
         Task<ApiResult<bool>> CreateCompanyImages(CreateCompanyImageRequest request);
         Task<ApiResult<bool>> UpdateAvatar(int Id, AvatarUpdateRequest request);

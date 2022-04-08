@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModel", "ViewModel\View
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{D1F6F952-390E-42D5-ADD9-31C14C38E1C7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MVCApp", "MVCApp\MVCApp.csproj", "{6C331553-6EF7-4024-93C9-EC0D76708BFD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{D1F6F952-390E-42D5-ADD9-31C14C38E1C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1F6F952-390E-42D5-ADD9-31C14C38E1C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1F6F952-390E-42D5-ADD9-31C14C38E1C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6C331553-6EF7-4024-93C9-EC0D76708BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6C331553-6EF7-4024-93C9-EC0D76708BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6C331553-6EF7-4024-93C9-EC0D76708BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6C331553-6EF7-4024-93C9-EC0D76708BFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using ViewModel.Catalog.Admin;
 using ViewModel.Catalog.Company;
 using ViewModel.Common;
 
@@ -162,29 +163,27 @@ namespace Application.Catalog
                 return new ApiErrorResult<bool>("Company doesn't exist, please re-enter");
             }
 
-            foreach (var image in request.Images)
+
+            var imageIndex = request.Image.FileName.LastIndexOf(".");
+            var imageType = request.Image.FileName.Substring(imageIndex + 1);
+            if (imageType == "jpg" || imageType == "png")
             {
-                var imageIndex = image.FileName.LastIndexOf(".");
-                var imageType = image.FileName.Substring(imageIndex + 1);
-                if (imageType == "jpg" || imageType == "png")
+                var companyImage = new CompanyImage()
                 {
-                    var companyImage = new CompanyImage()
-                    {
-                        FizeSize = image.Length,
-                        Caption = image.FileName,
-                        DateCreated = DateTime.Now,
-                        CompanyId = request.CompanyId,
-                        ImagePath = await this.SaveImages(image)
-                    };
+                    FizeSize = request.Image.Length,
+                    Caption = request.Image.FileName,
+                    DateCreated = DateTime.Now,
+                    CompanyId = request.CompanyId,
+                    ImagePath = await this.SaveImages(request.Image)
+                };
 
-                    await _context.CompanyImages.AddAsync(companyImage);
-                }
-                else
-                {
-                    return new ApiErrorResult<bool>("Please choose jpg or png image file");
-                }
-
+                await _context.CompanyImages.AddAsync(companyImage);
             }
+            else
+            {
+                return new ApiErrorResult<bool>("Please choose jpg or png image file");
+            }
+
 
             var result = await _context.SaveChangesAsync();
             if (result == 0)
@@ -305,34 +304,21 @@ namespace Application.Catalog
 
 
 
-        public async Task<ApiResult<PageResult<CompanyImagesViewModel>>> GetAllImagesPaging(GetCompanyImagesRequest request)
+        public async Task<ApiResult<List<CompanyImagesViewModel>>> GetAllImages(GetCompanyImagesRequest request)
         {
             var company = await _context.CompanyInformations.FindAsync(request.CompanyId);
             if (company == null)
             {
-                return new ApiErrorResult<PageResult<CompanyImagesViewModel>>("Company doesn't exist, please re-enter");
+                return new ApiErrorResult<List<CompanyImagesViewModel>>("Company doesn't exist, please re-enter");
             }
 
-            var query = await _context.CompanyImages.Where(x => x.CompanyId == request.CompanyId).ToListAsync();
-            var companyImages = query.AsQueryable();
-            if (!string.IsNullOrEmpty(request.Keyword))
-            {
-                companyImages = companyImages.Where(x => x.Caption.Contains(request.Keyword));
-            }
+            var companyImages = await _context.CompanyImages.Where(x => x.CompanyId == request.CompanyId).ToListAsync();
 
-            int totalRow = companyImages.Count();
-            var data = companyImages.Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .Select(image => _mapper.Map<CompanyImagesViewModel>(image)).ToList();
 
-            var pagedResult = new PageResult<CompanyImagesViewModel>()
-            {
-                TotalRecords = totalRow,
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                Items = data
-            };
-            return new ApiSuccessResult<PageResult<CompanyImagesViewModel>>(pagedResult);
+            var data = companyImages.Select(image => _mapper.Map<CompanyImagesViewModel>(image)).ToList();
+
+
+            return new ApiSuccessResult<List<CompanyImagesViewModel>>(data);
         }
 
         public async Task<ApiResult<PageResult<RecruitmentPagingResult>>> GetAllRecruitmentPaging(GetRecruitmentRequest request)
@@ -528,6 +514,8 @@ namespace Application.Catalog
             var companyImagesVM = companyImages.Select(image => _mapper.Map<CompanyImagesViewModel>(image)).ToList();
 
             companyInforVM.CompanyImages = companyImagesVM;
+            var companyBranch = await this.GetCompanyBranch(companyId);
+            companyInforVM.CompanyBranches = companyBranch.ResultObj;
             return new ApiSuccessResult<CompanyInformationViewModel>(companyInforVM);
         }
 
@@ -720,6 +708,42 @@ namespace Application.Catalog
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             await _storageService.SaveImagesAsync(file.OpenReadStream(), fileName);
             return fileName;
+        }
+
+
+
+        public async Task<ApiResult<List<CompanyBranchViewModel>>> GetCompanyBranch(Guid companyId)
+        {
+            var company = await _context.CompanyInformations.FindAsync(companyId);
+            if (company == null)
+            {
+                return new ApiErrorResult<List<CompanyBranchViewModel>>("Không tìm thấy công ty hiện tại, vui lòng kiểm tra lại");
+            }
+            var branches = await _context.CompanyBranches.Where(x => x.CompanyId == companyId).ToListAsync();
+            var branchVM = branches.Select(companyBranch => _mapper.Map<CompanyBranchViewModel>(companyBranch)).ToList();
+            foreach (var item in branchVM)
+            {
+                var branch = await _context.Branches.FindAsync(item.BranchId);
+                item.City = branch.City;
+            }
+            branchVM = branchVM.OrderBy(x => x.City).ToList();
+
+            return new ApiSuccessResult<List<CompanyBranchViewModel>>(branchVM);
+        }
+
+        public async Task<List<BranchViewModel>> GetBranchesNotExist(Guid companyId)
+        {
+            var branches = await _context.Branches.ToListAsync();
+            var branchExists = await _context.CompanyBranches.Where(x => x.CompanyId == companyId).ToListAsync();
+            foreach (var item in branchExists)
+            {
+                var branch = await _context.Branches.FindAsync(item.BranchId);
+                branches.Remove(branch);
+
+            }
+            var branchVM = branches.Select(branch => _mapper.Map<BranchViewModel>(branch)).OrderBy(x => x.City).ToList();
+            return branchVM;
+
         }
     }
 }

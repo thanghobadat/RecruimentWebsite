@@ -12,11 +12,12 @@ namespace Application.System.Users
         Task<ApiResult<LoginViewModel>> Authenticate(LoginRequest request);
         Task<ApiResult<List<AccountViewModel>>> GetAllAccount();
         Task<ApiResult<bool>> ChangePassword(ChangePasswordRequest request);
-
-        // chưa ok
         Task<ApiResult<bool>> RegisterUserAccount(RegisterUserAccountRequest request);
         Task<ApiResult<bool>> RegisterCompanyAccount(RegisterCompanyAccountRequest request);
         Task<ApiResult<bool>> RegisterAdminAccount(RegisterAdminAccountRequest request);
+
+        // chưa ok
+
 
 
         Task<ApiResult<bool>> Delete(Guid id);

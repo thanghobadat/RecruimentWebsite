@@ -113,11 +113,7 @@ namespace Application.Catalog
         public async Task<List<BranchViewModel>> GetAllBranchPaging()
         {
             var query = await _context.Branches.OrderBy(x => x.City).ToListAsync();
-            var data = query.Select(x => new BranchViewModel()
-            {
-                Id = x.Id,
-                City = x.City,
-            }).ToList();
+            var data = query.Select(branch => _mapper.Map<BranchViewModel>(branch)).OrderBy(x => x.City).ToList();
             return data;
         }
 

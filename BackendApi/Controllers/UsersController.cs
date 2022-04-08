@@ -37,8 +37,7 @@ namespace BackendApi.Controllers
         [HttpPost("FollowCompany")]
         public async Task<IActionResult> FollowCompany(Guid userId, Guid companyId)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+
 
             var result = await _userService.FollowCompany(userId, companyId);
             if (!result.IsSuccessed)

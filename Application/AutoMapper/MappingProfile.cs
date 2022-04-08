@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Data.Entities;
+using ViewModel.Catalog.Admin;
 using ViewModel.Catalog.Company;
 using ViewModel.Catalog.User;
 using ViewModel.System.Users;
@@ -42,6 +43,14 @@ namespace Application.AutoMapper
             CreateMap<CompanyCoverImageViewModel, CompanyCoverImage>();
             CreateMap<CompanyCoverImage, CreateCoverImageRequest>();
             CreateMap<CreateCoverImageRequest, CompanyCoverImage>();
+
+
+
+            // Company Branch
+            CreateMap<CompanyBranch, CompanyBranchViewModel>();
+            CreateMap<CompanyBranchViewModel, CompanyBranch>();
+            CreateMap<Branch, BranchViewModel>();
+            CreateMap<BranchViewModel, Branch>();
 
             //recruitment
             CreateMap<Recruitment, RecruitmentViewModel>();

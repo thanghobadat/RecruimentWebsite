@@ -68,10 +68,7 @@ namespace BackendApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RegisterCompany([FromBody] RegisterCompanyAccountRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+
             var result = await _accountService.RegisterCompanyAccount(request);
             if (!result.ResultObj)
             {
