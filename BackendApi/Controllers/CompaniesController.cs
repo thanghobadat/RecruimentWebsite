@@ -247,8 +247,26 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
 
-
-
+        [HttpPut("UpdateRecruitmentName")]
+        public async Task<IActionResult> UpdateRecruitmentName([FromBody] UpdateRecruitmentNameRequest request)
+        {
+            var result = await _companyService.UpdateRecruitmentName(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [HttpPut("UpdateRecruitmentSalary")]
+        public async Task<IActionResult> UpdateRecruitmentSalary([FromBody] UpdateSalaryRecruitment request)
+        {
+            var result = await _companyService.UpdateRecruitmentSalary(request);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
         [HttpDelete("DeleteCoverImage")]
         public async Task<IActionResult> DeleteCoverImage(int id)
         {

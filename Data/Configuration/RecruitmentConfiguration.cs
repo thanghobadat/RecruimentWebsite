@@ -23,8 +23,8 @@ namespace Data.Configuration
             builder.Property(x => x.Description).IsRequired();
             builder.Property(x => x.ExpirationDate).IsRequired();
             builder.Property(x => x.DateCreated).IsRequired();
-            builder.HasOne(ci => ci.CompanyInformation).WithOne(ca => ca.Recruitment)
-                .HasForeignKey<Recruitment>(pc => pc.CompanyId);
+            builder.HasOne(ci => ci.CompanyInformation).WithMany(ca => ca.Recruitments)
+                .HasForeignKey(pc => pc.CompanyId);
 
         }
     }

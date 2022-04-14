@@ -37,7 +37,7 @@ namespace Application.Catalog
             var userInfor = await _context.UserInformations.FindAsync(userId);
             if (userInfor == null)
             {
-                return new ApiErrorResult<UserInformationViewModel>("User information could not be found, please check again");
+                return new ApiErrorResult<UserInformationViewModel>("Không tìm thấy thông tin người dùng, vui lòng");
             }
 
             var userInforVM = _mapper.Map<UserInformationViewModel>(userInfor);
@@ -54,7 +54,7 @@ namespace Application.Catalog
             var avatar = await _context.UserAvatars.FirstOrDefaultAsync(x => x.UserId == userId);
             if (avatar == null)
             {
-                return new ApiErrorResult<UserAvatarViewModel>("Something wrong, Please check user id");
+                return new ApiErrorResult<UserAvatarViewModel>("Có lỗi xảy ra, vui lòng kiểm tra lại");
             }
 
             var avatarVM = _mapper.Map<UserAvatarViewModel>(avatar);
@@ -67,7 +67,7 @@ namespace Application.Catalog
             var userAva = await _context.UserAvatars.FindAsync(id);
             if (userAva == null)
             {
-                return new ApiErrorResult<bool>("User avatar could not be found");
+                return new ApiErrorResult<bool>("Không tìm thấy avatar");
             }
 
 
@@ -86,12 +86,12 @@ namespace Application.Catalog
                 var result = await _context.SaveChangesAsync();
                 if (result == 0)
                 {
-                    return new ApiErrorResult<bool>("An error occured, register unsuccessful");
+                    return new ApiErrorResult<bool>("Đã có lỗi xảy ra, vui lòng kiểm tra lại");
                 }
                 return new ApiSuccessResult<bool>(true);
             }
 
-            return new ApiErrorResult<bool>("Please choose jpg or png image file");
+            return new ApiErrorResult<bool>("Vui lòng chọn hình ảnh có đuôi jpg hoặc png");
         }
 
         //Save File
@@ -129,7 +129,7 @@ namespace Application.Catalog
             var resultUserInf = await _context.SaveChangesAsync();
             if (resultUserInf == 0)
             {
-                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
+                return new ApiErrorResult<bool>("Đã có lỗi xảy ra, vui lòng kiểm tra lại");
             }
             return new ApiSuccessResult<bool>(true);
         }
@@ -139,13 +139,13 @@ namespace Application.Catalog
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
             {
-                return new ApiErrorResult<bool>("User doesn't exist");
+                return new ApiErrorResult<bool>("Người dùng không tồn tại");
             }
             var userinf = await _context.UserInformations.FindAsync(userId);
             var company = await _userManager.FindByIdAsync(companyId.ToString());
             if (company == null)
             {
-                return new ApiErrorResult<bool>("Company doesn't exist");
+                return new ApiErrorResult<bool>("Công ty không tồn tại");
             }
 
             var follow = new Follow()
@@ -157,7 +157,7 @@ namespace Application.Catalog
             var noti = new Notification()
             {
                 AccountId = companyId,
-                Content = userinf.FirstName + " " + userinf.LastName + " just followed your company",
+                Content = userinf.FirstName + " " + userinf.LastName + " vừa theo dõi công ty bạn",
                 DateCreated = DateTime.Now
             };
 
@@ -166,7 +166,7 @@ namespace Application.Catalog
             var result = await _context.SaveChangesAsync();
             if (result == 0)
             {
-                return new ApiErrorResult<bool>("An error occured, please re enter");
+                return new ApiErrorResult<bool>("Đã có lỗi xảy ra, vui lòng kiểm tra lại");
             }
             return new ApiSuccessResult<bool>(true);
 

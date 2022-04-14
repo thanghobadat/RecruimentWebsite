@@ -25,9 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\CoverImages\" />
     <Folder Include="wwwroot\Images\" />
     <Folder Include="wwwroot\CVs\" />
+    <Folder Include="wwwroot\CoverImages\" />
   </ItemGroup>
 
 

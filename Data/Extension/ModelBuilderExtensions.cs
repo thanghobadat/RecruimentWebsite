@@ -65,7 +65,8 @@ namespace Data.Extension
                 PasswordHash = hasher2.HashPassword(null, "Admin@123"),
                 SecurityStamp = string.Empty,
                 DateCreated = DateTime.Now,
-                IsSave = false
+                IsSave = false,
+                PhoneNumber = "11111"
             });
 
             modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>

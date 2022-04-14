@@ -15,7 +15,7 @@ namespace Data.Entities
         public List<CompanyBranch> CompanyBranches { get; set; }
         public CompanyAvatar CompanyAvatar { get; set; }
         public CompanyCoverImage CompanyCoverImage { get; set; }
-        public Recruitment Recruitment { get; set; }
+        public List<Recruitment> Recruitments { get; set; }
         public List<Follow> Follows { get; set; }
         public List<Chat> Chats { get; set; }
 

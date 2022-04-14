@@ -11,11 +11,11 @@ namespace Data.Migrations
                 name: "AppRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    RoleId = table.Column<Guid>(nullable: false),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -26,11 +26,11 @@ namespace Data.Migrations
                 name: "AppRoles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    NormalizedName = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,11 +41,11 @@ namespace Data.Migrations
                 name: "AppUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<Guid>(nullable: false),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -56,10 +56,10 @@ namespace Data.Migrations
                 name: "AppUserLogins",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProviderKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<Guid>(nullable: false),
+                    LoginProvider = table.Column<string>(nullable: true),
+                    ProviderKey = table.Column<string>(nullable: true),
+                    ProviderDisplayName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -70,8 +70,8 @@ namespace Data.Migrations
                 name: "AppUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(nullable: false),
+                    RoleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -82,23 +82,23 @@ namespace Data.Migrations
                 name: "AppUsers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsSave = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    UserName = table.Column<string>(nullable: true),
+                    NormalizedUserName = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    NormalizedEmail = table.Column<string>(nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    IsSave = table.Column<bool>(nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -109,10 +109,10 @@ namespace Data.Migrations
                 name: "AppUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<Guid>(nullable: false),
+                    LoginProvider = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -123,9 +123,9 @@ namespace Data.Migrations
                 name: "Branches",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    City = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -136,10 +136,10 @@ namespace Data.Migrations
                 name: "Careers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Name = table.Column<string>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -150,13 +150,13 @@ namespace Data.Migrations
                 name: "MailSettings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Host = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Port = table.Column<int>(type: "int", nullable: false)
+                    Email = table.Column<string>(nullable: false),
+                    DisplayName = table.Column<string>(nullable: false),
+                    Host = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(nullable: false),
+                    Port = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -167,11 +167,11 @@ namespace Data.Migrations
                 name: "CompanyInformations",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WorkerNumber = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    ContactName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    WorkerNumber = table.Column<int>(nullable: false, defaultValue: 0),
+                    ContactName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -188,11 +188,11 @@ namespace Data.Migrations
                 name: "Notifications",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 4, 1, 15, 26, 50, 207, DateTimeKind.Local).AddTicks(9790))
+                    AccountId = table.Column<Guid>(nullable: false),
+                    Content = table.Column<string>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2022, 4, 9, 13, 16, 54, 992, DateTimeKind.Local).AddTicks(6958))
                 },
                 constraints: table =>
                 {
@@ -209,13 +209,13 @@ namespace Data.Migrations
                 name: "UserInformations",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    Sex = table.Column<int>(type: "int", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AcademicLevel = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserId = table.Column<Guid>(nullable: false),
+                    FirstName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false),
+                    Age = table.Column<int>(nullable: false),
+                    Sex = table.Column<int>(nullable: false),
+                    Address = table.Column<string>(nullable: false),
+                    AcademicLevel = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -232,13 +232,13 @@ namespace Data.Migrations
                 name: "CompanyAvatars",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Caption = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FizeSize = table.Column<long>(type: "bigint", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    ImagePath = table.Column<string>(nullable: false),
+                    Caption = table.Column<string>(nullable: false),
+                    FizeSize = table.Column<long>(nullable: false),
+                    CompanyId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -255,9 +255,9 @@ namespace Data.Migrations
                 name: "CompanyBranches",
                 columns: table => new
                 {
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BranchId = table.Column<int>(type: "int", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CompanyId = table.Column<Guid>(nullable: false),
+                    BranchId = table.Column<int>(nullable: false),
+                    Address = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -280,13 +280,13 @@ namespace Data.Migrations
                 name: "CompanyCoverImages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Caption = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FizeSize = table.Column<long>(type: "bigint", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    ImagePath = table.Column<string>(nullable: false),
+                    Caption = table.Column<string>(nullable: false),
+                    FizeSize = table.Column<long>(nullable: false),
+                    CompanyId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -303,13 +303,13 @@ namespace Data.Migrations
                 name: "CompanyImages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Caption = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FizeSize = table.Column<long>(type: "bigint", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    ImagePath = table.Column<string>(nullable: false),
+                    Caption = table.Column<string>(nullable: false),
+                    FizeSize = table.Column<long>(nullable: false),
+                    CompanyId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -326,20 +326,20 @@ namespace Data.Migrations
                 name: "Recruitments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Rank = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Experience = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "none"),
-                    DetailedExperience = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Benefits = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Salary = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    Education = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Name = table.Column<string>(nullable: false),
+                    Rank = table.Column<string>(nullable: false),
+                    Experience = table.Column<string>(nullable: false, defaultValue: "none"),
+                    DetailedExperience = table.Column<string>(nullable: true),
+                    Benefits = table.Column<string>(nullable: true),
+                    Salary = table.Column<int>(nullable: false, defaultValue: 0),
+                    Education = table.Column<string>(nullable: false),
+                    Type = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    ExpirationDate = table.Column<DateTime>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    CompanyId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -356,13 +356,13 @@ namespace Data.Migrations
                 name: "Chats",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 4, 1, 15, 26, 50, 181, DateTimeKind.Local).AddTicks(2862)),
-                    Performer = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserId = table.Column<Guid>(nullable: false),
+                    CompanyId = table.Column<Guid>(nullable: false),
+                    Content = table.Column<string>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2022, 4, 9, 13, 16, 54, 965, DateTimeKind.Local).AddTicks(6948)),
+                    Performer = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -385,8 +385,8 @@ namespace Data.Migrations
                 name: "Follows",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(nullable: false),
+                    CompanyId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -409,13 +409,13 @@ namespace Data.Migrations
                 name: "UserAvatars",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Caption = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FizeSize = table.Column<long>(type: "bigint", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    ImagePath = table.Column<string>(nullable: false),
+                    Caption = table.Column<string>(nullable: false),
+                    FizeSize = table.Column<long>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -432,8 +432,8 @@ namespace Data.Migrations
                 name: "BranchRecruiments",
                 columns: table => new
                 {
-                    BranchId = table.Column<int>(type: "int", nullable: false),
-                    RecruimentId = table.Column<int>(type: "int", nullable: false)
+                    BranchId = table.Column<int>(nullable: false),
+                    RecruimentId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -456,8 +456,8 @@ namespace Data.Migrations
                 name: "CareerRecruitments",
                 columns: table => new
                 {
-                    RecruimentId = table.Column<int>(type: "int", nullable: false),
-                    CareerId = table.Column<int>(type: "int", nullable: false)
+                    RecruimentId = table.Column<int>(nullable: false),
+                    CareerId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -480,13 +480,13 @@ namespace Data.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RecruimentId = table.Column<int>(type: "int", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SubcommentId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    AccountId = table.Column<Guid>(nullable: false),
+                    RecruimentId = table.Column<int>(nullable: false),
+                    Content = table.Column<string>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    SubcommentId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -509,10 +509,10 @@ namespace Data.Migrations
                 name: "CurriculumVitaes",
                 columns: table => new
                 {
-                    RecruimentId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 4, 1, 15, 26, 50, 203, DateTimeKind.Local).AddTicks(6042))
+                    RecruimentId = table.Column<int>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
+                    FilePath = table.Column<string>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2022, 4, 9, 13, 16, 54, 987, DateTimeKind.Local).AddTicks(1547))
                 },
                 constraints: table =>
                 {
@@ -536,20 +536,20 @@ namespace Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("71b20899-4673-47f7-84fb-40fe7e10d137"), "cea14a8d-678d-45ce-9036-3553cee20c50", "Company role", "company", "company" },
-                    { new Guid("05ddc91e-18ae-4ed6-b804-36b75e50d880"), "71871563-1d74-421d-80db-a4026441a188", "User role", "user", "user" },
-                    { new Guid("5ca85098-3392-4e71-b85c-fa00171d1def"), "a2e2d531-f163-4c32-8cd9-ee32e59796ad", "Admin role", "admin", "admin" }
+                    { new Guid("65272a1f-fa97-4d8c-bf8f-2754f55ed9f8"), "fda77e60-c267-4252-ba3f-2a6d735690ee", "Company role", "company", "company" },
+                    { new Guid("f7cde378-6cff-4a68-81ba-34675d108a5c"), "9913bba0-8c62-4e89-abb1-fb4494223da8", "User role", "user", "user" },
+                    { new Guid("a380ed16-a9c7-4918-82e8-c676baede1d1"), "0d405517-c20f-4a1d-a66c-ddaa43ef5311", "Admin role", "admin", "admin" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AppUserRoles",
-                columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("5ca85098-3392-4e71-b85c-fa00171d1def"), new Guid("42560043-fbe2-4520-a7d1-86c5854ea59e") });
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[] { new Guid("a747074e-8a93-471f-a542-21d3fea814a5"), new Guid("a380ed16-a9c7-4918-82e8-c676baede1d1") });
 
             migrationBuilder.InsertData(
                 table: "AppUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateCreated", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("42560043-fbe2-4520-a7d1-86c5854ea59e"), 0, "75d9b258-821a-4adb-8408-f6bce8a867de", new DateTime(2022, 4, 1, 15, 26, 50, 239, DateTimeKind.Local).AddTicks(1991), "hoangthanh01022000@gmail.com", true, false, null, "hoangthanh01022000@gmail.com", "admin", "AQAAAAEAACcQAAAAEHn3TojVYRXeVsDJFMRvOMVuWHiLz6LL8KNp0pdrDpCHe5wT7SJsKcOQXKtDHJu5uA==", null, false, "", false, "admin" });
+                values: new object[] { new Guid("a747074e-8a93-471f-a542-21d3fea814a5"), 0, "72b4da9f-d81f-4a3b-9a3b-5beffd0c5e0c", new DateTime(2022, 4, 9, 13, 16, 55, 22, DateTimeKind.Local).AddTicks(911), "hoangthanh01022000@gmail.com", true, false, null, "hoangthanh01022000@gmail.com", "admin", "AQAAAAEAACcQAAAAEPXd7r/Q25a96mw2Fy4bME/3klJxqd51tlStcRXuwA+w8iMcpTiKwjXU9SUzenTQrQ==", "11111", false, "", false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "MailSettings",
@@ -626,8 +626,7 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Recruitments_CompanyId",
                 table: "Recruitments",
-                column: "CompanyId",
-                unique: true);
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserAvatars_UserId",

@@ -29,6 +29,12 @@ namespace Application.Catalog
         Task<ApiResult<bool>> UpdateCompanyDescription(Guid id, string description);
         Task<ApiResult<bool>> UpdateCompanyContactName(Guid id, string contactName);
         Task<ApiResult<bool>> UpdateCompanyWorkerNumber(Guid id, int workerNumber);
+        Task<ApiResult<bool>> CreateNewRecruitment(RecruitmentCreateRequest request);
+        Task<ApiResult<bool>> UpdateRecruitmentName(UpdateRecruitmentNameRequest request);
+        Task<ApiResult<bool>> UpdateRecruitmentSalary(UpdateSalaryRecruitment request);
+        Task<ApiResult<RecruitmentViewModel>> GetRecruitmentById(int id);
+        Task<ApiResult<List<CommentViewModel>>> GetCommentRecruitment(int id);
+
 
 
         // chưa chắc xài
@@ -38,13 +44,10 @@ namespace Application.Catalog
 
 
         //chưa test
-        Task<ApiResult<bool>> CreateNewRecruitment(RecruitmentCreateRequest request);
         Task<ApiResult<bool>> AddBranchToRecruitment(int recruimentId, int branchId);
         Task<ApiResult<bool>> AddCareerToRecruitment(int recruimentId, int careerId);
         Task<ApiResult<bool>> Comment(CommentRequest request);
-        Task<ApiResult<List<CommentViewModel>>> GetCommentRecruitment(int id);
         Task<ApiResult<PageResult<RecruitmentPagingResult>>> GetAllRecruitmentPaging(GetRecruitmentRequest request);
-        Task<ApiResult<RecruitmentViewModel>> GetRecruitmentById(int id);
 
     }
 }

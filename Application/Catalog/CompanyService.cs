@@ -3,7 +3,6 @@ using AutoMapper;
 using Data.EF;
 using Data.Entities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,15 +18,13 @@ namespace Application.Catalog
 {
     public class CompanyService : ICompanyService
     {
-        private readonly UserManager<AppUser> _userManager;
 
         private readonly RecruimentWebsiteDbContext _context;
         private readonly IStorageService _storageService;
         private readonly IMapper _mapper;
         public CompanyService(RecruimentWebsiteDbContext context, IStorageService storageService,
-            IMapper mapper, UserManager<AppUser> userManager)
+            IMapper mapper)
         {
-            _userManager = userManager;
             _context = context;
             _storageService = storageService;
             _mapper = mapper;
@@ -224,7 +221,7 @@ namespace Application.Catalog
             var company = await _context.CompanyInformations.FindAsync(request.CompanyId);
             if (company == null)
             {
-                return new ApiErrorResult<bool>("Company doesn't exist, please re-enter");
+                return new ApiErrorResult<bool>("Công ty không tồn tại, vui lòng kiểm tra lại");
             }
 
             var recruitment = new Recruitment()
@@ -247,7 +244,7 @@ namespace Application.Catalog
             var result = await _context.SaveChangesAsync();
             if (result == 0)
             {
-                return new ApiErrorResult<bool>("An error occured, register unsuccessful");
+                return new ApiErrorResult<bool>("Có vấn đề xảy ra, vui lòng kiểm tra lại");
             }
 
             var usersFollow = await _context.Follows.Where(x => x.CompanyId == request.CompanyId).ToListAsync();
@@ -257,7 +254,7 @@ namespace Application.Catalog
                 var noti = new Notification()
                 {
                     AccountId = user.UserId,
-                    Content = company.Name + " has just posted a new job opening that you may be interested in",
+                    Content = company.Name + " vừa đăng một bài tuyển dụng mới mà có thể bạn quan tâm.",
                     DateCreated = DateTime.Now
                 };
                 await _context.Notifications.AddAsync(noti);
@@ -435,15 +432,33 @@ namespace Application.Catalog
                 {
                     var informationUser = await _context.UserInformations.FindAsync(comment.AccountId);
                     var avatar = await _context.UserAvatars.FirstOrDefaultAsync(x => x.UserId == comment.AccountId);
-                    var commentVM = new CommentViewModel()
+                    if (comment.SubcommentId != null)
                     {
-                        Content = comment.Content,
-                        DateCreated = comment.DateCreated,
-                        SubCommentId = int.Parse(comment.SubcommentId),
-                        Name = informationUser.FirstName + " " + informationUser.LastName,
-                        AvatarPath = avatar.ImagePath
-                    };
-                    commentVMs.Add(commentVM);
+                        var commentVM = new CommentViewModel()
+                        {
+                            Id = comment.Id,
+                            Content = comment.Content,
+                            DateCreated = comment.DateCreated,
+                            SubCommentId = int.Parse(comment.SubcommentId),
+                            Name = informationUser.FirstName + " " + informationUser.LastName,
+                            AvatarPath = avatar.ImagePath
+                        };
+                        commentVMs.Add(commentVM);
+                    }
+                    else
+                    {
+                        var commentVM = new CommentViewModel()
+                        {
+                            Id = comment.Id,
+                            Content = comment.Content,
+                            DateCreated = comment.DateCreated,
+                            SubCommentId = 0,
+                            Name = informationUser.FirstName + " " + informationUser.LastName,
+                            AvatarPath = avatar.ImagePath
+                        };
+                        commentVMs.Add(commentVM);
+                    }
+
                 }
                 else
                 {
@@ -516,6 +531,29 @@ namespace Application.Catalog
             companyInforVM.CompanyImages = companyImagesVM;
             var companyBranch = await this.GetCompanyBranch(companyId);
             companyInforVM.CompanyBranches = companyBranch.ResultObj;
+
+            var companyRecruitmentVMs = new List<CompanyRecruitmentViewModel>();
+            var companyRecruitments = await _context.Recruitments.Where(x => x.CompanyId == companyId).ToListAsync();
+            foreach (var recruitment in companyRecruitments)
+            {
+                var companyRecruitmentVM = new CompanyRecruitmentViewModel()
+                {
+                    Id = recruitment.Id,
+                    Name = recruitment.Name,
+                    StartDay = recruitment.DateCreated,
+                    EndDate = recruitment.ExpirationDate,
+                    Salary = recruitment.Salary,
+                    RecruitmentBranches = new List<string>()
+                };
+                var branches = await _context.BranchRecruitments.Where(x => x.RecruimentId == recruitment.Id).ToListAsync();
+                foreach (var item in branches)
+                {
+                    var branch = await _context.Branches.FindAsync(item.BranchId);
+                    companyRecruitmentVM.RecruitmentBranches.Add(branch.City);
+                }
+                companyRecruitmentVMs.Add(companyRecruitmentVM);
+            }
+            companyInforVM.CompanyRecruitments = companyRecruitmentVMs;
             return new ApiSuccessResult<CompanyInformationViewModel>(companyInforVM);
         }
 
@@ -539,8 +577,16 @@ namespace Application.Catalog
             foreach (var item in careerRecruitment)
             {
                 var career = await _context.Careers.FindAsync(item.CareerId);
-                recruitmentVM.Branches.Add(career.Name);
+                recruitmentVM.Careers.Add(career.Name);
             }
+            var comments = await this.GetCommentRecruitment(id);
+            recruitmentVM.Comments = comments.ResultObj;
+
+            var information = await _context.CompanyInformations.FindAsync(recruitment.CompanyId);
+            recruitmentVM.CompanyName = information.Name;
+            recruitmentVM.CompanyId = information.UserId;
+            var avatar = await _context.CompanyAvatars.FirstOrDefaultAsync(x => x.CompanyId == recruitment.CompanyId);
+            recruitmentVM.AvatarPath = avatar.ImagePath;
 
             return new ApiSuccessResult<RecruitmentViewModel>(recruitmentVM);
         }
@@ -744,6 +790,30 @@ namespace Application.Catalog
             var branchVM = branches.Select(branch => _mapper.Map<BranchViewModel>(branch)).OrderBy(x => x.City).ToList();
             return branchVM;
 
+        }
+
+        public async Task<ApiResult<bool>> UpdateRecruitmentName(UpdateRecruitmentNameRequest request)
+        {
+            var recruitment = await _context.Recruitments.FindAsync(request.Id);
+            if (recruitment == null)
+            {
+                return new ApiErrorResult<bool>("Recruitment doesn't exist");
+            }
+            recruitment.Name = request.Name;
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>(true);
+        }
+
+        public async Task<ApiResult<bool>> UpdateRecruitmentSalary(UpdateSalaryRecruitment request)
+        {
+            var recruitment = await _context.Recruitments.FindAsync(request.Id);
+            if (recruitment == null)
+            {
+                return new ApiErrorResult<bool>("Recruitment doesn't exist");
+            }
+            recruitment.Salary = request.Salary;
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>(true);
         }
     }
 }

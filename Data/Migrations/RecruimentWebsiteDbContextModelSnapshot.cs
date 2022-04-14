@@ -15,8 +15,8 @@ namespace Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("ProductVersion", "3.1.23")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Data.Entities.AppRole", b =>
@@ -30,8 +30,8 @@ namespace Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -46,24 +46,24 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("71b20899-4673-47f7-84fb-40fe7e10d137"),
-                            ConcurrencyStamp = "cea14a8d-678d-45ce-9036-3553cee20c50",
+                            Id = new Guid("65272a1f-fa97-4d8c-bf8f-2754f55ed9f8"),
+                            ConcurrencyStamp = "fda77e60-c267-4252-ba3f-2a6d735690ee",
                             Description = "Company role",
                             Name = "company",
                             NormalizedName = "company"
                         },
                         new
                         {
-                            Id = new Guid("05ddc91e-18ae-4ed6-b804-36b75e50d880"),
-                            ConcurrencyStamp = "71871563-1d74-421d-80db-a4026441a188",
+                            Id = new Guid("f7cde378-6cff-4a68-81ba-34675d108a5c"),
+                            ConcurrencyStamp = "9913bba0-8c62-4e89-abb1-fb4494223da8",
                             Description = "User role",
                             Name = "user",
                             NormalizedName = "user"
                         },
                         new
                         {
-                            Id = new Guid("5ca85098-3392-4e71-b85c-fa00171d1def"),
-                            ConcurrencyStamp = "a2e2d531-f163-4c32-8cd9-ee32e59796ad",
+                            Id = new Guid("a380ed16-a9c7-4918-82e8-c676baede1d1"),
+                            ConcurrencyStamp = "0d405517-c20f-4a1d-a66c-ddaa43ef5311",
                             Description = "Admin role",
                             Name = "admin",
                             NormalizedName = "admin"
@@ -133,17 +133,18 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("42560043-fbe2-4520-a7d1-86c5854ea59e"),
+                            Id = new Guid("a747074e-8a93-471f-a542-21d3fea814a5"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "75d9b258-821a-4adb-8408-f6bce8a867de",
-                            DateCreated = new DateTime(2022, 4, 1, 15, 26, 50, 239, DateTimeKind.Local).AddTicks(1991),
+                            ConcurrencyStamp = "72b4da9f-d81f-4a3b-9a3b-5beffd0c5e0c",
+                            DateCreated = new DateTime(2022, 4, 9, 13, 16, 55, 22, DateTimeKind.Local).AddTicks(911),
                             Email = "hoangthanh01022000@gmail.com",
                             EmailConfirmed = true,
                             IsSave = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "hoangthanh01022000@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHn3TojVYRXeVsDJFMRvOMVuWHiLz6LL8KNp0pdrDpCHe5wT7SJsKcOQXKtDHJu5uA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPXd7r/Q25a96mw2Fy4bME/3klJxqd51tlStcRXuwA+w8iMcpTiKwjXU9SUzenTQrQ==",
+                            PhoneNumber = "11111",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -239,7 +240,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 4, 1, 15, 26, 50, 181, DateTimeKind.Local).AddTicks(2862));
+                        .HasDefaultValue(new DateTime(2022, 4, 9, 13, 16, 54, 965, DateTimeKind.Local).AddTicks(6948));
 
                     b.Property<string>("Performer")
                         .IsRequired()
@@ -447,7 +448,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 4, 1, 15, 26, 50, 203, DateTimeKind.Local).AddTicks(6042));
+                        .HasDefaultValue(new DateTime(2022, 4, 9, 13, 16, 54, 987, DateTimeKind.Local).AddTicks(1547));
 
                     b.Property<string>("FilePath")
                         .IsRequired()
@@ -536,7 +537,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 4, 1, 15, 26, 50, 207, DateTimeKind.Local).AddTicks(9790));
+                        .HasDefaultValue(new DateTime(2022, 4, 9, 13, 16, 54, 992, DateTimeKind.Local).AddTicks(6958));
 
                     b.HasKey("Id");
 
@@ -602,8 +603,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId")
-                        .IsUnique();
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Recruitments");
                 });
@@ -751,8 +751,8 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("42560043-fbe2-4520-a7d1-86c5854ea59e"),
-                            RoleId = new Guid("5ca85098-3392-4e71-b85c-fa00171d1def")
+                            UserId = new Guid("a747074e-8a93-471f-a542-21d3fea814a5"),
+                            RoleId = new Guid("a380ed16-a9c7-4918-82e8-c676baede1d1")
                         });
                 });
 
@@ -789,10 +789,6 @@ namespace Data.Migrations
                         .HasForeignKey("RecruimentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Recruitment");
                 });
 
             modelBuilder.Entity("Data.Entities.CareerRecruitment", b =>
@@ -808,10 +804,6 @@ namespace Data.Migrations
                         .HasForeignKey("RecruimentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Career");
-
-                    b.Navigation("Recruitment");
                 });
 
             modelBuilder.Entity("Data.Entities.Chat", b =>
@@ -827,10 +819,6 @@ namespace Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("CompanyInformation");
-
-                    b.Navigation("UserInformation");
                 });
 
             modelBuilder.Entity("Data.Entities.Comment", b =>
@@ -846,10 +834,6 @@ namespace Data.Migrations
                         .HasForeignKey("RecruimentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("AppUser");
-
-                    b.Navigation("Recruitment");
                 });
 
             modelBuilder.Entity("Data.Entities.CompanyAvatar", b =>
@@ -859,8 +843,6 @@ namespace Data.Migrations
                         .HasForeignKey("Data.Entities.CompanyAvatar", "CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CompanyInformation");
                 });
 
             modelBuilder.Entity("Data.Entities.CompanyBranch", b =>
@@ -876,10 +858,6 @@ namespace Data.Migrations
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("CompanyInformation");
                 });
 
             modelBuilder.Entity("Data.Entities.CompanyCoverImage", b =>
@@ -889,8 +867,6 @@ namespace Data.Migrations
                         .HasForeignKey("Data.Entities.CompanyCoverImage", "CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CompanyInformation");
                 });
 
             modelBuilder.Entity("Data.Entities.CompanyImage", b =>
@@ -900,8 +876,6 @@ namespace Data.Migrations
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CompanyInformation");
                 });
 
             modelBuilder.Entity("Data.Entities.CompanyInformation", b =>
@@ -911,8 +885,6 @@ namespace Data.Migrations
                         .HasForeignKey("Data.Entities.CompanyInformation", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("Data.Entities.CurriculumVitae", b =>
@@ -928,10 +900,6 @@ namespace Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Recruitment");
-
-                    b.Navigation("UserInformation");
                 });
 
             modelBuilder.Entity("Data.Entities.Follow", b =>
@@ -947,10 +915,6 @@ namespace Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("CompanyInformation");
-
-                    b.Navigation("UserInformation");
                 });
 
             modelBuilder.Entity("Data.Entities.Notification", b =>
@@ -960,19 +924,15 @@ namespace Data.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("Data.Entities.Recruitment", b =>
                 {
                     b.HasOne("Data.Entities.CompanyInformation", "CompanyInformation")
-                        .WithOne("Recruitment")
-                        .HasForeignKey("Data.Entities.Recruitment", "CompanyId")
+                        .WithMany("Recruitments")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CompanyInformation");
                 });
 
             modelBuilder.Entity("Data.Entities.UserAvatar", b =>
@@ -982,8 +942,6 @@ namespace Data.Migrations
                         .HasForeignKey("Data.Entities.UserAvatar", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("UserInformation");
                 });
 
             modelBuilder.Entity("Data.Entities.UserInformation", b =>
@@ -993,70 +951,6 @@ namespace Data.Migrations
                         .HasForeignKey("Data.Entities.UserInformation", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AppUser");
-                });
-
-            modelBuilder.Entity("Data.Entities.AppUser", b =>
-                {
-                    b.Navigation("Comments");
-
-                    b.Navigation("CompanyInformation");
-
-                    b.Navigation("Notifications");
-
-                    b.Navigation("UserInformation");
-                });
-
-            modelBuilder.Entity("Data.Entities.Branch", b =>
-                {
-                    b.Navigation("BranchRecruiments");
-
-                    b.Navigation("CompanyBranches");
-                });
-
-            modelBuilder.Entity("Data.Entities.Career", b =>
-                {
-                    b.Navigation("CareerRecruitments");
-                });
-
-            modelBuilder.Entity("Data.Entities.CompanyInformation", b =>
-                {
-                    b.Navigation("Chats");
-
-                    b.Navigation("CompanyAvatar");
-
-                    b.Navigation("CompanyBranches");
-
-                    b.Navigation("CompanyCoverImage");
-
-                    b.Navigation("CompanyImages");
-
-                    b.Navigation("Follows");
-
-                    b.Navigation("Recruitment");
-                });
-
-            modelBuilder.Entity("Data.Entities.Recruitment", b =>
-                {
-                    b.Navigation("BranchRecruiments");
-
-                    b.Navigation("CareerRecruitments");
-
-                    b.Navigation("Comments");
-
-                    b.Navigation("CurriculumVitaes");
-                });
-
-            modelBuilder.Entity("Data.Entities.UserInformation", b =>
-                {
-                    b.Navigation("Chats");
-
-                    b.Navigation("CurriculumVitaes");
-
-                    b.Navigation("Follows");
-
-                    b.Navigation("UserAvatar");
                 });
 #pragma warning restore 612, 618
         }
