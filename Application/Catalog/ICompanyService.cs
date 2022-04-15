@@ -16,7 +16,14 @@ namespace Application.Catalog
         Task<ApiResult<CompanyCoverImageViewModel>> GetCompanyCoverImage(Guid companyId);
         Task<ApiResult<List<CompanyImagesViewModel>>> GetAllImages(GetCompanyImagesRequest request);
         Task<ApiResult<List<CompanyBranchViewModel>>> GetCompanyBranch(Guid companyId);
+        Task<ApiResult<List<ListCompanyRecruitment>>> GetListCompanyRecruitment(Guid companyId);
+        Task<ApiResult<RecruitmentViewModel>> GetRecruitmentById(int id);
+        Task<ApiResult<List<CommentViewModel>>> GetCommentRecruitment(int id);
         Task<List<BranchViewModel>> GetBranchesNotExist(Guid companyId);
+        Task<List<CareerViewModel>> GetCareersRecruitmentNotExist(int id);
+        Task<List<CareerViewModel>> GetCareersRecruitmentExist(int id);
+        Task<List<BranchViewModel>> GetBranchesRecruitmentNotExist(int id);
+        Task<List<BranchViewModel>> GetBranchesRecruitmentExist(int id);
 
         Task<ApiResult<bool>> CreateCoverImage(CreateCoverImageRequest request);
         Task<ApiResult<bool>> CreateCompanyImages(CreateCompanyImageRequest request);
@@ -32,21 +39,18 @@ namespace Application.Catalog
         Task<ApiResult<bool>> CreateNewRecruitment(RecruitmentCreateRequest request);
         Task<ApiResult<bool>> UpdateRecruitmentName(UpdateRecruitmentNameRequest request);
         Task<ApiResult<bool>> UpdateRecruitmentSalary(UpdateSalaryRecruitment request);
-        Task<ApiResult<RecruitmentViewModel>> GetRecruitmentById(int id);
-        Task<ApiResult<List<CommentViewModel>>> GetCommentRecruitment(int id);
-
-
-
-        // chưa chắc xài
-
-        Task<ApiResult<bool>> DeleteCoverImage(int id);
-
-
-
-        //chưa test
         Task<ApiResult<bool>> AddBranchToRecruitment(int recruimentId, int branchId);
         Task<ApiResult<bool>> AddCareerToRecruitment(int recruimentId, int careerId);
+        Task<ApiResult<bool>> RemoveCareerFromRecruitment(int recruimentId, int careerId);
+        Task<ApiResult<bool>> RemoveBranchFromRecruitment(int recruimentId, int branchId);
+
+
         Task<ApiResult<bool>> Comment(CommentRequest request);
+
+        // chưa chắc xài
+        Task<ApiResult<bool>> DeleteCoverImage(int id);
+        //chưa test
+
         Task<ApiResult<PageResult<RecruitmentPagingResult>>> GetAllRecruitmentPaging(GetRecruitmentRequest request);
 
     }

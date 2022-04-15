@@ -141,7 +141,7 @@ namespace Application.Catalog
                 RecruimentId = request.RecruitmentId,
                 Content = request.Content,
                 DateCreated = DateTime.Now,
-                SubcommentId = request.SubCommentId.ToString()
+                SubcommentId = request.SubCommentId
             };
             await _context.Comments.AddAsync(comment);
             var result = await _context.SaveChangesAsync();
@@ -434,16 +434,16 @@ namespace Application.Catalog
                     var avatar = await _context.UserAvatars.FirstOrDefaultAsync(x => x.UserId == comment.AccountId);
                     if (comment.SubcommentId != null)
                     {
-                        var commentVM = new CommentViewModel()
+                        var childCommentVM = new ChildCommentViewModel()
                         {
                             Id = comment.Id,
                             Content = comment.Content,
                             DateCreated = comment.DateCreated,
-                            SubCommentId = int.Parse(comment.SubcommentId),
                             Name = informationUser.FirstName + " " + informationUser.LastName,
                             AvatarPath = avatar.ImagePath
                         };
-                        commentVMs.Add(commentVM);
+                        var subComment = commentVMs.FirstOrDefault(x => x.Id == int.Parse(comment.SubcommentId));
+                        subComment.ChildComments.Add(childCommentVM);
                     }
                     else
                     {
@@ -452,7 +452,7 @@ namespace Application.Catalog
                             Id = comment.Id,
                             Content = comment.Content,
                             DateCreated = comment.DateCreated,
-                            SubCommentId = 0,
+                            ChildComments = new List<ChildCommentViewModel>(),
                             Name = informationUser.FirstName + " " + informationUser.LastName,
                             AvatarPath = avatar.ImagePath
                         };
@@ -463,15 +463,34 @@ namespace Application.Catalog
                 else
                 {
                     var avatar = await _context.CompanyAvatars.FirstOrDefaultAsync(x => x.CompanyId == comment.AccountId);
-                    var commentVM = new CommentViewModel()
+                    if (comment.SubcommentId != null)
                     {
-                        Content = comment.Content,
-                        DateCreated = comment.DateCreated,
-                        SubCommentId = int.Parse(comment.SubcommentId),
-                        Name = informationCompany.Name,
-                        AvatarPath = avatar.ImagePath
-                    };
-                    commentVMs.Add(commentVM);
+
+                        var childCommentVM = new ChildCommentViewModel()
+                        {
+                            Id = comment.Id,
+                            Content = comment.Content,
+                            DateCreated = comment.DateCreated,
+                            Name = informationCompany.Name,
+                            AvatarPath = avatar.ImagePath
+                        };
+                        var subComment = commentVMs.FirstOrDefault(x => x.Id == int.Parse(comment.SubcommentId));
+                        subComment.ChildComments.Add(childCommentVM);
+                    }
+                    else
+                    {
+                        var commentVM = new CommentViewModel()
+                        {
+                            Id = comment.Id,
+                            Content = comment.Content,
+                            DateCreated = comment.DateCreated,
+                            ChildComments = new List<ChildCommentViewModel>(),
+                            Name = informationCompany.Name,
+                            AvatarPath = avatar.ImagePath
+                        };
+                        commentVMs.Add(commentVM);
+                    }
+
                 }
             }
             return new ApiSuccessResult<List<CommentViewModel>>(commentVMs);
@@ -580,7 +599,16 @@ namespace Application.Catalog
                 recruitmentVM.Careers.Add(career.Name);
             }
             var comments = await this.GetCommentRecruitment(id);
-            recruitmentVM.Comments = comments.ResultObj;
+            if (comments.ResultObj == null)
+            {
+                recruitmentVM.Comments = new List<CommentViewModel>();
+            }
+            else
+            {
+                recruitmentVM.Comments = comments.ResultObj;
+
+            }
+
 
             var information = await _context.CompanyInformations.FindAsync(recruitment.CompanyId);
             recruitmentVM.CompanyName = information.Name;
@@ -814,6 +842,114 @@ namespace Application.Catalog
             recruitment.Salary = request.Salary;
             await _context.SaveChangesAsync();
             return new ApiSuccessResult<bool>(true);
+        }
+
+        public async Task<ApiResult<List<ListCompanyRecruitment>>> GetListCompanyRecruitment(Guid companyId)
+        {
+            var companyRecruitments = await _context.Recruitments.Where(x => x.CompanyId == companyId).ToListAsync();
+            var listCompanyRecruitment = new List<ListCompanyRecruitment>();
+            foreach (var recruitment in companyRecruitments)
+            {
+                var companyRecruitment = _mapper.Map<ListCompanyRecruitment>(recruitment);
+                companyRecruitment.Branches = new List<string>();
+                companyRecruitment.Careers = new List<string>();
+                var branchRecruitment = await _context.BranchRecruitments.Where(x => x.RecruimentId == recruitment.Id).ToListAsync();
+                foreach (var item in branchRecruitment)
+                {
+                    var branch = await _context.Branches.FindAsync(item.BranchId);
+                    companyRecruitment.Branches.Add(branch.City);
+                }
+                var careerRecruitment = await _context.CareerRecruitments.Where(x => x.RecruimentId == recruitment.Id).ToListAsync();
+                foreach (var item in careerRecruitment)
+                {
+                    var career = await _context.Careers.FindAsync(item.CareerId);
+                    companyRecruitment.Careers.Add(career.Name);
+                }
+                listCompanyRecruitment.Add(companyRecruitment);
+            }
+            return new ApiSuccessResult<List<ListCompanyRecruitment>>(listCompanyRecruitment);
+
+        }
+
+        public async Task<List<CareerViewModel>> GetCareersRecruitmentNotExist(int id)
+        {
+            var careers = await _context.Careers.ToListAsync();
+            var careerExists = await _context.CareerRecruitments.Where(x => x.RecruimentId == id).ToListAsync();
+            foreach (var item in careerExists)
+            {
+                var career = await _context.Careers.FindAsync(item.CareerId);
+                careers.Remove(career);
+
+            }
+            var careerVM = careers.Select(career => _mapper.Map<CareerViewModel>(career)).OrderBy(x => x.Name).ToList();
+            return careerVM;
+        }
+
+        public async Task<List<BranchViewModel>> GetBranchesRecruitmentNotExist(int id)
+        {
+            var branches = await _context.Branches.ToListAsync();
+            var branchExists = await _context.BranchRecruitments.Where(x => x.RecruimentId == id).ToListAsync();
+            foreach (var item in branchExists)
+            {
+                var branch = await _context.Branches.FindAsync(item.BranchId);
+                branches.Remove(branch);
+
+            }
+            var branchVM = branches.Select(branch => _mapper.Map<BranchViewModel>(branch)).OrderBy(x => x.City).ToList();
+            return branchVM;
+
+        }
+
+        public async Task<ApiResult<bool>> RemoveCareerFromRecruitment(int recruimentId, int careerId)
+        {
+            var careerRecruitment = await _context.CareerRecruitments.FirstOrDefaultAsync(x => x.RecruimentId == recruimentId && x.CareerId == careerId);
+            if (careerRecruitment == null)
+            {
+                return new ApiErrorResult<bool>("Nghề này chưa được thêm, vui lòng kiểm tra lại");
+            }
+            _context.CareerRecruitments.Remove(careerRecruitment);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>(true);
+        }
+
+        public async Task<ApiResult<bool>> RemoveBranchFromRecruitment(int recruimentId, int branchId)
+        {
+            var branchRecruitment = await _context.BranchRecruitments.FirstOrDefaultAsync(x => x.RecruimentId == recruimentId && x.BranchId == branchId);
+            if (branchRecruitment == null)
+            {
+                return new ApiErrorResult<bool>("Việc làm chưa có chi nhánh ở thành phố này, vui lòng kiểm tra lại");
+            }
+            _context.BranchRecruitments.Remove(branchRecruitment);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>(true);
+        }
+
+        public async Task<List<CareerViewModel>> GetCareersRecruitmentExist(int id)
+        {
+            var careerList = new List<Career>();
+            var careerExists = await _context.CareerRecruitments.Where(x => x.RecruimentId == id).ToListAsync();
+            foreach (var item in careerExists)
+            {
+                var career = await _context.Careers.FindAsync(item.CareerId);
+                careerList.Add(career);
+
+            }
+            var careerVM = careerList.Select(career => _mapper.Map<CareerViewModel>(career)).OrderBy(x => x.Name).ToList();
+            return careerVM;
+        }
+
+        public async Task<List<BranchViewModel>> GetBranchesRecruitmentExist(int id)
+        {
+            var branches = new List<Branch>();
+            var branchExists = await _context.BranchRecruitments.Where(x => x.RecruimentId == id).ToListAsync();
+            foreach (var item in branchExists)
+            {
+                var branch = await _context.Branches.FindAsync(item.BranchId);
+                branches.Add(branch);
+
+            }
+            var branchVM = branches.Select(branch => _mapper.Map<BranchViewModel>(branch)).OrderBy(x => x.City).ToList();
+            return branchVM;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace ViewModel.Catalog.Company
         public Guid AccountId { get; set; }
         public int RecruitmentId { get; set; }
         public string Content { get; set; }
-        public int SubCommentId { get; set; }
+        public string SubCommentId { get; set; }
         public string Role { get; set; }
     }
 }

@@ -72,13 +72,42 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetAllCompanyRecruitment")]
+        public async Task<IActionResult> GetAllCompanyRecruitment(Guid companyId)
+        {
+            var result = await _companyService.GetListCompanyRecruitment(companyId);
+            return Ok(result);
+        }
         [HttpGet("GetRecruitmentById")]
         public async Task<IActionResult> GetRecruitmentById(int id)
         {
             var result = await _companyService.GetRecruitmentById(id);
             return Ok(result);
         }
-
+        [HttpGet("GetCareerRecruitmentNotExist")]
+        public async Task<IActionResult> GetCareerRecruitmentNotExist(int id)
+        {
+            var result = await _companyService.GetCareersRecruitmentNotExist(id);
+            return Ok(result);
+        }
+        [HttpGet("GetCareerRecruitmentExist")]
+        public async Task<IActionResult> GetCareerRecruitmentExist(int id)
+        {
+            var result = await _companyService.GetCareersRecruitmentExist(id);
+            return Ok(result);
+        }
+        [HttpGet("GetBranchesRecruitmentNotExist")]
+        public async Task<IActionResult> GetBranchesRecruitmentNotExist(int id)
+        {
+            var result = await _companyService.GetBranchesRecruitmentNotExist(id);
+            return Ok(result);
+        }
+        [HttpGet("GetBranchesRecruitmentExist")]
+        public async Task<IActionResult> GetBranchesRecruitmentExist(int id)
+        {
+            var result = await _companyService.GetBranchesRecruitmentExist(id);
+            return Ok(result);
+        }
 
         [HttpPost("CreateCompanyImages")]
         [Consumes("multipart/form-data")]
@@ -134,11 +163,11 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
         [HttpPost("AddCareerToRecruitment")]
-        public async Task<IActionResult> AddCareerToRecruitment(int recruimentId, int branchId)
+        public async Task<IActionResult> AddCareerToRecruitment(int recruimentId, int careerId)
         {
 
 
-            var result = await _companyService.AddCareerToRecruitment(recruimentId, branchId);
+            var result = await _companyService.AddCareerToRecruitment(recruimentId, careerId);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result.Message);
@@ -166,9 +195,6 @@ namespace BackendApi.Controllers
             }
             return Ok(result);
         }
-
-
-
 
         [HttpPut("UpdateCompanyName")]
         public async Task<IActionResult> UpdateCompanyName([FromBody] CompanyNameUpdateRequest request)
@@ -302,6 +328,18 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
 
+        [HttpDelete("RemoveBranchFromRecruitment")]
+        public async Task<IActionResult> RemoveBranchFromRecruitment(int recruitmentId, int branchId)
+        {
+            var result = await _companyService.RemoveBranchFromRecruitment(recruitmentId, branchId);
+            return Ok(result);
+        }
 
+        [HttpDelete("RemoveCareerFromRecruitment")]
+        public async Task<IActionResult> RemoveCareerFromRecruitment(int recruitmentId, int careerId)
+        {
+            var result = await _companyService.RemoveCareerFromRecruitment(recruitmentId, careerId);
+            return Ok(result);
+        }
     }
 }

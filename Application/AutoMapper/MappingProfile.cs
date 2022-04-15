@@ -52,9 +52,15 @@ namespace Application.AutoMapper
             CreateMap<Branch, BranchViewModel>();
             CreateMap<BranchViewModel, Branch>();
 
+            // company carreer
+            CreateMap<Career, CareerViewModel>();
+            CreateMap<CareerViewModel, Career>();
+
             //recruitment
             CreateMap<Recruitment, RecruitmentViewModel>();
             CreateMap<RecruitmentViewModel, Recruitment>();
+            CreateMap<Recruitment, ListCompanyRecruitment>();
+            CreateMap<ListCompanyRecruitment, Recruitment>();
         }
     }
 }
