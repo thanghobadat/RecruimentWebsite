@@ -2,8 +2,10 @@
 using AutoMapper;
 using Data.EF;
 using Data.Entities;
+using MailKit.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,12 +24,14 @@ namespace Application.Catalog
         private readonly RecruimentWebsiteDbContext _context;
         private readonly IStorageService _storageService;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
         public CompanyService(RecruimentWebsiteDbContext context, IStorageService storageService,
-            IMapper mapper)
+            IMapper mapper, IUserService userService)
         {
             _context = context;
             _storageService = storageService;
             _mapper = mapper;
+            _userService = userService;
         }
 
         public async Task<ApiResult<bool>> AddBranch(AddBranchViewModel request)
@@ -950,6 +954,119 @@ namespace Application.Catalog
             }
             var branchVM = branches.Select(branch => _mapper.Map<BranchViewModel>(branch)).OrderBy(x => x.City).ToList();
             return branchVM;
+        }
+
+        public async Task<ApiResult<bool>> ExtendRecruitment(ExtendRecruitmentRequest request)
+        {
+            var recruitment = await _context.Recruitments.FindAsync(request.Id);
+            recruitment.ExpirationDate = request.NewExpirationDate;
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>(true);
+        }
+
+        public async Task<ApiResult<List<CVViewModel>>> GetAllCV(int id)
+        {
+            var CVViewModel = new List<CVViewModel>();
+            var CVs = await _context.CurriculumVitaes.Where(x => x.RecruimentId == id).OrderBy(x => x.DateCreated).ToListAsync();
+            foreach (var item in CVs)
+            {
+                var userInfor = await _userService.GetUserInformation(item.UserId);
+                var recruitment = await _context.Recruitments.FindAsync(item.RecruimentId);
+                var CVVM = new CVViewModel()
+                {
+                    DateSubit = item.DateCreated,
+                    FilePath = item.FilePath,
+                    User = userInfor.ResultObj,
+                    RecruitmentId = item.RecruimentId,
+                    UserId = item.UserId,
+                    RecruitmentName = recruitment.Name
+                };
+                CVViewModel.Add(CVVM);
+            }
+            return new ApiSuccessResult<List<CVViewModel>>(CVViewModel);
+
+        }
+
+        public async Task<ApiResult<bool>> AcceptCV(int recruitmentId, Guid userId)
+        {
+            var CV = await _context.CurriculumVitaes.FirstOrDefaultAsync(x => x.UserId == userId && x.RecruimentId == recruitmentId);
+            if (CV == null)
+            {
+                return new ApiErrorResult<bool>("CV này hiện không tồn tại, vui lòng kiểm tra lại");
+            }
+
+            _context.CurriculumVitaes.Remove(CV);
+            var recruitment = await _context.Recruitments.FindAsync(recruitmentId);
+            var company = await _context.CompanyInformations.FindAsync(recruitment.CompanyId);
+            var noti = new Notification()
+            {
+                AccountId = userId,
+                DateCreated = DateTime.Now,
+                Content = company.Name + " vừa chấp thuận CV của bạn, vui lòng liên hệ trực tiếp để được giải quyết!"
+            };
+            _context.Notifications.Add(noti);
+            await _context.SaveChangesAsync();
+            var user = await _userService.GetUserInformation(userId);
+            string to = user.ResultObj.Email;
+            string subject = "Chúc mừng bạn đã ứng tuyển thành công";
+            string body = "Bạn đã được công ty " + company.Name + " đồng ý ứng tuyển, vui lòng vào website liên hệ với công ty.";
+
+            var mailSetting = await _context.MailSettings.FirstOrDefaultAsync();
+
+            var email = new MimeMessage();
+
+            email.Sender = new MailboxAddress(mailSetting.DisplayName, mailSetting.Email);
+            email.From.Add(new MailboxAddress(mailSetting.DisplayName, mailSetting.Email));
+            email.To.Add(new MailboxAddress(to, to));
+            email.Subject = subject;
+            var builder = new BodyBuilder();
+            builder.HtmlBody = body;
+            email.Body = builder.ToMessageBody();
+            using var smtp = new MailKit.Net.Smtp.SmtpClient();
+            try
+            {
+                //kết nối máy chủ
+                await smtp.ConnectAsync(mailSetting.Host, mailSetting.Port, SecureSocketOptions.StartTls);
+                // xác thực
+                await smtp.AuthenticateAsync(mailSetting.Email, mailSetting.Password);
+                //gởi
+                await smtp.SendAsync(email);
+            }
+            catch (Exception e)
+            {
+                return new ApiErrorResult<bool>("there was an error when sending mail but still created the idea. Error: " + e.Message);
+            }
+            smtp.Disconnect(true);
+
+            return new ApiSuccessResult<bool>(true);
+        }
+
+        public async Task<ApiResult<bool>> RefuseCV(int recruitmentId, Guid userId)
+        {
+            var CV = await _context.CurriculumVitaes.FirstOrDefaultAsync(x => x.UserId == userId && x.RecruimentId == recruitmentId);
+            if (CV == null)
+            {
+                return new ApiErrorResult<bool>("CV này hiện không tồn tại, vui lòng kiểm tra lại");
+            }
+
+            _context.CurriculumVitaes.Remove(CV);
+            var recruitment = await _context.Recruitments.FindAsync(recruitmentId);
+            var company = await _context.CompanyInformations.FindAsync(recruitment.CompanyId);
+            var noti = new Notification()
+            {
+                AccountId = userId,
+                DateCreated = DateTime.Now,
+                Content = company.Name + " vừa chấp thuận CV của bạn, vui lòng liên hệ trực tiếp để được giải quyết!"
+            };
+            _context.Notifications.Add(noti);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>(true);
+        }
+
+        public DownloadFileViewModel DownloadCV(string filePath)
+        {
+            var fileDownload = _storageService.DownloadZip(filePath);
+            return fileDownload;
         }
     }
 }

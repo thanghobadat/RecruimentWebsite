@@ -43,9 +43,13 @@ namespace Application.Catalog
         Task<ApiResult<bool>> AddCareerToRecruitment(int recruimentId, int careerId);
         Task<ApiResult<bool>> RemoveCareerFromRecruitment(int recruimentId, int careerId);
         Task<ApiResult<bool>> RemoveBranchFromRecruitment(int recruimentId, int branchId);
-
-
+        Task<ApiResult<bool>> ExtendRecruitment(ExtendRecruitmentRequest request);
         Task<ApiResult<bool>> Comment(CommentRequest request);
+        Task<ApiResult<List<CVViewModel>>> GetAllCV(int id);
+        Task<ApiResult<bool>> AcceptCV(int recruitmentId, Guid userId);
+        Task<ApiResult<bool>> RefuseCV(int recruitmentId, Guid userId);
+        DownloadFileViewModel DownloadCV(string filePath);
+
 
         // chưa chắc xài
         Task<ApiResult<bool>> DeleteCoverImage(int id);

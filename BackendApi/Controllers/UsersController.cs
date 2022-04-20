@@ -46,15 +46,19 @@ namespace BackendApi.Controllers
             }
             return Ok(result);
         }
+        [HttpPost("SubmitCV")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> FollowCompany([FromForm] SubmitCVRequest request)
+        {
+            var result = await _userService.SubmitCV(request);
+            return Ok(result);
+        }
 
         [HttpPut("UpdateUserInformation")]
         public async Task<IActionResult> UpdateUserInformation([FromBody] UserUpdateRequest request)
         {
             var result = await _userService.UpdateUserInformation(request);
-            if (!result.IsSuccessed)
-            {
-                return BadRequest(result);
-            }
+
             return Ok(result);
         }
 
@@ -83,10 +87,6 @@ namespace BackendApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _userService.UpdateUserAvatar(id, thumnailImage);
-            if (!result.IsSuccessed)
-            {
-                return BadRequest(result);
-            }
             return Ok(result);
         }
     }

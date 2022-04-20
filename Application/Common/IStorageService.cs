@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using ViewModel.Catalog.Company;
 
 namespace Application.Common
 {
@@ -18,5 +19,6 @@ namespace Application.Common
         Task DeleteImagesAsync(string fileName);
         Task DeleteCVAsync(string fileName);
         Task DeleteCoverImageAsync(string fileName);
+        DownloadFileViewModel DownloadZip(string fileName);
     }
 }

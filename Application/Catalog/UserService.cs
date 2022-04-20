@@ -178,12 +178,12 @@ namespace Application.Catalog
             var user = await _context.UserInformations.FindAsync(request.UserId);
             if (user == null)
             {
-                return new ApiErrorResult<bool>("User doesn't exist");
+                return new ApiErrorResult<bool>("tài khoản không tồn tại, vui lòng thử lại");
             }
             var recruitment = await _context.Recruitments.FindAsync(request.RecruitmentId);
-            if (recruitment == null)
+            if (DateTime.Now > recruitment.ExpirationDate)
             {
-                return new ApiErrorResult<bool>("User doesn't exist");
+                return new ApiErrorResult<bool>("Đã hết hạn úng tuyển, vui lòng quay lại sau!");
             }
             var imageIndex = request.File.FileName.LastIndexOf(".");
             var imageType = request.File.FileName.Substring(imageIndex + 1);
@@ -201,13 +201,13 @@ namespace Application.Catalog
                 var result = await _context.SaveChangesAsync();
                 if (result == 0)
                 {
-                    return new ApiErrorResult<bool>("An error occured, please re enter");
+                    return new ApiErrorResult<bool>("Có lỗi xảy ra, vui lòng thử lại");
                 }
 
                 var noti = new Notification()
                 {
                     AccountId = recruitment.CompanyId,
-                    Content = user.FirstName + " " + user.LastName + " just applied, please check",
+                    Content = user.FirstName + " " + user.LastName + " vừa nộp CV vào bài tuyển dụng " + recruitment.Name,
                     DateCreated = DateTime.Now
                 };
 
@@ -217,7 +217,7 @@ namespace Application.Catalog
             }
 
 
-            return new ApiErrorResult<bool>("CVs only accept pdf files");
+            return new ApiErrorResult<bool>("Vui lòng chuyển CV sang file pdf trước khi nộp");
 
         }
 

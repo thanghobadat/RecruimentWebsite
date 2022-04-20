@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
+using ViewModel.Catalog.Company;
 
 namespace Application.Common
 {
@@ -89,6 +91,27 @@ namespace Application.Common
             if (File.Exists(filePath))
             {
                 await Task.Run(() => File.Delete(filePath));
+            }
+        }
+
+        public DownloadFileViewModel DownloadZip(string fileName)
+        {
+            var filePath = Path.Combine(_userContentFolderCV, fileName);
+            var nameFile = string.Concat(Path.GetFileName(filePath), ".zip");
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var achive = new ZipArchive(memoryStream, ZipArchiveMode.Create))
+                {
+                    achive.CreateEntryFromFile(filePath, Path.GetFileName(filePath));
+                }
+                var fileDownload = new DownloadFileViewModel()
+                {
+                    FiltType = "aplication/zip",
+                    ArchiveData = memoryStream.ToArray(),
+                    AchiveName = nameFile
+
+                };
+                return fileDownload;
             }
         }
     }
