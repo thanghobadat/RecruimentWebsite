@@ -61,6 +61,10 @@ namespace Application.AutoMapper
             CreateMap<RecruitmentViewModel, Recruitment>();
             CreateMap<Recruitment, ListCompanyRecruitment>();
             CreateMap<ListCompanyRecruitment, Recruitment>();
+
+            //chat 
+            CreateMap<Chat, ListChatContent>();
+            CreateMap<ListChatContent, Chat>();
         }
     }
 }

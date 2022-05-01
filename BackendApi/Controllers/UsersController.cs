@@ -33,6 +33,12 @@ namespace BackendApi.Controllers
             var result = await _userService.GetUserAvatar(userId);
             return Ok(result);
         }
+        [HttpGet("GetAllUser")]
+        public async Task<IActionResult> GetAllUser()
+        {
+            var result = await _userService.GetAllUser();
+            return Ok(result);
+        }
 
         [HttpPost("FollowCompany")]
         public async Task<IActionResult> FollowCompany(Guid userId, Guid companyId)

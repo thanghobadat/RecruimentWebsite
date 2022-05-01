@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -282,19 +283,26 @@ namespace Application.Catalog
             return new ApiSuccessResult<bool>(true);
         }
 
-        //public async Task<ApiResult<bool>> Comment(CommentRequest request)
-        //{
-        //    var user = await _context.UserInformations.FindAsync(request.AccountId);
-        //    if (user == null)
-        //    {
-        //        return new ApiErrorResult<bool>("User doesn't exist");
-        //    }
+        public async Task<ApiResult<List<AllUserResult>>> GetAllUser()
+        {
+            var results = new List<AllUserResult>();
+            var users = await _userManager.GetUsersInRoleAsync("user");
+            foreach (var user in users)
+            {
+                var infor = await this.GetUserInformation(user.Id);
+                var result = new AllUserResult()
+                {
+                    Id = user.Id,
+                    Name = infor.ResultObj.FirstName + " " + infor.ResultObj.LastName,
+                    Address = infor.ResultObj.Address,
+                    AcademicLevel = infor.ResultObj.AcademicLevel,
+                    AvatarPath = infor.ResultObj.UserAvatar.ImagePath
+                };
+                results.Add(result);
+            }
+            return new ApiSuccessResult<List<AllUserResult>>(results);
+        }
 
-        //    var recruitment = await _context.Recruitments.FindAsync(request.RecruitmentId);
-        //    if (recruitment == null)
-        //    {
-        //        return new ApiErrorResult<bool>("Recruitment doesn't exist");
-        //    }
-        //}
+
     }
 }

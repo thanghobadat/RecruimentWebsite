@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ViewModel.Catalog.User;
 using ViewModel.Common;
@@ -11,6 +12,7 @@ namespace Application.Catalog
 
         Task<ApiResult<UserInformationViewModel>> GetUserInformation(Guid userId);
         Task<ApiResult<UserAvatarViewModel>> GetUserAvatar(Guid userId);
+        Task<ApiResult<List<AllUserResult>>> GetAllUser();
         Task<ApiResult<bool>> UpdateUserInformation(UserUpdateRequest request);
 
         Task<ApiResult<bool>> UpdateUserAvatar(int id, IFormFile thumnailImage);

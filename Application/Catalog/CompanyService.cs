@@ -4,6 +4,7 @@ using Data.EF;
 using Data.Entities;
 using MailKit.Security;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
 using System;
@@ -25,12 +26,14 @@ namespace Application.Catalog
         private readonly IStorageService _storageService;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
+        private readonly UserManager<AppUser> _userManager;
         public CompanyService(RecruimentWebsiteDbContext context, IStorageService storageService,
-            IMapper mapper, IUserService userService)
+            IMapper mapper, IUserService userService, UserManager<AppUser> userManager)
         {
             _context = context;
             _storageService = storageService;
             _mapper = mapper;
+            _userManager = userManager;
             _userService = userService;
         }
 
@@ -326,42 +329,30 @@ namespace Application.Catalog
         {
             var query = await _context.Recruitments.ToListAsync();
 
-            if (!string.IsNullOrEmpty(request.Branch))
+            if (request.CareerId != 0)
             {
                 query.Clear();
-                var branch = await _context.Branches.FirstOrDefaultAsync(x => x.City == request.Branch);
-                var branchRecruitment = _context.BranchRecruitments.Where(x => x.BranchId == branch.Id);
-                foreach (var item in branchRecruitment)
+                var careerrecruitments = await _context.CareerRecruitments.Where(x => x.CareerId == request.CareerId).ToListAsync();
+                foreach (var item in careerrecruitments)
                 {
                     var recruitment = await _context.Recruitments.FindAsync(item.RecruimentId);
                     query.Add(recruitment);
                 }
             }
-            if (!string.IsNullOrEmpty(request.Career))
+            if (request.BranchId != 0)
             {
                 var query1 = query;
                 var query2 = new List<Recruitment>();
-                query.Clear();
-                var career = await _context.Careers.FirstOrDefaultAsync(x => x.Name == request.Career);
-                var careerRecruitment = _context.CareerRecruitments.Where(x => x.CareerId == career.Id);
-                foreach (var item in careerRecruitment)
+                query2.Clear();
+                var branchrecruitments = await _context.BranchRecruitments.Where(x => x.BranchId == request.BranchId).ToListAsync();
+                foreach (var item in branchrecruitments)
                 {
                     var recruitment = await _context.Recruitments.FindAsync(item.RecruimentId);
                     query2.Add(recruitment);
                 }
-                foreach (var item in query2)
-                {
-                    foreach (var recruitment in query1)
-                    {
-                        if (recruitment.Id == item.Id)
-                        {
-                            query.Add(recruitment);
-                            break;
-                        }
-                    }
-                }
-
+                query = query1.Intersect(query2).ToList();
             }
+
             var recruiments = query.AsQueryable();
             if (!string.IsNullOrEmpty(request.Rank))
             {
@@ -373,7 +364,31 @@ namespace Application.Catalog
             }
             if (request.Salary != 0)
             {
-                recruiments = recruiments.Where(x => x.Salary >= request.Salary);
+                if (request.Salary == 1000000)
+                {
+                    recruiments = recruiments.Where(x => x.Salary >= 0 && x.Salary <= request.Salary);
+                }
+                else if (request.Salary == 3000000)
+                {
+                    recruiments = recruiments.Where(x => x.Salary >= 1000000 && x.Salary <= request.Salary);
+                }
+                else if (request.Salary == 8000000)
+                {
+                    recruiments = recruiments.Where(x => x.Salary >= 3000000 && x.Salary <= request.Salary);
+                }
+                else if (request.Salary == 20000000)
+                {
+                    recruiments = recruiments.Where(x => x.Salary >= 8000000 && x.Salary <= request.Salary);
+                }
+                else if (request.Salary == 50000000)
+                {
+                    recruiments = recruiments.Where(x => x.Salary >= 20000000 && x.Salary <= request.Salary);
+                }
+                else if (request.Salary > 50000000)
+                {
+                    recruiments = recruiments.Where(x => x.Salary >= 50000000);
+                }
+
             }
             if (!string.IsNullOrEmpty(request.Education))
             {
@@ -396,15 +411,26 @@ namespace Application.Catalog
                     DateCreated = x.DateCreated,
                     Branches = new List<string>()
                 }).ToList();
-            for (int i = 0; i < recruiments.Count(); i++)
+            int length;
+            if (request.PageSize < recruiments.Count())
             {
-                var infor = await _context.CompanyInformations.FindAsync(recruiments.ElementAt(i).CompanyId);
-                data[i].CompanyName = infor.Name;
+                length = request.PageSize;
+            }
+            else
+            {
+                length = recruiments.Count();
+            }
+            for (int i = 0; i < length; i++)
+            {
+                var infor = await this.GetCompanyInformation(recruiments.ElementAt(i).CompanyId);
+                data[i].CompanyName = infor.ResultObj.Name;
+                data[i].AvatarPath = infor.ResultObj.CompanyAvatar.ImagePath;
+
                 var branchRecruitment = await _context.BranchRecruitments.Where(x => x.RecruimentId == recruiments.ElementAt(i).Id).ToListAsync();
                 foreach (var item in branchRecruitment)
                 {
-                    var branch = await _context.Branches.FindAsync(item.BranchId);
-                    data[i].Branches.Add(branch.City);
+                    //var branch = await _context.Branches.FindAsync(item.BranchId);
+                    data[i].Branches.Add(item.Branch.City);
 
                 }
             }
@@ -850,7 +876,7 @@ namespace Application.Catalog
 
         public async Task<ApiResult<List<ListCompanyRecruitment>>> GetListCompanyRecruitment(Guid companyId)
         {
-            var companyRecruitments = await _context.Recruitments.Where(x => x.CompanyId == companyId).ToListAsync();
+            var companyRecruitments = await _context.Recruitments.Where(x => x.CompanyId == companyId).OrderBy(x => x.ExpirationDate).ToListAsync();
             var listCompanyRecruitment = new List<ListCompanyRecruitment>();
             foreach (var recruitment in companyRecruitments)
             {
@@ -1067,6 +1093,164 @@ namespace Application.Catalog
         {
             var fileDownload = _storageService.DownloadZip(filePath);
             return fileDownload;
+        }
+
+        public async Task<ApiResult<ChatViewModel>> GetAllChat(Guid userId, Guid companyId, string role)
+        {
+            var chats = await _context.Chats.Where(x => x.UserId == userId && x.CompanyId == companyId).OrderBy(x => x.DateCreated).ToListAsync();
+            var chatVM = new ChatViewModel();
+            var data = chats.Select(chat => _mapper.Map<ListChatContent>(chat)).ToList();
+            if (role == "user")
+            {
+                var company = await this.GetCompanyInformation(companyId);
+                chatVM = new ChatViewModel()
+                {
+                    Name = company.ResultObj.Name,
+                    AvatarPath = company.ResultObj.CompanyAvatar.ImagePath,
+                    Content = data
+                };
+            }
+            else
+            {
+                var user = await _userService.GetUserInformation(userId);
+                chatVM = new ChatViewModel()
+                {
+                    Name = user.ResultObj.FirstName + " " + user.ResultObj.LastName,
+                    AvatarPath = user.ResultObj.UserAvatar.ImagePath,
+                    Content = data
+                };
+            }
+            return new ApiSuccessResult<ChatViewModel>(chatVM);
+        }
+
+        public async Task<ApiResult<bool>> Chat(ChatRequest request)
+        {
+
+            var chat = new Chat()
+            {
+                CompanyId = request.CompanyId,
+                UserId = request.UserId,
+                Content = request.Content,
+                Performer = request.Performer,
+                DateCreated = DateTime.Now
+            };
+            _context.Chats.Add(chat);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>(true);
+        }
+
+        public async Task<ApiResult<List<PersonChat>>> GetAllPersonChat(Guid id, string role)
+        {
+            var persons = new List<PersonChat>();
+            var query = await _context.Chats.OrderByDescending(x => x.DateCreated).ToListAsync();
+            //if (role == "user")
+            //{
+            //    query = await _context.Chats.OrderBy(x => x.CompanyId).ToListAsync();
+            //}
+            //else
+            //{
+            //    query = await _context.Chats.OrderBy(x => x.UserId).ToListAsync();
+
+            //}
+            //query = query.OrderByDescending(x => x.DateCreated).ToList();
+            var queryArr = query.ToArray();
+            var chats = new List<Chat>();
+            if (role == "user")
+            {
+                var idExists = new List<Guid>();
+                for (int i = 0; i < queryArr.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        chats.Add(queryArr[i]);
+                        idExists.Add(queryArr[i].CompanyId);
+                    }
+                    else
+                    {
+                        if (!idExists.Any(id => id == queryArr[i].CompanyId))
+                        {
+                            chats.Add(queryArr[i]);
+                            idExists.Add(queryArr[i].CompanyId);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                var idExists = new List<Guid>();
+                for (int i = 0; i < queryArr.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        chats.Add(queryArr[i]);
+                        idExists.Add(queryArr[i].UserId);
+                    }
+                    else
+                    {
+                        if (!idExists.Any(id => id == queryArr[i].UserId))
+                        {
+                            chats.Add(queryArr[i]);
+                            idExists.Add(queryArr[i].UserId);
+                        }
+                    }
+                }
+            }
+
+            foreach (var chat in chats)
+            {
+                if (role == "user")
+                {
+                    var company = await this.GetCompanyInformation(chat.CompanyId);
+                    var newPerson = new PersonChat()
+                    {
+                        Id = chat.CompanyId,
+                        LastContent = chat.Content,
+                        DateCreated = chat.DateCreated,
+                        Name = company.ResultObj.Name,
+                        AvatarPath = company.ResultObj.CompanyAvatar.ImagePath
+                    };
+                    persons.Add(newPerson);
+                }
+                else
+                {
+                    var user = await _userService.GetUserInformation(chat.UserId);
+                    var newPerson = new PersonChat()
+                    {
+                        Id = chat.UserId,
+                        LastContent = chat.Content,
+                        DateCreated = chat.DateCreated,
+                        Name = user.ResultObj.FirstName + " " + user.ResultObj.LastName,
+                        AvatarPath = user.ResultObj.UserAvatar.ImagePath
+                    };
+                    persons.Add(newPerson);
+                }
+
+            }
+
+            return new ApiSuccessResult<List<PersonChat>>(persons);
+        }
+
+        public async Task<ApiResult<List<AllCompanyResult>>> GetAllCompany()
+        {
+            var results = new List<AllCompanyResult>();
+            var companies = await _userManager.GetUsersInRoleAsync("company");
+            foreach (var company in companies)
+            {
+                var infor = await this.GetCompanyInformation(company.Id);
+                var recruitment = await this.GetListCompanyRecruitment(company.Id);
+                var branch = await this.GetCompanyBranch(company.Id);
+                var result = new AllCompanyResult()
+                {
+                    Id = company.Id,
+                    Name = infor.ResultObj.Name,
+                    AvatarPath = infor.ResultObj.CompanyAvatar.ImagePath,
+                    CountRecruitment = recruitment.ResultObj.Count,
+                    Branches = branch.ResultObj,
+                    WorkerNumber = infor.ResultObj.WorkerNumber
+                };
+                results.Add(result);
+            }
+            return new ApiSuccessResult<List<AllCompanyResult>>(results);
         }
     }
 }

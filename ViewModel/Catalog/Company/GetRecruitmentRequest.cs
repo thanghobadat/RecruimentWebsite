@@ -9,8 +9,8 @@ namespace ViewModel.Catalog.Company
         public int Salary { get; set; }
         public string Education { get; set; }
         public string Type { get; set; }
-        public string Branch { get; set; }
-        public string Career { get; set; }
+        public int BranchId { get; set; }
+        public int CareerId { get; set; }
 
 
     }

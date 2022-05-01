@@ -121,6 +121,28 @@ namespace BackendApi.Controllers
             var response = _companyService.DownloadCV(fileName);
             return File(response.ArchiveData, response.FiltType, response.AchiveName);
         }
+
+
+        [HttpGet("GetAllChat")]
+        public async Task<IActionResult> GetAllChat(Guid userId, Guid companyId, string role)
+        {
+            var result = await _companyService.GetAllChat(userId, companyId, role);
+            return Ok(result);
+        }
+        [HttpGet("GetAllPersonChatChat")]
+        public async Task<IActionResult> GetAllPersonChatChat(Guid id, string role)
+        {
+            var result = await _companyService.GetAllPersonChat(id, role);
+            return Ok(result);
+        }
+
+        [HttpGet("GetAllCompany")]
+        public async Task<IActionResult> GetAllCompany()
+        {
+            var result = await _companyService.GetAllCompany();
+            return Ok(result);
+        }
+
         [HttpPost("CreateCompanyImages")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateCompanyImages([FromForm] CreateCompanyImageRequest request)
@@ -231,7 +253,12 @@ namespace BackendApi.Controllers
             return Ok(result);
         }
 
-
+        [HttpPost("Chat")]
+        public async Task<IActionResult> Chat([FromBody] ChatRequest request)
+        {
+            var result = await _companyService.Chat(request);
+            return Ok(result);
+        }
 
         [HttpPut("UpdateCompanyName")]
         public async Task<IActionResult> UpdateCompanyName([FromBody] CompanyNameUpdateRequest request)

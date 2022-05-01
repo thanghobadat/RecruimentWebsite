@@ -24,6 +24,12 @@ namespace Application.Catalog
         Task<List<CareerViewModel>> GetCareersRecruitmentExist(int id);
         Task<List<BranchViewModel>> GetBranchesRecruitmentNotExist(int id);
         Task<List<BranchViewModel>> GetBranchesRecruitmentExist(int id);
+        Task<ApiResult<PageResult<RecruitmentPagingResult>>> GetAllRecruitmentPaging(GetRecruitmentRequest request);
+        Task<ApiResult<ChatViewModel>> GetAllChat(Guid userId, Guid companyId, string role);
+        Task<ApiResult<List<PersonChat>>> GetAllPersonChat(Guid id, string role);
+        Task<ApiResult<List<AllCompanyResult>>> GetAllCompany();
+
+
 
         Task<ApiResult<bool>> CreateCoverImage(CreateCoverImageRequest request);
         Task<ApiResult<bool>> CreateCompanyImages(CreateCompanyImageRequest request);
@@ -48,6 +54,9 @@ namespace Application.Catalog
         Task<ApiResult<List<CVViewModel>>> GetAllCV(int id);
         Task<ApiResult<bool>> AcceptCV(int recruitmentId, Guid userId);
         Task<ApiResult<bool>> RefuseCV(int recruitmentId, Guid userId);
+
+        Task<ApiResult<bool>> Chat(ChatRequest request);
+
         DownloadFileViewModel DownloadCV(string filePath);
 
 
@@ -55,7 +64,7 @@ namespace Application.Catalog
         Task<ApiResult<bool>> DeleteCoverImage(int id);
         //chưa test
 
-        Task<ApiResult<PageResult<RecruitmentPagingResult>>> GetAllRecruitmentPaging(GetRecruitmentRequest request);
+
 
     }
 }
