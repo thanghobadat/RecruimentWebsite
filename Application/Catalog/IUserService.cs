@@ -14,14 +14,10 @@ namespace Application.Catalog
         Task<ApiResult<UserAvatarViewModel>> GetUserAvatar(Guid userId);
         Task<ApiResult<List<AllUserResult>>> GetAllUser();
         Task<ApiResult<bool>> UpdateUserInformation(UserUpdateRequest request);
-
         Task<ApiResult<bool>> UpdateUserAvatar(int id, IFormFile thumnailImage);
         Task<ApiResult<bool>> FollowCompany(Guid userId, Guid companyId);
         Task<ApiResult<bool>> ChangePasswordUser(ChangePasswordUserRequest request);
         Task<ApiResult<bool>> ForgotPassword(ForgotPasswordRequest request);
-
-        // chưa test
-
         Task<ApiResult<bool>> SubmitCV(SubmitCVRequest request);
 
 

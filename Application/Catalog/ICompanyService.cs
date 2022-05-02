@@ -10,7 +10,6 @@ namespace Application.Catalog
 {
     public interface ICompanyService
     {
-        // đã dùng 
         Task<ApiResult<CompanyInformationViewModel>> GetCompanyInformation(Guid companyId);
         Task<ApiResult<CompanyAvatarViewModel>> GetCompanyAvatar(Guid companyId);
         Task<ApiResult<CompanyCoverImageViewModel>> GetCompanyCoverImage(Guid companyId);

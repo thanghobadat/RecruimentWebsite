@@ -42,7 +42,7 @@ namespace Application.Catalog
             }
 
             var userInforVM = _mapper.Map<UserInformationViewModel>(userInfor);
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _context.Users.FindAsync(userId);
             userInforVM.Email = user.Email;
             userInforVM.PhoneNumber = user.PhoneNumber;
             var userAvatar = await this.GetUserAvatar(userId);
@@ -115,7 +115,7 @@ namespace Application.Catalog
         public async Task<ApiResult<bool>> UpdateUserInformation(UserUpdateRequest request)
         {
 
-            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            var user = await _context.Users.FindAsync(request.UserId);
             user.Email = request.Email;
             user.PhoneNumber = request.PhoneNumber;
 
@@ -137,13 +137,13 @@ namespace Application.Catalog
 
         public async Task<ApiResult<bool>> FollowCompany(Guid userId, Guid companyId)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
                 return new ApiErrorResult<bool>("Người dùng không tồn tại");
             }
             var userinf = await _context.UserInformations.FindAsync(userId);
-            var company = await _userManager.FindByIdAsync(companyId.ToString());
+            var company = await _context.Users.FindAsync(companyId);
             if (company == null)
             {
                 return new ApiErrorResult<bool>("Công ty không tồn tại");
@@ -224,7 +224,7 @@ namespace Application.Catalog
 
         public async Task<ApiResult<bool>> ChangePasswordUser(ChangePasswordUserRequest request)
         {
-            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            var user = await _context.Users.FindAsync(request.UserId);
             var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
             if (!result.Succeeded)
             {
@@ -238,7 +238,7 @@ namespace Application.Catalog
 
         public async Task<ApiResult<bool>> ForgotPassword(ForgotPasswordRequest request)
         {
-            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            var user = await _context.Users.FindAsync(request.UserId);
             if (user == null)
             {
                 return new ApiErrorResult<bool>("Tài khoản đăng nhập hiện không tồn tại!");

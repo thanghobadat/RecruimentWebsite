@@ -1,8 +1,6 @@
-﻿using Application.Common;
-using AutoMapper;
+﻿using AutoMapper;
 using Data.EF;
 using Data.Entities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,17 +13,13 @@ namespace Application.Catalog
 {
     public class AdminService : IAdminService
     {
-        private readonly UserManager<AppUser> _userManager;
 
         private readonly RecruimentWebsiteDbContext _context;
-        private readonly IStorageService _storageService;
         private readonly IMapper _mapper;
-        public AdminService(RecruimentWebsiteDbContext context, IStorageService storageService,
-            IMapper mapper, UserManager<AppUser> userManager)
+        public AdminService(RecruimentWebsiteDbContext context,
+            IMapper mapper)
         {
-            _userManager = userManager;
             _context = context;
-            _storageService = storageService;
             _mapper = mapper;
         }
 
@@ -49,7 +43,7 @@ namespace Application.Catalog
                 return new ApiErrorResult<bool>("Tỉnh thành đã tồn tại, vui lòng nhập lại");
             }
 
-            return new ApiSuccessResult<bool>();
+            return new ApiSuccessResult<bool>(true);
         }
 
         public async Task<ApiResult<bool>> CreateCareer(CareerCreateRequest request)
@@ -73,7 +67,7 @@ namespace Application.Catalog
                 return new ApiErrorResult<bool>("Công việc đã tồn tại, vui lòng nhập lại");
             }
 
-            return new ApiSuccessResult<bool>();
+            return new ApiSuccessResult<bool>(true);
         }
 
         public async Task<ApiResult<bool>> DeleteBranch(int id)
@@ -90,7 +84,7 @@ namespace Application.Catalog
             {
                 return new ApiErrorResult<bool>("Xóa không thành công, vui lòng thử lại");
             }
-            return new ApiSuccessResult<bool>();
+            return new ApiSuccessResult<bool>(true);
         }
 
         public async Task<ApiResult<bool>> DeleteCareer(int id)
@@ -107,7 +101,7 @@ namespace Application.Catalog
             {
                 return new ApiErrorResult<bool>("Xóa không thành công, vui lòng thử lại");
             }
-            return new ApiSuccessResult<bool>();
+            return new ApiSuccessResult<bool>(true);
         }
 
         public async Task<List<BranchViewModel>> GetAllBranchPaging()
@@ -184,7 +178,7 @@ namespace Application.Catalog
                 return new ApiErrorResult<bool>("Tỉnh thành này đã tồn tại, vui lòng nhập lại");
             }
 
-            return new ApiSuccessResult<bool>();
+            return new ApiSuccessResult<bool>(true);
         }
 
         public async Task<ApiResult<bool>> UpdateCareer(CareerUpdateRequest request)
@@ -204,7 +198,7 @@ namespace Application.Catalog
                 return new ApiErrorResult<bool>("Công việc này đã tồn tại, vui lòng nhập tên khác");
             }
 
-            return new ApiSuccessResult<bool>();
+            return new ApiSuccessResult<bool>(true);
         }
     }
 }

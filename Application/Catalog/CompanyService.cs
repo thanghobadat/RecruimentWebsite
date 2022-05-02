@@ -631,11 +631,11 @@ namespace Application.Catalog
             var comments = await this.GetCommentRecruitment(id);
             if (comments.ResultObj == null)
             {
-                recruitmentVM.Comments = new List<CommentViewModel>();
+                recruitmentVM.ListComment = new List<CommentViewModel>();
             }
             else
             {
-                recruitmentVM.Comments = comments.ResultObj;
+                recruitmentVM.ListComment = comments.ResultObj;
 
             }
 
@@ -663,7 +663,7 @@ namespace Application.Catalog
             {
                 return new ApiErrorResult<bool>("Delete unsuccessful");
             }
-            return new ApiSuccessResult<bool>();
+            return new ApiSuccessResult<bool>(true);
         }
 
         public async Task<ApiResult<bool>> UpdateAvatar(int Id, AvatarUpdateRequest request)
@@ -1032,8 +1032,8 @@ namespace Application.Catalog
             };
             _context.Notifications.Add(noti);
             await _context.SaveChangesAsync();
-            var user = await _userService.GetUserInformation(userId);
-            string to = user.ResultObj.Email;
+            var user = await _context.Users.FindAsync(userId);
+            string to = user.Email;
             string subject = "Chúc mừng bạn đã ứng tuyển thành công";
             string body = "Bạn đã được công ty " + company.Name + " đồng ý ứng tuyển, vui lòng vào website liên hệ với công ty.";
 

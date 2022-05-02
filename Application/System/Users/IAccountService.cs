@@ -17,9 +17,6 @@ namespace Application.System.Users
         Task<ApiResult<bool>> RegisterAdminAccount(RegisterAdminAccountRequest request);
 
         // chưa ok
-
-
-
         Task<ApiResult<bool>> Delete(Guid id);
 
     }

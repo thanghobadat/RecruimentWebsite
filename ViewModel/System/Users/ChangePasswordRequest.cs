@@ -1,8 +1,10 @@
-﻿namespace ViewModel.System.Users
+﻿using System;
+
+namespace ViewModel.System.Users
 {
     public class ChangePasswordRequest
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string NewPassword { get; set; }
     }
 }

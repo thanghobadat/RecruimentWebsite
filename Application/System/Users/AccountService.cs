@@ -81,7 +81,7 @@ namespace Application.System.Users
 
         public async Task<ApiResult<bool>> ChangePassword(ChangePasswordRequest request)
         {
-            var user = await _userManager.FindByIdAsync(request.Id);
+            var user = await _context.Users.FindAsync(request.Id);
             if (user == null)
             {
                 return new ApiErrorResult<bool>("Account does not exits");
@@ -143,14 +143,14 @@ namespace Application.System.Users
 
         public async Task<ApiResult<bool>> RegisterCompanyAccount(RegisterCompanyAccountRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.UserName);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName);
             if (user != null)
             {
-                return new ApiErrorResult<bool>("User name already exists, please choose another User name");
+                return new ApiErrorResult<bool>("User name đã được sử dụng, vui lòng thử lại");
             }
-            if (await _userManager.FindByEmailAsync(request.Email) != null)
+            if (await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email) != null)
             {
-                return new ApiErrorResult<bool>("This email has already been applied to another account, please enter another email");
+                return new ApiErrorResult<bool>("Email này đã được sử dụng cho tài khoản khác, vui lòng chọn email khác");
 
             }
 
@@ -205,12 +205,12 @@ namespace Application.System.Users
 
         public async Task<ApiResult<bool>> RegisterUserAccount(RegisterUserAccountRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.UserName);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName);
             if (user != null)
             {
                 return new ApiErrorResult<bool>("User name already exists, please choose another User name");
             }
-            if (await _userManager.FindByEmailAsync(request.Email) != null)
+            if (await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email) != null)
             {
                 return new ApiErrorResult<bool>("This email has already been applied to another account, please enter another email");
 
