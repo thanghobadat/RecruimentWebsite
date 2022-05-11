@@ -7,7 +7,6 @@ namespace Application.Catalog
 {
     public interface IAdminService
     {
-        //ok
         Task<List<BranchViewModel>> GetAllBranchPaging();
         Task<List<CareerViewModel>> GetAllCareerPaging();
         Task<ApiResult<BranchViewModel>> GetBranchById(int id);

@@ -17,8 +17,6 @@ namespace Testing
         private IAdminService _adminService;
         private RecruimentWebsiteDbContext _context;
         private static IMapper _mapper;
-
-
         public AdminServiceTest()
         {
             if (_mapper == null)
@@ -72,10 +70,6 @@ namespace Testing
                 Id = 3,
                 City = "Branch 3"
             });
-
-
-
-
             _context.SaveChanges();
 
             _adminService = new AdminService(_context, _mapper);
@@ -196,6 +190,6 @@ namespace Testing
             // Assert
             Assert.IsTrue(result.ResultObj);
         }
-        
+
     }
 }

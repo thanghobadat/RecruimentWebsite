@@ -142,6 +142,12 @@ namespace BackendApi.Controllers
             var result = await _companyService.GetAllCompany();
             return Ok(result);
         }
+        [HttpGet("GetAllNotify")]
+        public async Task<IActionResult> GetAllNotify(Guid id)
+        {
+            var result = await _companyService.GetAllNotify(id);
+            return Ok(result);
+        }
 
         [HttpPost("CreateCompanyImages")]
         [Consumes("multipart/form-data")]
@@ -407,6 +413,16 @@ namespace BackendApi.Controllers
         public async Task<IActionResult> RefuseCV(int recruitmentId, Guid userId)
         {
             var result = await _companyService.RefuseCV(recruitmentId, userId);
+            if (!result.IsSuccessed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result);
+        }
+        [HttpDelete("DeleteRecruitment")]
+        public async Task<IActionResult> DeleteRecruitment(int id)
+        {
+            var result = await _companyService.DeleteRecruitment(id);
             if (!result.IsSuccessed)
             {
                 return BadRequest(result.Message);

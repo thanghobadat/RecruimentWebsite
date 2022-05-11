@@ -53,8 +53,6 @@ namespace Testing
             mgr.Setup(x => x.UpdateAsync(It.IsAny<TUser>())).ReturnsAsync(IdentityResult.Success);
             mgr.Setup(x => x.RemovePasswordAsync(It.IsAny<TUser>())).ReturnsAsync(IdentityResult.Success);
             mgr.Setup(x => x.AddPasswordAsync(It.IsAny<TUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
-            //mgr.Setup(x => x.FindByNameAsync(It.IsAny<string>())).Returns(Task.FromResult(It.IsAny<TUser>()));
-            //mgr.Setup(x => x.FindByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(It.IsAny<TUser>()));
             mgr.Setup(x => x.ChangePasswordAsync(It.IsAny<TUser>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
 
             return mgr;
@@ -207,20 +205,20 @@ namespace Testing
             // Assert
             Assert.IsTrue(result.ResultObj);
         }
-        //[Test]
-        //public async Task CanForogtPassword()
-        //{
-        //    // Arrange
-        //    var request = new ForgotPasswordRequest()
-        //    {
-        //        UserId = new Guid("5e9962d7-8b63-4e1a-943c-24c17d2f25de"),
-        //        Email = "hoangthanh01022000@gmail.com"
-        //    };
-        //    // Act
-        //    var result = await _userService.ForgotPassword(request);
-        //    // Assert
-        //    Assert.IsTrue(result.ResultObj);
-        //}
+        [Test]
+        public async Task CanForogtPassword()
+        {
+            // Arrange
+            var request = new ForgotPasswordRequest()
+            {
+                UserId = new Guid("5e9962d7-8b63-4e1a-943c-24c17d2f25de"),
+                Email = "hoangthanh01022000@gmail.com"
+            };
+            // Act
+            var result = await _userService.ForgotPassword(request);
+            // Assert
+            Assert.IsTrue(result.ResultObj);
+        }
         [Test]
         public async Task CanSubmitCV()
         {

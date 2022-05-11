@@ -35,8 +35,6 @@ namespace Data.EF
             modelBuilder.ApplyConfiguration(new UserAvatarconfiguration());
             modelBuilder.ApplyConfiguration(new UserInformationConfiguration());
             modelBuilder.ApplyConfiguration(new MailSettingConfiguration());
-
-
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogins").HasKey(x => x.UserId);

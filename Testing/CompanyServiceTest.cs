@@ -807,17 +807,17 @@ namespace Testing
             // Assert
             Assert.IsTrue(result.ResultObj);
         }
-        //[Test]
-        //public async Task CanAcceptCV()
-        //{
-        //    // Arrange
-        //    int recruitmentId = 2;
-        //    var userId = new Guid("e8eed1d4-73ad-46ca-0b79-08da23c12f17");
-        //    // Act
-        //    var result = await _companyService.AcceptCV(recruitmentId, userId);
-        //    // Assert
-        //    Assert.IsTrue(result.ResultObj);
-        //}
+        [Test]
+        public async Task CanAcceptCV()
+        {
+            // Arrange
+            int recruitmentId = 2;
+            var userId = new Guid("e8eed1d4-73ad-46ca-0b79-08da23c12f17");
+            // Act
+            var result = await _companyService.AcceptCV(recruitmentId, userId);
+            // Assert
+            Assert.IsTrue(result.ResultObj);
+        }
         [Test]
         public async Task CanRefuseCV()
         {

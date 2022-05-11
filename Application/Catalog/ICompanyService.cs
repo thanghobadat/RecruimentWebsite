@@ -27,6 +27,8 @@ namespace Application.Catalog
         Task<ApiResult<ChatViewModel>> GetAllChat(Guid userId, Guid companyId, string role);
         Task<ApiResult<List<PersonChat>>> GetAllPersonChat(Guid id, string role);
         Task<ApiResult<List<AllCompanyResult>>> GetAllCompany();
+        Task<ApiResult<List<NotifyViewModel>>> GetAllNotify(Guid id);
+
 
 
 
@@ -55,8 +57,10 @@ namespace Application.Catalog
         Task<ApiResult<bool>> RefuseCV(int recruitmentId, Guid userId);
 
         Task<ApiResult<bool>> Chat(ChatRequest request);
+        Task<ApiResult<bool>> DeleteRecruitment(int id);
 
         DownloadFileViewModel DownloadCV(string filePath);
+
 
 
         // chưa chắc xài

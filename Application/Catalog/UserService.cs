@@ -238,7 +238,7 @@ namespace Application.Catalog
 
         public async Task<ApiResult<bool>> ForgotPassword(ForgotPasswordRequest request)
         {
-            var user = await _context.Users.FindAsync(request.UserId);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName);
             if (user == null)
             {
                 return new ApiErrorResult<bool>("Tài khoản đăng nhập hiện không tồn tại!");

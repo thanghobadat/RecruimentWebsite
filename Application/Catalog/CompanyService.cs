@@ -327,7 +327,7 @@ namespace Application.Catalog
 
         public async Task<ApiResult<PageResult<RecruitmentPagingResult>>> GetAllRecruitmentPaging(GetRecruitmentRequest request)
         {
-            var query = await _context.Recruitments.ToListAsync();
+            var query = await _context.Recruitments.OrderByDescending(x => x.DateCreated).ToListAsync();
 
             if (request.CareerId != 0)
             {
@@ -1143,16 +1143,7 @@ namespace Application.Catalog
         {
             var persons = new List<PersonChat>();
             var query = await _context.Chats.OrderByDescending(x => x.DateCreated).ToListAsync();
-            //if (role == "user")
-            //{
-            //    query = await _context.Chats.OrderBy(x => x.CompanyId).ToListAsync();
-            //}
-            //else
-            //{
-            //    query = await _context.Chats.OrderBy(x => x.UserId).ToListAsync();
 
-            //}
-            //query = query.OrderByDescending(x => x.DateCreated).ToList();
             var queryArr = query.ToArray();
             var chats = new List<Chat>();
             if (role == "user")
@@ -1251,6 +1242,38 @@ namespace Application.Catalog
                 results.Add(result);
             }
             return new ApiSuccessResult<List<AllCompanyResult>>(results);
+        }
+
+        public async Task<ApiResult<List<NotifyViewModel>>> GetAllNotify(Guid id)
+        {
+            var notifies = await _context.Notifications.Where(x => x.AccountId == id).OrderByDescending(x => x.DateCreated).ToListAsync();
+            var result = notifies.Select(x => new NotifyViewModel()
+            {
+                Id = x.Id,
+                Content = x.Content,
+                DateCreated = x.DateCreated
+            }).ToList();
+            return new ApiSuccessResult<List<NotifyViewModel>>(result);
+        }
+
+        public async Task<ApiResult<bool>> DeleteRecruitment(int id)
+        {
+            var recruitment = await _context.Recruitments.FindAsync(id);
+            var CVs = await _context.CurriculumVitaes.Where(x => x.RecruimentId == id).ToListAsync();
+            foreach (var cv in CVs)
+            {
+                _context.CurriculumVitaes.Remove(cv);
+                await _context.SaveChangesAsync();
+            }
+            var comments = await _context.Comments.Where(x => x.RecruimentId == id).ToListAsync();
+            foreach (var comment in comments)
+            {
+                _context.Comments.Remove(comment);
+                await _context.SaveChangesAsync();
+            }
+            _context.Recruitments.Remove(recruitment);
+            await _context.SaveChangesAsync();
+            return new ApiSuccessResult<bool>(true);
         }
     }
 }
