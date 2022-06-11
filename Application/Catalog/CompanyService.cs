@@ -1094,7 +1094,6 @@ namespace Application.Catalog
             var fileDownload = _storageService.DownloadZip(filePath);
             return fileDownload;
         }
-
         public async Task<ApiResult<ChatViewModel>> GetAllChat(Guid userId, Guid companyId, string role)
         {
             var chats = await _context.Chats.Where(x => x.UserId == userId && x.CompanyId == companyId).OrderBy(x => x.DateCreated).ToListAsync();

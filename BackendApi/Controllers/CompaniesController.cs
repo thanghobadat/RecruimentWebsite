@@ -29,6 +29,7 @@ namespace BackendApi.Controllers
         [HttpGet("GetCompanyAvatar")]
         public async Task<IActionResult> GetCompanyAvatar(Guid companyId)
         {
+
             var result = await _companyService.GetCompanyAvatar(companyId);
             return Ok(result);
         }

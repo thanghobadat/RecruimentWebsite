@@ -33,15 +33,9 @@ namespace BackendApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminAccountRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+
             var result = await _accountService.RegisterAdminAccount(request);
-            if (!result.ResultObj)
-            {
-                return BadRequest(result);
-            }
+
             return Ok(result);
         }
 
@@ -49,15 +43,9 @@ namespace BackendApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserAccountRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+
             var result = await _accountService.RegisterUserAccount(request);
-            if (!result.ResultObj)
-            {
-                return BadRequest(result);
-            }
+
             return Ok(result);
         }
 
@@ -67,10 +55,7 @@ namespace BackendApi.Controllers
         {
 
             var result = await _accountService.RegisterCompanyAccount(request);
-            if (!result.ResultObj)
-            {
-                return BadRequest(result);
-            }
+
             return Ok(result);
         }
 

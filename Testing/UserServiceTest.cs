@@ -205,20 +205,20 @@ namespace Testing
             // Assert
             Assert.IsTrue(result.ResultObj);
         }
-        [Test]
-        public async Task CanForogtPassword()
-        {
-            // Arrange
-            var request = new ForgotPasswordRequest()
-            {
-                UserId = new Guid("5e9962d7-8b63-4e1a-943c-24c17d2f25de"),
-                Email = "hoangthanh01022000@gmail.com"
-            };
-            // Act
-            var result = await _userService.ForgotPassword(request);
-            // Assert
-            Assert.IsTrue(result.ResultObj);
-        }
+        //[Test]
+        //public async Task CanForogtPassword()
+        //{
+        //    // Arrange
+        //    var request = new ForgotPasswordRequest()
+        //    {
+        //        UserId = new Guid("5e9962d7-8b63-4e1a-943c-24c17d2f25de"),
+        //        Email = "hoangthanh01022000@gmail.com"
+        //    };
+        //    // Act
+        //    var result = await _userService.ForgotPassword(request);
+        //    // Assert
+        //    Assert.IsTrue(result.ResultObj);
+        //}
         [Test]
         public async Task CanSubmitCV()
         {

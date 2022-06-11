@@ -54,7 +54,7 @@ namespace BackendApi.Controllers
         }
         [HttpPost("SubmitCV")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> FollowCompany([FromForm] SubmitCVRequest request)
+        public async Task<IActionResult> SubmitCV([FromForm] SubmitCVRequest request)
         {
             var result = await _userService.SubmitCV(request);
             return Ok(result);
